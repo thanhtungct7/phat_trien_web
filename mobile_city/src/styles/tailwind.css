@@ -1,0 +1,82 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Custom CSS Variables */
+:root {
+    /* Primary Colors */
+    --color-primary-100: #DBEAFE; /* blue-100 */
+    --color-primary-600: #2563EB; /* blue-600 */
+    --color-primary-700: #1D4ED8; /* blue-700 */
+    
+    /* Neutral Colors */
+    --color-background: #FFFFFF; /* white */
+    --color-surface: #F9FAFB; /* gray-50 */
+    --color-border: #E5E7EB; /* gray-200 */
+    --color-text-primary: #111827; /* gray-900 */
+    --color-text-secondary: #4B5563; /* gray-600 */
+    --color-text-tertiary: #9CA3AF; /* gray-400 */
+    
+    /* Semantic Colors */
+    --color-success: #16A34A; /* green-600 */
+    --color-warning: #F59E0B; /* amber-500 */
+    --color-error: #DC2626; /* red-600 */
+    --color-info: #0EA5E9; /* sky-500 */
+}
+
+/* Custom Animation Classes */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Custom Component Classes */
+@layer components {
+    .btn {
+        @apply px-4 py-2 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+    }
+
+    .btn-primary {
+        @apply bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-600;
+    }
+
+    .btn-secondary {
+        @apply bg-white text-gray-900 border border-gray-200 hover:bg-gray-50 focus:ring-primary-600;
+    }
+
+    .btn-outline {
+        @apply border border-primary-600 text-primary-600 hover:bg-primary-100 focus:ring-primary-600;
+    }
+
+    .btn-ghost {
+        @apply text-primary-600 hover:bg-primary-100 focus:ring-primary-600;
+    }
+
+    .btn-icon {
+        @apply p-2 rounded-full;
+    }
+
+    .input-field {
+        @apply w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent;
+    }
+
+    .card {
+        @apply bg-white rounded-lg shadow-sm overflow-hidden;
+    }
+}
