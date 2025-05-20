@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import Icon from '../../components/AppIcon';
-import Button from './Button';
-import Input from './Input';
+import Icon from '../../components/AppIcon'; // Đảm bảo đường dẫn này đúng
+import Button from './Button'; // Đảm bảo đường dẫn này đúng
+import Input from './Input'; // Đảm bảo đường dẫn này đúng
 
 const Header = ({
   variant = 'default',
@@ -12,14 +12,25 @@ const Header = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
+  // State để quản lý trạng thái mở/đóng của dropdown "Điện thoại"
+  const [isPhonesDropdownOpen, setIsPhonesDropdownOpen] = useState(false); 
   const location = useLocation();
 
   const navigationItems = [
-    { name: 'Home', path: '/homepage' },
-    { name: 'Products', path: '/product-listing-page' },
-    { name: 'Featured', path: '/product-detail-page' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
+    // Thêm thuộc tính hasDropdown để đánh dấu mục nào có dropdown
+    { name: 'Điện thoại', path: '/phones', hasDropdown: true },
+    { name: 'Máy tính bảng', path: '/tablets' },
+    { name: 'Camera', path: '/cameras' },
+  ];
+
+  // Danh sách các hãng điện thoại
+  const phoneBrands = [
+    { name: 'Samsung', path: '/phones/samsung' },
+    { name: 'iPhone', path: '/phones/iphone' },
+    { name: 'Xiaomi', path: '/phones/xiaomi' },
+    { name: 'Oppo', path: '/phones/oppo' },
+    { name: 'Realme', path: '/phones/realme' },
+    // Thêm các hãng khác nếu cần
   ];
 
   useEffect(() => {
@@ -32,8 +43,9 @@ const Header = ({
   }, []);
 
   useEffect(() => {
-    // Close mobile menu when route changes
+    // Đóng cả menu di động và dropdown điện thoại khi route thay đổi
     setIsMenuOpen(false);
+    setIsPhonesDropdownOpen(false); 
   }, [location]);
 
   const handleSearchChange = (e) => {
@@ -42,8 +54,8 @@ const Header = ({
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    // Handle search submission
     console.log('Search submitted:', searchValue);
+    // Thêm logic chuyển hướng hoặc tìm kiếm ở đây nếu cần
   };
 
   const toggleMenu = () => {
@@ -53,9 +65,9 @@ const Header = ({
   const baseClasses = 'w-full z-50';
   
   const variantClasses = {
-    default: `bg-white shadow-sm ${isScrolled ? 'shadow-md' : ''}`,
-    compact: 'bg-white shadow-sm py-2',
-    transparent: `${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'} transition-all duration-300`,
+    default: `bg-blue-600 shadow-sm ${isScrolled ? 'shadow-md' : ''}`,
+    compact: 'bg-blue-600 shadow-sm py-2',
+    transparent: `${isScrolled ? 'bg-blue-600 shadow-md' : 'bg-transparent'} transition-all duration-300`,
   };
 
   return (
@@ -67,13 +79,19 @@ const Header = ({
         <a href="#main-content">Skip to content</a>
       </div>
       
+      <div className="bg-blue-700 text-white text-sm py-1.5">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-end items-center space-x-4">
+              <Link to="/login" className="hover:text-gray-200">Đăng nhập</Link>
+              <Link to="/register" className="hover:text-gray-200">Đăng ký</Link>
+          </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+        <div className="flex justify-between items-center h-12"> 
           <div className="flex-shrink-0">
             <Link to="/homepage" className="flex items-center">
               <svg 
-                className="h-8 w-auto text-primary-600" 
+                className="h-8 w-auto text-white" 
                 viewBox="0 0 40 40" 
                 fill="none" 
                 xmlns="http://www.w3.org/2000/svg"
@@ -95,35 +113,68 @@ const Header = ({
                   fill="currentColor"
                 />
               </svg>
-              <span className="ml-2 text-xl font-bold text-gray-900">ShopHub</span>
+              <span className="ml-2 text-xl font-bold text-white">ShopHub</span>
             </Link>
           </div>
           
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
             {navigationItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={`
-                  px-1 py-2 text-sm font-medium border-b-2 transition-colors
-                  ${location.pathname === item.path 
-                    ? 'border-primary-600 text-primary-600' :'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'}
-                `}
-                aria-current={location.pathname === item.path ? 'page' : undefined}
+              // Bọc Link bằng div để xử lý dropdown
+              <div 
+                key={item.name} 
+                className="relative"
+                onMouseEnter={() => item.hasDropdown && setIsPhonesDropdownOpen(true)}
+                onMouseLeave={() => item.hasDropdown && setIsPhonesDropdownOpen(false)}
               >
-                {item.name}
-              </Link>
+                <Link
+                  to={item.path} // Link cho mục chính (ví dụ: /phones)
+                  className={`
+                    px-1 py-2 text-sm font-medium border-b-2 transition-colors
+                    ${
+                      // Logic để gạch chân item hiện tại hoặc khi dropdown của nó mở
+                      (item.name === 'Điện thoại' && (location.pathname.startsWith(item.path) || isPhonesDropdownOpen)) ||
+                      (item.name !== 'Điện thoại' && location.pathname.startsWith(item.path))
+                      ? 'border-white text-white' 
+                      : 'border-transparent text-gray-200 hover:text-white hover:border-gray-300'
+                    }
+                  `}
+                  aria-current={location.pathname === item.path ? 'page' : undefined}
+                >
+                  {item.name}
+                </Link>
+                {/* Dropdown cho "Điện thoại" */}
+                {item.hasDropdown && isPhonesDropdownOpen && (
+                  <div 
+                    className="absolute z-10 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    role="menu" 
+                    aria-orientation="vertical" 
+                    aria-labelledby="menu-button"
+                  >
+                    <div className="py-1" role="none">
+                      {phoneBrands.map(brand => (
+                        <Link 
+                          key={brand.name}
+                          to={brand.path}
+                          className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                          role="menuitem"
+                          onClick={() => setIsPhonesDropdownOpen(false)} // Đóng dropdown khi click vào hãng
+                        >
+                          {brand.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             ))}
           </nav>
           
-          {/* Search, Cart, Account */}
           <div className="hidden md:flex items-center space-x-4">
             {variant !== 'compact' && (
               <form onSubmit={handleSearchSubmit} className="relative">
                 <Input
                   type="search"
-                  placeholder="Search products..."
+                  placeholder="Tìm kiếm sản phẩm..."
                   value={searchValue}
                   onChange={handleSearchChange}
                   icon="Search"
@@ -134,45 +185,47 @@ const Header = ({
               </form>
             )}
             
-            <Link to="/shopping-cart" className="relative p-2 text-gray-600 hover:text-gray-900">
+            <Link to="/shopping-cart" className="relative p-2 text-gray-200 hover:text-white">
               <Icon name="ShoppingCart" size={24} />
-              <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-primary-600 rounded-full">3</span>
+              <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">3</span>
             </Link>
             
-            <Button 
-              variant="ghost" 
-              icon="User"
-              aria-label="Account"
-            />
+            <Link to="/account">
+              <Button 
+                variant="ghost" 
+                icon="User"
+                aria-label="Tài khoản"
+                className="text-gray-200 hover:text-white"
+              />
+            </Link>
           </div>
           
-          {/* Mobile menu button */}
           <div className="flex md:hidden">
-            <Link to="/shopping-cart" className="relative p-2 mr-2 text-gray-600 hover:text-gray-900">
+            <Link to="/shopping-cart" className="relative p-2 mr-2 text-gray-200 hover:text-white">
               <Icon name="ShoppingCart" size={24} />
-              <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-primary-600 rounded-full">3</span>
+              <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">3</span>
             </Link>
             
             <button
               type="button"
-              className="p-2 rounded-md text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-600"
+              className="p-2 rounded-md text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
               onClick={toggleMenu}
               aria-expanded={isMenuOpen}
             >
-              <span className="sr-only">{isMenuOpen ? 'Close menu' : 'Open menu'}</span>
+              <span className="sr-only">{isMenuOpen ? 'Đóng menu' : 'Mở menu'}</span>
               <Icon name={isMenuOpen ? "X" : "Menu"} size={24} />
             </button>
           </div>
         </div>
       </div>
       
-      {/* Mobile menu */}
-      <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
+      {/* Mobile menu - Bạn cũng cần thêm dropdown cho mobile nếu muốn */}
+      <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'} bg-blue-600`}>
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           <form onSubmit={handleSearchSubmit} className="mb-4 px-2">
             <Input
               type="search"
-              placeholder="Search products..."
+              placeholder="Tìm kiếm sản phẩm..."
               value={searchValue}
               onChange={handleSearchChange}
               icon="Search"
@@ -182,47 +235,52 @@ const Header = ({
           </form>
           
           {navigationItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              className={`
-                block px-3 py-2 rounded-md text-base font-medium
-                ${location.pathname === item.path 
-                  ? 'bg-primary-100 text-primary-600' :'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
-              `}
-              aria-current={location.pathname === item.path ? 'page' : undefined}
-            >
-              {item.name}
-            </Link>
+            <React.Fragment key={item.name}>
+              <Link
+                to={item.path}
+                className={`
+                  block px-3 py-2 rounded-md text-base font-medium
+                  ${location.pathname.startsWith(item.path) 
+                    ? 'bg-blue-700 text-white' 
+                    :'text-gray-200 hover:bg-blue-500 hover:text-white'}
+                `}
+                aria-current={location.pathname === item.path ? 'page' : undefined}
+                // Tùy chọn: Bạn có thể thêm logic dropdown cho mobile menu tại đây nếu muốn
+                // Ví dụ: onClick={() => item.hasDropdown && setIsPhonesDropdownOpen(!isPhonesDropdownOpen)}
+              >
+                {item.name}
+              </Link>
+              {/* Nếu bạn muốn dropdown cho mobile menu, bạn sẽ thêm logic tương tự ở đây */}
+            </React.Fragment>
           ))}
           
-          <div className="pt-4 pb-3 border-t border-gray-200">
+          <div className="pt-4 pb-3 border-t border-blue-700">
             <div className="flex items-center px-3">
               <div className="flex-shrink-0">
-                <div className="h-10 w-10 rounded-full bg-primary-600 flex items-center justify-center text-white">
+                <div className="h-10 w-10 rounded-full bg-blue-700 flex items-center justify-center text-white">
                   <Icon name="User" size={20} />
                 </div>
               </div>
               <div className="ml-3">
-                <div className="text-base font-medium text-gray-800">User Account</div>
-                <div className="text-sm font-medium text-gray-500">user@example.com</div>
+                <div className="text-base font-medium text-white">User Account</div>
+                <div className="text-sm font-medium text-gray-200">user@example.com</div>
               </div>
             </div>
             <div className="mt-3 space-y-1 px-2">
               <Link
                 to="/profile"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white"
               >
                 Your Profile
               </Link>
               <Link
                 to="/settings"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white"
               >
                 Settings
               </Link>
               <button
-                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white"
               >
                 Sign out
               </button>
