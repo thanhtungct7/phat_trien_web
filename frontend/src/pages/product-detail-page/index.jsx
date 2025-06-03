@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation, Link } from "react-router-dom";
 
 import Header from "../../components/ui/Header";
 import Footer from "../../components/ui/Footer";
@@ -12,6 +13,10 @@ import SkeletonLoader from "./components/SkeletonLoader";
 import AddToCartModal from "./components/AddToCartModal";
 
 const ProductDetailPage = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const id = params.get("id");
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,23 +24,24 @@ const ProductDetailPage = () => {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    // Simulate API call with timeout
-    const fetchProductData = async () => {
-      setLoading(true);
-      try {
-        // Simulate network request
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        setProduct(mockProductData);
-        setError(null);
-      } catch (err) {
-        setError("Failed to load product data. Please try again.");
-      } finally {
-        setLoading(false);
+    setLoading(true);
+    setTimeout(() => {
+      // Xác định sản phẩm là điện thoại hay laptop dựa vào id
+      let data = null;
+      if (id === "iphone-13-pro-max") {
+        data = mockProductData;
+      } else {
+        data = mockLaptopList.find(lap => lap.id === id);
       }
-    };
-
-    fetchProductData();
-  }, []);
+      if (data) {
+        setProduct(data);
+        setError(null);
+      } else {
+        setError("Không tìm thấy sản phẩm.");
+      }
+      setLoading(false);
+    }, 1000);
+  }, [id]);
 
   const handleAddToCart = () => {
     // In a real app, this would make an API call to add the item to cart
@@ -56,9 +62,11 @@ const ProductDetailPage = () => {
     setQuantity(newQuantity);
   };
 
+  const isLaptop = product?.sku?.toLowerCase().includes("laptop") || product?.name?.toLowerCase().includes("laptop") || product?.name?.toLowerCase().includes("macbook");
+
   const breadcrumbItems = [
     { name: "Home", path: "/homepage" },
-    { name: "Phones", path: "/product-listing-page" },
+    { name: isLaptop ? "Laptops" : "Phones", path: isLaptop ? "/laptops" : "/product-listing-page" },
     { name: product?.name || "Product", path: "" },
   ];
 
@@ -71,7 +79,7 @@ const ProductDetailPage = () => {
         
         {loading ? (
           <SkeletonLoader />
-        ) : error ? (
+        ) : error && !loading ? (
           <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-6">
@@ -273,5 +281,532 @@ const mockProductData = {
     }
   ]
 };
+
+// Mock data for the laptop
+const mockLaptopList = [
+  {
+    id: "macbook-air-m2-2024",
+    name: "Apple Macbook Air M2 2024",
+    brand: "Apple",
+    price: 1299.99,
+    discountPrice: 1199.99,
+    rating: 4.9,
+    reviewCount: 120,
+    availability: "In Stock",
+    sku: "APL-MBAIR2024-512GB",
+    description: "The latest Macbook Air with M2 chip, ultra-thin design, and all-day battery life.",
+    shortDescription: "Apple's flagship ultrabook with M2 chip and Retina display.",
+    features: [
+      "13.6-inch Liquid Retina display",
+      "Apple M2 chip",
+      "Up to 18 hours battery life",
+      "Fanless design",
+      "MagSafe charging",
+      "Thunderbolt / USB 4 ports"
+    ],
+    colors: [
+      { name: "Midnight", code: "#24292F" },
+      { name: "Starlight", code: "#F3E8D7" },
+      { name: "Space Gray", code: "#6E6E73" }
+    ],
+    storage: [
+      { size: "256GB", price: 1199.99 },
+      { size: "512GB", price: 1299.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Apple Macbook Air M2 2024.webp",
+        alt: "Macbook Air M2 - Front"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "13.6 inches" },
+          { name: "Type", value: "Liquid Retina" },
+          { name: "Resolution", value: "2560 x 1664" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "Chip", value: "Apple M2" },
+          { name: "CPU", value: "8-core" },
+          { name: "GPU", value: "8-core" }
+        ]
+      }
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: "Alice N.",
+        avatar: "https://randomuser.me/api/portraits/women/50.jpg",
+        rating: 5,
+        date: "2024-05-10",
+        title: "Best Macbook ever",
+        comment: "Super light, super fast, and the battery lasts all day. Perfect for work and travel!"
+      }
+    ]
+  },
+  {
+    id: "asus-vivobook-15-x1504va-bq2076w",
+    name: "Laptop Asus VivoBook 15 X1504VA-BQ2076W",
+    brand: "Asus",
+    price: 799.99,
+    discountPrice: 749.99,
+    rating: 4.7,
+    reviewCount: 210,
+    availability: "In Stock",
+    sku: "ASUS-VB15-X1504VA-BQ2076W",
+    description: "Laptop Asus VivoBook 15 với thiết kế mỏng nhẹ, hiệu năng ổn định cho học tập và làm việc.",
+    shortDescription: "Mỏng nhẹ, hiệu năng ổn định, màn hình 15.6 inch FHD.",
+    features: [
+      "15.6-inch FHD display",
+      "Intel Core i5",
+      "512GB SSD",
+      "8GB RAM",
+      "Windows 11"
+    ],
+    colors: [
+      { name: "Silver", code: "#C0C0C0" }
+    ],
+    storage: [
+      { size: "512GB", price: 799.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop Asus VivoBook 15 X1504VA-BQ2076W.webp",
+        alt: "Asus VivoBook 15"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "15.6 inches" },
+          { name: "Type", value: "FHD" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i5" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "asus-vivobook-s-16-oled-s5606ma-mx051w",
+    name: "Laptop Asus VivoBook S 16 OLED S5606MA-MX051W",
+    brand: "Asus",
+    price: 1099.99,
+    discountPrice: 999.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "ASUS-VB-S16-OLED-S5606MA-MX051W",
+    description: "Laptop Asus VivoBook S 16 OLED với màn hình OLED sắc nét, hiệu năng mạnh mẽ.",
+    shortDescription: "Màn hình OLED 16 inch, Intel Core i7, 1TB SSD.",
+    features: [
+      "16-inch OLED display",
+      "Intel Core i7",
+      "1TB SSD",
+      "16GB RAM"
+    ],
+    colors: [
+      { name: "Black", code: "#222" }
+    ],
+    storage: [
+      { size: "1TB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop Asus VivoBook S 16 OLED S5606MA-MX051W.webp",
+        alt: "Asus VivoBook S 16 OLED"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "16 inches" },
+          { name: "Type", value: "OLED" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i7" },
+          { name: "RAM", value: "16GB" },
+          { name: "Storage", value: "1TB SSD" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "acer-nitro-v-avn15-51-57b2",
+    name: "Laptop Gaming Acer Nitro V AVN15-51-57B2",
+    brand: "Acer",
+    price: 1099.99,
+    discountPrice: 1049.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "ACER-NITRO-V-AVN15-51-57B2",
+    description: "Laptop gaming mạnh mẽ với card đồ họa rời, màn hình 15.6 inch FULL HD.",
+    shortDescription: "Gaming, Intel Core i5-13420H, 512GB SSD, 8GB RAM.",
+    features: [
+      "15.6-inch FULL HD display",
+      "Intel Core i5-13420H",
+      "512GB SSD",
+      "8GB RAM",
+      "NVIDIA GeForce RTX"
+    ],
+    colors: [
+      { name: "Black", code: "#222" }
+    ],
+    storage: [
+      { size: "512GB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop Gaming Acer Nitro V AVN15-51-57B2.webp",
+        alt: "Acer Nitro V"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "15.6 inches" },
+          { name: "Type", value: "FULL HD" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i5-13420H" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" },
+          { name: "GPU", value: "NVIDIA GeForce RTX" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "hp-15-fc0086au",
+    name: "Laptop Hp 15-FC0086AU",
+    brand: "HP",
+    price: 1099.99,
+    discountPrice: 1049.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "HP-15-FC0086AU",
+    description: "Laptop HP 15 với thiết kế hiện đại, hiệu năng ổn định cho công việc và học tập.",
+    shortDescription: "15.6-inch FULL HD, R5-7430U, 512GB SSD.",
+    features: [
+      "15.6-inch FULL HD display",
+      "AMD Ryzen 5 7430U",
+      "512GB SSD",
+      "8GB RAM"
+    ],
+    colors: [
+      { name: "Silver", code: "#C0C0C0" }
+    ],
+    storage: [
+      { size: "512GB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop Hp 15-FC0086AU.webp",
+        alt: "HP 15"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "15.6 inches" },
+          { name: "Type", value: "FULL HD" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "AMD Ryzen 5 7430U" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "hp-gaming-victus-15-fa1139tx-8y6w3pa",
+    name: "Laptop HP Gaming Victus 15-FA1139TX 8Y6W3PA",
+    brand: "HP",
+    price: 1099.99,
+    discountPrice: 1049.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "HP-GAMING-VICTUS-15-FA1139TX-8Y6W3PA",
+    description: "Laptop gaming HP Victus với hiệu năng mạnh mẽ, card đồ họa rời.",
+    shortDescription: "15.6-inch FULL HD, Intel Core i5-12450H, 512GB SSD.",
+    features: [
+      "15.6-inch FULL HD display",
+      "Intel Core i5-12450H",
+      "512GB SSD",
+      "8GB RAM",
+      "NVIDIA GeForce RTX"
+    ],
+    colors: [
+      { name: "Black", code: "#222" }
+    ],
+    storage: [
+      { size: "512GB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop HP Gaming Victus 15-FA1139TX 8Y6W3PA.webp",
+        alt: "HP Gaming Victus 15"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "15.6 inches" },
+          { name: "Type", value: "FULL HD" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i5-12450H" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" },
+          { name: "GPU", value: "NVIDIA GeForce RTX" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "lenovo-ideapad-slim-3-14irh10-83l00008vn",
+    name: "Laptop Lenovo IdeaPad Slim 3 14IRH10 83L00008VN",
+    brand: "Lenovo",
+    price: 1099.99,
+    discountPrice: 1049.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "LENOVO-IDEAPAD-SLIM-3-14IRH10-83L00008VN",
+    description: "Laptop Lenovo IdeaPad Slim 3 với thiết kế mỏng nhẹ, hiệu năng ổn định.",
+    shortDescription: "14-inch WUXGA, Intel Core i5-13420H, 512GB SSD.",
+    features: [
+      "14-inch WUXGA display",
+      "Intel Core i5-13420H",
+      "512GB SSD",
+      "8GB RAM"
+    ],
+    colors: [
+      { name: "Gray", code: "#888" }
+    ],
+    storage: [
+      { size: "512GB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop Lenovo IdeaPad Slim 3 14IRH10 83L00008VN.webp",
+        alt: "Lenovo IdeaPad Slim 3"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "14 inches" },
+          { name: "Type", value: "WUXGA" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i5-13420H" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "msi-modern-14-c12mo-660vn",
+    name: "Laptop MSI Modern 14 C12MO-660VN",
+    brand: "MSI",
+    price: 1099.99,
+    discountPrice: 1049.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "MSI-MODERN-14-C12MO-660VN",
+    description: "Laptop MSI Modern 14 với thiết kế hiện đại, hiệu năng ổn định.",
+    shortDescription: "14-inch FULL HD, Intel Core i5-1235U, 512GB SSD.",
+    features: [
+      "14-inch FULL HD display",
+      "Intel Core i5-1235U",
+      "512GB SSD",
+      "8GB RAM"
+    ],
+    colors: [
+      { name: "Gray", code: "#888" }
+    ],
+    storage: [
+      { size: "512GB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop MSI Modern 14 C12MO-660VN.webp",
+        alt: "MSI Modern 14"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "14 inches" },
+          { name: "Type", value: "FULL HD" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i5-1235U" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "asus-gaming-vivobook-k3605zc-rp564w",
+    name: "Latop Asus Gaming VivoBook K3605ZC-RP564W",
+    brand: "Asus",
+    price: 1099.99,
+    discountPrice: 1049.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "ASUS-GAMING-VB-K3605ZC-RP564W",
+    description: "Laptop Asus Gaming VivoBook với hiệu năng mạnh mẽ, màn hình lớn.",
+    shortDescription: "16-inch WUXGA, Intel Core i5-12500H, 512GB SSD.",
+    features: [
+      "16-inch WUXGA display",
+      "Intel Core i5-12500H",
+      "512GB SSD",
+      "8GB RAM",
+      "NVIDIA GeForce RTX"
+    ],
+    colors: [
+      { name: "Black", code: "#222" }
+    ],
+    storage: [
+      { size: "512GB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Latop Asus Gaming VivoBook K3605ZC-RP564W.webp",
+        alt: "Asus Gaming VivoBook"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "16 inches" },
+          { name: "Type", value: "WUXGA" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i5-12500H" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" },
+          { name: "GPU", value: "NVIDIA GeForce RTX" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "macbook-air-m4-13-inch-2025",
+    name: "MacBook Air M4 13 inch 2025",
+    brand: "Apple",
+    price: 1399.99,
+    discountPrice: 1299.99,
+    rating: 4.9,
+    reviewCount: 80,
+    availability: "In Stock",
+    sku: "APL-MBAIR-M4-13-2025",
+    description: "MacBook Air M4 13 inch 2025 với chip Apple M4, thiết kế siêu mỏng nhẹ.",
+    shortDescription: "13.6-inch 2.5K, Apple M4, 256GB SSD.",
+    features: [
+      "13.6-inch 2.5K display",
+      "Apple M4 chip",
+      "256GB SSD",
+      "8GB RAM"
+    ],
+    colors: [
+      { name: "Silver", code: "#C0C0C0" }
+    ],
+    storage: [
+      { size: "256GB", price: 1299.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/MacBook Air M4 13 inch 2025.webp",
+        alt: "MacBook Air M4 13 inch 2025"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "13.6 inches" },
+          { name: "Type", value: "2.5K" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "Chip", value: "Apple M4" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "256GB SSD" }
+        ]
+      }
+    ],
+    reviews: []
+  }
+];
 
 export default ProductDetailPage;
