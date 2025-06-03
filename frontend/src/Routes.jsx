@@ -6,6 +6,8 @@ import Homepage from "./pages/homepage";
 import ProductDetailPage from "./pages/product-detail-page";
 import ProductListingPage from "./pages/product-listing-page";
 import ShoppingCart from "./pages/shopping-cart";
+import ComputerPage from "pages/laptopPage";
+import CameraPage from "pages/cameraPage";
 import NotFound from "./pages/NotFound";
 
 const Routes = () => {
@@ -19,6 +21,8 @@ const Routes = () => {
           <Route path="/shopping-cart" element={<ShoppingCart />} />
           <Route path="/product-listing-page" element={<ProductListingPage />} />
           <Route path="/product-detail-page" element={<ProductDetailPage />} />
+          <Route path="/laptops" element={<ComputerPage />} />
+          <Route path="/cameras" element={<CameraPage />} />
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
       </ErrorBoundary>
