@@ -26,12 +26,13 @@ const ProductDetailPage = () => {
   useEffect(() => {
     setLoading(true);
     setTimeout(() => {
-      // Xác định sản phẩm là điện thoại hay laptop dựa vào id
       let data = null;
       if (id === "iphone-13-pro-max") {
         data = mockProductData;
-      } else {
+      } else if (mockLaptopList.find(lap => lap.id === id)) {
         data = mockLaptopList.find(lap => lap.id === id);
+      } else if (mockCameraList.find(cam => cam.id === id)) {
+        data = mockCameraList.find(cam => cam.id === id);
       }
       if (data) {
         setProduct(data);
@@ -64,9 +65,17 @@ const ProductDetailPage = () => {
 
   const isLaptop = product?.sku?.toLowerCase().includes("laptop") || product?.name?.toLowerCase().includes("laptop") || product?.name?.toLowerCase().includes("macbook");
 
+  // Thêm dòng này để xác định sản phẩm là camera
+  const isCamera = product?.sku?.toLowerCase().includes("camera") || product?.name?.toLowerCase().includes("camera");
+
+  // Sửa lại breadcrumbItems như sau:
   const breadcrumbItems = [
     { name: "Home", path: "/homepage" },
-    { name: isLaptop ? "Laptops" : "Phones", path: isLaptop ? "/laptops" : "/product-listing-page" },
+    isLaptop
+      ? { name: "Laptops", path: "/laptops" }
+      : isCamera
+        ? { name: "Cameras", path: "/cameras" }
+        : { name: "Phones", path: "/product-listing-page" },
     { name: product?.name || "Product", path: "" },
   ];
 
@@ -809,4 +818,416 @@ const mockLaptopList = [
   }
 ];
 
+const mockCameraList = [
+  {
+    id: "camera-imou-ipc-a32e-khong-day-3mp_2",
+    name: "Camera Imou IPC-A32E Không Dây 3MP",
+    brand: "Imou",
+    price: 899,
+    discountPrice: 799,
+    rating: 4.8,
+    reviewCount: 120,
+    availability: "In Stock",
+    sku: "IMOU-IPC-A32E-3MP",
+    description: "Camera không dây Imou IPC-A32E độ phân giải 3MP, hỗ trợ thẻ nhớ 256GB.",
+    shortDescription: "Camera WiFi 3MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    features: [
+      "Độ phân giải 3MP",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 256GB",
+      "Night Vision"
+    ],
+    colors: [
+      { name: "White", code: "#fff" }
+    ],
+    storage: [
+      { size: "256GB", price: 899 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-imou-ipc-a32e-khong-day-3mp_2.webp",
+        alt: "Camera Imou IPC-A32E Không Dây 3MP"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "3MP" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 256GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-hong-ngoai-khong-day-5mp-ezviz-h6c-pro",
+    name: "Camera IP Hồng Ngoại Không Dây 5MP EZVIZ H6C Pro",
+    brand: "EZVIZ",
+    price: 129,
+    discountPrice: 119,
+    rating: 4.7,
+    reviewCount: 98,
+    availability: "In Stock",
+    sku: "EZVIZ-H6C-PRO-5MP",
+    description: "Camera EZVIZ H6C Pro 5MP, hỗ trợ thẻ nhớ 512GB, Night Vision.",
+    shortDescription: "Camera WiFi 5MP, hỗ trợ thẻ nhớ 512GB, Night Vision.",
+    features: [
+      "Độ phân giải 5MP",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 512GB",
+      "Night Vision"
+    ],
+    colors: [
+      { name: "White", code: "#fff" }
+    ],
+    storage: [
+      { size: "512GB", price: 129 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-hong-ngoai-khong-day-5mp-ezviz-h6c-pro.webp",
+        alt: "Camera IP Hồng Ngoại Không Dây 5MP EZVIZ H6C Pro"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "5MP" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 512GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-hong-ngoai-khong-day-5mp-imou-ipc-a52p",
+    name: "Camera IP Hồng Ngoại Không Dây 5MP Imou IPC-A52P",
+    brand: "Imou",
+    price: 135,
+    discountPrice: 115,
+    rating: 4.9,
+    reviewCount: 150,
+    availability: "In Stock",
+    sku: "IMOU-IPC-A52P-5MP",
+    description: "Camera Imou IPC-A52P 5MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    shortDescription: "Camera WiFi 5MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    features: [
+      "Độ phân giải 5MP",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 256GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "256GB", price: 135 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-hong-ngoai-khong-day-5mp-imou-ipc-a52p.webp",
+        alt: "Camera IP Hồng Ngoại Không Dây 5MP Imou IPC-A52P"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "5MP" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 256GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-hong-ngoai-khong-day-ezviz-c6n-3mp_3_",
+    name: "Camera IP Hồng Ngoại Không Dây EZVIZ C6N 3MP",
+    brand: "EZVIZ",
+    price: 990,
+    discountPrice: 910,
+    rating: 4.6,
+    reviewCount: 110,
+    availability: "In Stock",
+    sku: "EZVIZ-C6N-3MP",
+    description: "Camera EZVIZ C6N 3MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    shortDescription: "Camera WiFi 3MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    features: [
+      "Độ phân giải 3MP",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 256GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "256GB", price: 990 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-hong-ngoai-khong-day-ezviz-c6n-3mp_3_.webp",
+        alt: "Camera IP Hồng Ngoại Không Dây EZVIZ C6N 3MP"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "3MP" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 256GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-ngoai-troi-wifi-365-selection-oc1-2k_8_",
+    name: "Camera IP Ngoài Trời Wifi 365 Selection OC1 2K",
+    brand: "365 Selection",
+    price: 149,
+    discountPrice: 134,
+    rating: 4.7,
+    reviewCount: 90,
+    availability: "In Stock",
+    sku: "365-OC1-2K",
+    description: "Camera ngoài trời 2K, hỗ trợ thẻ nhớ 128GB, Night Vision.",
+    shortDescription: "Camera ngoài trời 2K, WiFi, Night Vision.",
+    features: [
+      "Độ phân giải 2K",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 128GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "128GB", price: 149 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-ngoai-troi-wifi-365-selection-oc1-2k_8_.webp",
+        alt: "Camera IP Ngoài Trời Wifi 365 Selection OC1 2K"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "2K" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 128GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-wifi-2k-365-selection-c1.1",
+    name: "Camera IP Wifi 2K 365 Selection C1.1",
+    brand: "365 Selection",
+    price: 119,
+    discountPrice: 111,
+    rating: 4.5,
+    reviewCount: 80,
+    availability: "In Stock",
+    sku: "365-C1.1-2K",
+    description: "Camera IP Wifi 2K 365 Selection C1.1, hỗ trợ thẻ nhớ 128GB, Night Vision.",
+    shortDescription: "Camera WiFi 2K, hỗ trợ thẻ nhớ 128GB, Night Vision.",
+    features: [
+      "Độ phân giải 2K",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 128GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "128GB", price: 119 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-wifi-2k-365-selection-c1.1.webp",
+        alt: "Camera IP Wifi 2K 365 Selection C1.1"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "2K" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 128GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-wifi-3k-365-selection-c2_5_",
+    name: "Camera IP Wifi 3K 365 Selection C2",
+    brand: "365 Selection",
+    price: 159,
+    discountPrice: 141,
+    rating: 4.8,
+    reviewCount: 105,
+    availability: "In Stock",
+    sku: "365-C2-3K",
+    description: "Camera IP Wifi 3K 365 Selection C2, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    shortDescription: "Camera WiFi 3K, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    features: [
+      "Độ phân giải 3K",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 256GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "256GB", price: 159 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-wifi-3k-365-selection-c2_5_.webp",
+        alt: "Camera IP Wifi 3K 365 Selection C2"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "3K" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 256GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-wifi-4mp-imou-ipc-a43.1",
+    name: "Camera IP Wifi 4MP Imou IPC-A43.1",
+    brand: "Imou",
+    price: 125,
+    discountPrice: 114,
+    rating: 4.7,
+    reviewCount: 92,
+    availability: "In Stock",
+    sku: "IMOU-IPC-A43.1-4MP",
+    description: "Camera Imou IPC-A43.1 4MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    shortDescription: "Camera WiFi 4MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    features: [
+      "Độ phân giải 4MP",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 256GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "256GB", price: 125 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-wifi-4mp-imou-ipc-a43.1.webp",
+        alt: "Camera IP Wifi 4MP Imou IPC-A43.1"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "4MP" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 256GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-wifi-ai-reoqoo-xt-x31b-2-5k-ngoai-troi",
+    name: "Camera IP Wifi AI Reoqoo XT-X31B 2.5K Ngoài Trời",
+    brand: "Reoqoo",
+    price: 169,
+    discountPrice: 147,
+    rating: 4.9,
+    reviewCount: 130,
+    availability: "In Stock",
+    sku: "REOQOO-XT-X31B-2.5K",
+    description: "Camera ngoài trời AI Reoqoo XT-X31B 2.5K, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    shortDescription: "Camera ngoài trời AI 2.5K, WiFi, Night Vision.",
+    features: [
+      "Độ phân giải 2.5K",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 256GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "256GB", price: 169 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-wifi-ai-reoqoo-xt-x31b-2-5k-ngoai-troi.webp",
+        alt: "Camera IP Wifi AI Reoqoo XT-X31B 2.5K Ngoài Trời"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "2.5K" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 256GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-wifi-imou-ipc-a23p",
+    name: "Camera IP Wifi Imou IPC-A23P",
+    brand: "Imou",
+    price: 105,
+    discountPrice: 97,
+    rating: 4.6,
+    reviewCount: 85,
+    availability: "In Stock",
+    sku: "IMOU-IPC-A23P-2MP",
+    description: "Camera Imou IPC-A23P 2MP, hỗ trợ thẻ nhớ 128GB, Night Vision.",
+    shortDescription: "Camera WiFi 2MP, hỗ trợ thẻ nhớ 128GB, Night Vision.",
+    features: [
+      "Độ phân giải 2MP",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 128GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "128GB", price: 105 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-wifi-imou-ipc-a23p.webp",
+        alt: "Camera IP Wifi Imou IPC-A23P"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "2MP" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 128GB" }
+        ]
+      }
+    ],
+    reviews: []
+  }
+];
+
 export default ProductDetailPage;
+export { mockCameraList };
