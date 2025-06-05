@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import Header from "../../components/ui/Header";
 import Footer from "../../components/ui/Footer";
-import FeaturedProducts from "../laptopPage/components/FeaturedProducts";
+import FeaturedProducts from "./components/FeaturedProducts";
 
 const cameraFeaturedProducts = [
 	{
