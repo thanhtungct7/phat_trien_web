@@ -14,7 +14,7 @@ const FeaturedProducts = ({ products, isLoading, hasError, onRefresh, className 
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Featured Devices</h2>
             <p className="text-gray-600 mt-2">Explore our most popular smartphones</p>
           </div>
-          <Link to="/phone-listing-page">
+          <Link to="/laptops/all">
             <Button variant="ghost" icon="ArrowRight" iconPosition="right">
               View All
             </Button>
