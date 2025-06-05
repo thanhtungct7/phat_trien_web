@@ -18,18 +18,18 @@ const Header = ({
 
   const navigationItems = [
     // Thêm thuộc tính hasDropdown để đánh dấu mục nào có dropdown
-    { name: 'Điện thoại', path: '/phones', hasDropdown: true },
+    { name: 'Điện thoại', path: '/phone-listing-page', hasDropdown: true },
     { name: 'Máy tính bảng', path: '/tablets' },
     { name: 'Camera', path: '/cameras' },
   ];
 
   // Danh sách các hãng điện thoại
   const phoneBrands = [
-    { name: 'Samsung', path: '/phones/samsung' },
-    { name: 'iPhone', path: '/phones/iphone' },
-    { name: 'Xiaomi', path: '/phones/xiaomi' },
-    { name: 'Oppo', path: '/phones/oppo' },
-    { name: 'Realme', path: '/phones/realme' },
+    { name: 'Apple', path: '/phone-listing-page', hasDropdown: true },
+    { name: 'Samsung', path: '/phone-lisitng-page', hasDropdown: true },
+    { name: 'Google', path: '/phone-listing-page', hasDropdown: true },
+    { name: 'Oneplus', path: '/phone-listing-page', hasDropdown: true },
+    { name: 'Xiaomi', path: '/phone-lisitng-page', hasDropdown: true },
     // Thêm các hãng khác nếu cần
   ];
 
