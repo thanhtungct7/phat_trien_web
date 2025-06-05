@@ -4,7 +4,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Homepage from "./pages/homepage";
 import ProductDetailPage from "./pages/product-detail-page";
-import ProductListingPage from "./pages/product-listing-page";
+import ProductListingPage from "./pages/phone-listing-page";
 import ShoppingCart from "./pages/shopping-cart";
 import NotFound from "./pages/NotFound";
 
@@ -17,7 +17,7 @@ const Routes = () => {
           <Route path="/" element={<Homepage />} />
           <Route path="/homepage" element={<Homepage />} />
           <Route path="/shopping-cart" element={<ShoppingCart />} />
-          <Route path="/product-listing-page" element={<ProductListingPage />} />
+          <Route path="/phone-listing-page" element={<ProductListingPage />} />
           <Route path="/product-detail-page" element={<ProductDetailPage />} />
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>

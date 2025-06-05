@@ -17,7 +17,7 @@ const HeroSection = () => {
               Find the perfect device that matches your lifestyle and needs.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/product-listing-page">
+              <Link to="/phone-listing-page">
                 <Button 
                   variant="primary" 
                   size="large" 
@@ -27,7 +27,7 @@ const HeroSection = () => {
                   Browse Phones
                 </Button>
               </Link>
-              <Link to="/product-listing-page?category=accessories">
+              <Link to="/phone-listing-page?category=accessories">
                 <Button 
                   variant="outline" 
                   size="large"
