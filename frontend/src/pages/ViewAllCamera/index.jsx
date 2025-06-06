@@ -13,8 +13,9 @@ import ProductCard from "./components/ProductCard";
 import Pagination from "./components/Pagination";
 import FilterSidebar from "./components/FilterSidebar";
 import ProductSkeleton from "./components/ProductSkeleton";
+import { View } from "lucide-react";
 
-const ProductListingPage = () => {
+const ViewAllCamera = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -23,304 +24,196 @@ const ProductListingPage = () => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isLaptopFilterOpen, setIsCameraFilterOpen] = useState(false);
   const [sortBy, setSortBy] = useState("popularity");
   const productsPerPage = 12;
 
   // Mock data for products
   const mockProducts = [
     {
-      id: 1,
-      name: "iPhone 13 Pro",
-      brand: "Apple",
-      price: 999,
-      salePrice: 899,
-      image: "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-      rating: 4.8,
-      specs: {
-        storage: "128GB",
-        screenSize: "6.1 inches",
-        camera: "12MP Triple",
-        battery: "3095 mAh",
-      },
-      inStock: true,
-    },
-    {
-      id: 2,
-      name: "Samsung Galaxy S21",
-      brand: "Samsung",
-      price: 799,
-      salePrice: null,
-      image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-      rating: 4.7,
-      specs: {
-        storage: "256GB",
-        screenSize: "6.2 inches",
-        camera: "64MP Triple",
-        battery: "4000 mAh",
-      },
-      inStock: true,
-    },
-    {
-      id: 3,
-      name: "Google Pixel 6",
-      brand: "Google",
-      price: 599,
-      salePrice: 549,
-      image: "https://images.pexels.com/photos/12576276/pexels-photo-12576276.jpeg?auto=compress&cs=tinysrgb&w=1000",
-      rating: 4.6,
-      specs: {
-        storage: "128GB",
-        screenSize: "6.4 inches",
-        camera: "50MP Dual",
-        battery: "4614 mAh",
-      },
-      inStock: true,
-    },
-    {
-      id: 4,
-      name: "OnePlus 9 Pro",
-      brand: "OnePlus",
+      id: "camera-imou-ipc-a32e-khong-day-3mp_2",
+      name: "Camera Imou IPC-A32E Không Dây 3MP",
+      brand: "Imou",
       price: 899,
-      salePrice: 799,
-      image: "https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg?auto=compress&cs=tinysrgb&w=1000",
-      rating: 4.5,
+      image: "/assets/images/Cameras/camera-imou-ipc-a32e-khong-day-3mp_2.webp",
+      rating: 4.8,
+      reviews: 120,
+      discount: 10,
+      isNew: true,
       specs: {
-        storage: "256GB",
-        screenSize: "6.7 inches",
-        camera: "48MP Quad",
-        battery: "4500 mAh",
+        resolution: "3MP",
+        connection: "WiFi",
+        nightVision: "Có",
+        storage: "Hỗ trợ thẻ nhớ 256GB",
       },
       inStock: true,
     },
     {
-      id: 5,
-      name: "Xiaomi Mi 11",
-      brand: "Xiaomi",
-      price: 749,
-      salePrice: 699,
-      image: "https://images.pexels.com/photos/13438611/pexels-photo-13438611.jpeg?auto=compress&cs=tinysrgb&w=1000",
-      rating: 4.4,
+      id: "camera-ip-hong-ngoai-khong-day-5mp-ezviz-h6c-pro",
+      name: "Camera IP Hồng Ngoại Không Dây 5MP EZVIZ H6C Pro",
+      brand: "EZVIZ",
+      price: 129,
+      image: "/assets/images/Cameras/camera-ip-hong-ngoai-khong-day-5mp-ezviz-h6c-pro.webp",
+      rating: 4.7,
+      reviews: 98,
+      discount: 12,
+      isNew: false,
       specs: {
-        storage: "128GB",
-        screenSize: "6.81 inches",
-        camera: "108MP Triple",
-        battery: "4600 mAh",
+        resolution: "5MP",
+        connection: "WiFi",
+        nightVision: "Có",
+        storage: "Hỗ trợ thẻ nhớ 512GB",
       },
-      inStock: false,
+      inStock: true,
     },
     {
-      id: 6,
-      name: "iPhone 12",
-      brand: "Apple",
-      price: 799,
-      salePrice: 749,
-      image: "https://images.unsplash.com/photo-1607936854279-55e8a4c64888?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
+      id: "camera-ip-hong-ngoai-khong-day-5mp-imou-ipc-a52p",
+      name: "Camera IP Hồng Ngoại Không Dây 5MP Imou IPC-A52P",
+      brand: "Imou",
+      price: 135,
+      image: "/assets/images/Cameras/camera-ip-hong-ngoai-khong-day-5mp-imou-ipc-a52p.webp",
+      rating: 4.9,
+      reviews: 150,
+      discount: 15,
+      isNew: true,
+      specs: {
+        resolution: "5MP",
+        connection: "WiFi",
+        nightVision: "Có",
+        storage: "Hỗ trợ thẻ nhớ 256GB",
+      },
+      inStock: true,
+    },
+    {
+      id: "camera-ip-hong-ngoai-khong-day-ezviz-c6n-3mp_3_",
+      name: "Camera IP Hồng Ngoại Không Dây EZVIZ C6N 3MP",
+      brand: "EZVIZ",
+      price: 990,
+      image: "/assets/images/Cameras/camera-ip-hong-ngoai-khong-day-ezviz-c6n-3mp_3_.webp",
       rating: 4.6,
+      reviews: 110,
+      discount: 8,
+      isNew: false,
       specs: {
-        storage: "64GB",
-        screenSize: "6.1 inches",
-        camera: "12MP Dual",
-        battery: "2815 mAh",
+        resolution: "3MP",
+        connection: "WiFi",
+        nightVision: "Có",
+        storage: "Hỗ trợ thẻ nhớ 256GB",
       },
       inStock: true,
     },
     {
-      id: 7,
-      name: "Samsung Galaxy Note 20",
-      brand: "Samsung",
-      price: 999,
-      salePrice: 899,
-      image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
+      id: "camera-ip-ngoai-troi-wifi-365-selection-oc1-2k_8_",
+      name: "Camera IP Ngoài Trời Wifi 365 Selection OC1 2K",
+      brand: "365 Selection",
+      price: 149,
+      image: "/assets/images/Cameras/camera-ip-ngoai-troi-wifi-365-selection-oc1-2k_8_.webp",
+      rating: 4.7,
+      reviews: 90,
+      discount: 10,
+      isNew: true,
+      specs: {
+        resolution: "2K",
+        connection: "WiFi",
+        nightVision: "Có",
+        storage: "Hỗ trợ thẻ nhớ 128GB",
+      },
+      inStock: true,
+    },
+    {
+      id: "camera-ip-wifi-2k-365-selection-c1.1",
+      name: "Camera IP Wifi 2K 365 Selection C1.1",
+      brand: "365 Selection",
+      price: 119,
+      image: "/assets/images/Cameras/camera-ip-wifi-2k-365-selection-c1.1.webp",
       rating: 4.5,
+      reviews: 80,
+      discount: 7,
+      isNew: false,
       specs: {
-        storage: "256GB",
-        screenSize: "6.7 inches",
-        camera: "64MP Triple",
-        battery: "4300 mAh",
+        resolution: "2K",
+        connection: "WiFi",
+        nightVision: "Có",
+        storage: "Hỗ trợ thẻ nhớ 128GB",
       },
       inStock: true,
     },
     {
-      id: 8,
-      name: "Google Pixel 5",
-      brand: "Google",
-      price: 699,
-      salePrice: 649,
-      image: "https://images.pexels.com/photos/13438612/pexels-photo-13438612.jpeg?auto=compress&cs=tinysrgb&w=1000",
-      rating: 4.4,
+      id: "camera-ip-wifi-3k-365-selection-c2_5_",
+      name: "Camera IP Wifi 3K 365 Selection C2",
+      brand: "365 Selection",
+      price: 159,
+      image: "/assets/images/Cameras/camera-ip-wifi-3k-365-selection-c2_5_.webp",
+      rating: 4.8,
+      reviews: 105,
+      discount: 11,
+      isNew: true,
       specs: {
-        storage: "128GB",
-        screenSize: "6.0 inches",
-        camera: "12.2MP Dual",
-        battery: "4080 mAh",
+        resolution: "3K",
+        connection: "WiFi",
+        nightVision: "Có",
+        storage: "Hỗ trợ thẻ nhớ 256GB",
       },
       inStock: true,
     },
     {
-      id: 9,
-      name: "OnePlus 8T",
-      brand: "OnePlus",
-      price: 749,
-      salePrice: 699,
-      image: "https://images.pexels.com/photos/13438613/pexels-photo-13438613.jpeg?auto=compress&cs=tinysrgb&w=1000",
-      rating: 4.3,
+      id: "camera-ip-wifi-4mp-imou-ipc-a43.1",
+      name: "Camera IP Wifi 4MP Imou IPC-A43.1",
+      brand: "Imou",
+      price: 125,
+      image: "/assets/images/Cameras/camera-ip-wifi-4mp-imou-ipc-a43.1.webp",
+      rating: 4.7,
+      reviews: 92,
+      discount: 9,
+      isNew: false,
       specs: {
-        storage: "128GB",
-        screenSize: "6.55 inches",
-        camera: "48MP Quad",
-        battery: "4500 mAh",
+        resolution: "4MP",
+        connection: "WiFi",
+        nightVision: "Có",
+        storage: "Hỗ trợ thẻ nhớ 256GB",
       },
       inStock: true,
     },
     {
-      id: 10,
-      name: "Xiaomi Redmi Note 10 Pro",
-      brand: "Xiaomi",
-      price: 299,
-      salePrice: 279,
-      image: "https://images.pexels.com/photos/13438614/pexels-photo-13438614.jpeg?auto=compress&cs=tinysrgb&w=1000",
-      rating: 4.2,
+      id: "camera-ip-wifi-ai-reoqoo-xt-x31b-2-5k-ngoai-troi",
+      name: "Camera IP Wifi AI Reoqoo XT-X31B 2.5K Ngoài Trời",
+      brand: "Reoqoo",
+      price: 169,
+      image: "/assets/images/Cameras/camera-ip-wifi-ai-reoqoo-xt-x31b-2-5k-ngoai-troi.webp",
+      rating: 4.9,
+      reviews: 130,
+      discount: 13,
+      isNew: true,
       specs: {
-        storage: "128GB",
-        screenSize: "6.67 inches",
-        camera: "108MP Quad",
-        battery: "5020 mAh",
+        resolution: "2.5K",
+        connection: "WiFi",
+        nightVision: "Có",
+        storage: "Hỗ trợ thẻ nhớ 256GB",
       },
       inStock: true,
     },
     {
-      id: 11,
-      name: "iPhone SE (2020)",
-      brand: "Apple",
-      price: 399,
-      salePrice: 349,
-      image: "https://images.unsplash.com/photo-1592286927505-1def25115481?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-      rating: 4.1,
-      specs: {
-        storage: "64GB",
-        screenSize: "4.7 inches",
-        camera: "12MP",
-        battery: "1821 mAh",
-      },
-      inStock: true,
-    },
-    {
-      id: 12,
-      name: "Samsung Galaxy A52",
-      brand: "Samsung",
-      price: 399,
-      salePrice: 379,
-      image: "https://images.pexels.com/photos/13438615/pexels-photo-13438615.jpeg?auto=compress&cs=tinysrgb&w=1000",
-      rating: 4.0,
-      specs: {
-        storage: "128GB",
-        screenSize: "6.5 inches",
-        camera: "64MP Quad",
-        battery: "4500 mAh",
-      },
-      inStock: true,
-    },
-    {
-      id: 13,
-      name: "Google Pixel 4a",
-      brand: "Google",
-      price: 349,
-      salePrice: 299,
-      image: "https://images.pexels.com/photos/13438616/pexels-photo-13438616.jpeg?auto=compress&cs=tinysrgb&w=1000",
-      rating: 4.2,
-      specs: {
-        storage: "128GB",
-        screenSize: "5.81 inches",
-        camera: "12.2MP",
-        battery: "3140 mAh",
-      },
-      inStock: false,
-    },
-    {
-      id: 14,
-      name: "OnePlus Nord",
-      brand: "OnePlus",
-      price: 399,
-      salePrice: 379,
-      image: "https://images.pexels.com/photos/13438617/pexels-photo-13438617.jpeg?auto=compress&cs=tinysrgb&w=1000",
-      rating: 4.3,
-      specs: {
-        storage: "128GB",
-        screenSize: "6.44 inches",
-        camera: "48MP Quad",
-        battery: "4115 mAh",
-      },
-      inStock: true,
-    },
-    {
-      id: 15,
-      name: "Xiaomi Poco F3",
-      brand: "Xiaomi",
-      price: 349,
-      salePrice: 329,
-      image: "https://images.pexels.com/photos/13438618/pexels-photo-13438618.jpeg?auto=compress&cs=tinysrgb&w=1000",
-      rating: 4.4,
-      specs: {
-        storage: "128GB",
-        screenSize: "6.67 inches",
-        camera: "48MP Triple",
-        battery: "4520 mAh",
-      },
-      inStock: true,
-    },
-    {
-      id: 16,
-      name: "iPhone 11",
-      brand: "Apple",
-      price: 599,
-      salePrice: 549,
-      image: "https://images.unsplash.com/photo-1591337676887-a217a6970a8a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-      rating: 4.5,
-      specs: {
-        storage: "64GB",
-        screenSize: "6.1 inches",
-        camera: "12MP Dual",
-        battery: "3110 mAh",
-      },
-      inStock: true,
-    },
-    {
-      id: 17,
-      name: "Samsung Galaxy Z Fold 3",
-      brand: "Samsung",
-      price: 1799,
-      salePrice: 1699,
-      image: "https://images.pexels.com/photos/13438619/pexels-photo-13438619.jpeg?auto=compress&cs=tinysrgb&w=1000",
+      id: "camera-ip-wifi-imou-ipc-a23p",
+      name: "Camera IP Wifi Imou IPC-A23P",
+      brand: "Imou",
+      price: 105,
+      image: "/assets/images/Cameras/camera-ip-wifi-imou-ipc-a23p.webp",
       rating: 4.6,
+      reviews: 85,
+      discount: 8,
+      isNew: false,
       specs: {
-        storage: "256GB",
-        screenSize: "7.6 inches",
-        camera: "12MP Triple",
-        battery: "4400 mAh",
-      },
-      inStock: true,
-    },
-    {
-      id: 18,
-      name: "Google Pixel 5a",
-      brand: "Google",
-      price: 449,
-      salePrice: 399,
-      image: "https://images.pexels.com/photos/13438620/pexels-photo-13438620.jpeg?auto=compress&cs=tinysrgb&w=1000",
-      rating: 4.1,
-      specs: {
-        storage: "128GB",
-        screenSize: "6.34 inches",
-        camera: "12.2MP Dual",
-        battery: "4680 mAh",
+        resolution: "2MP",
+        connection: "WiFi",
+        nightVision: "Có",
+        storage: "Hỗ trợ thẻ nhớ 128GB",
       },
       inStock: true,
     },
   ];
 
   // Available brands for filtering
-  const availableBrands = ["Apple", "Samsung", "Google", "OnePlus", "Xiaomi"];
+  const availableBrands = ["Imou", "Reoqoo", "365 Selection", "EZVIZ"];
 
   // Simulate API call to fetch products
   useEffect(() => {
@@ -410,7 +303,7 @@ const ProductListingPage = () => {
 
   // Toggle mobile filter sidebar
   const toggleMobileFilter = () => {
-    setIsMobileFilterOpen(!isMobileFilterOpen);
+    setIsCameraFilterOpen(!isLaptopFilterOpen);
   };
 
   return (
@@ -421,9 +314,9 @@ const ProductListingPage = () => {
         {/* Page header */}
         <div className="bg-white shadow-sm">
           <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-2xl font-bold text-gray-900">Mobile Phones</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Cameras</h1>
             <p className="mt-1 text-sm text-gray-600">
-              Browse our collection of the latest mobile phones
+              Browse our collection of the latest Cameras
             </p>
           </div>
         </div>
@@ -453,7 +346,7 @@ const ProductListingPage = () => {
             </div>
             
             {/* Mobile filter sidebar */}
-            {isMobileFilterOpen && (
+            {isLaptopFilterOpen && (
               <div className="fixed inset-0 z-40 flex md:hidden">
                 <div className="fixed inset-0 bg-black bg-opacity-25" onClick={toggleMobileFilter}></div>
                 <div className="relative w-full max-w-xs bg-white h-full overflow-y-auto">
@@ -612,4 +505,4 @@ const ProductListingPage = () => {
   );
 };
 
-export default ProductListingPage;
+export default ViewAllCamera;
