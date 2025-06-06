@@ -4,7 +4,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Homepage from "./pages/homepage";
 import ProductDetailPage from "./pages/product-detail-page";
-import ProductListingPage from "./pages/phone-listing-page";
+import PhonePage from "./pages/phonePage";
 import ShoppingCart from "./pages/shopping-cart";
 import ComputerPage from "pages/laptopPage";
 import CameraPage from "pages/cameraPage";
@@ -24,7 +24,7 @@ const Routes = () => {
           <Route path="/" element={<Homepage />} />
           <Route path="/homepage" element={<Homepage />} />
           <Route path="/shopping-cart" element={<ShoppingCart />} />
-          <Route path="/phone-listing-page" element={<ProductListingPage />} />
+          <Route path="/phones" element={<PhonePage />} />
           <Route path="/product-detail-page" element={<ProductDetailPage />} />
           <Route path="/laptops" element={<ComputerPage />} />
           <Route path="/cameras" element={<CameraPage />} />

@@ -51,7 +51,7 @@ const CartSummary = ({ subtotal, tax, shipping, total }) => {
           
           <div className="mt-4">
             <Link 
-              to="/phone-listing-page"
+              to="/phonePage"
               className="inline-flex items-center justify-center w-full text-primary-600 hover:text-primary-700 font-medium"
             >
               <span className="mr-2">Continue Shopping</span>
