@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation, Link } from "react-router-dom";
 
 import Header from "../../components/ui/Header";
 import Footer from "../../components/ui/Footer";
@@ -12,6 +13,10 @@ import SkeletonLoader from "./components/SkeletonLoader";
 import AddToCartModal from "./components/AddToCartModal";
 
 const ProductDetailPage = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const id = params.get("id");
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,23 +24,25 @@ const ProductDetailPage = () => {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    // Simulate API call with timeout
-    const fetchProductData = async () => {
-      setLoading(true);
-      try {
-        // Simulate network request
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        setProduct(mockProductData);
-        setError(null);
-      } catch (err) {
-        setError("Failed to load product data. Please try again.");
-      } finally {
-        setLoading(false);
+    setLoading(true);
+    setTimeout(() => {
+      let data = null;
+      if (id === "iphone-13-pro-max") {
+        data = mockProductData;
+      } else if (mockLaptopList.find(lap => lap.id === id)) {
+        data = mockLaptopList.find(lap => lap.id === id);
+      } else if (mockCameraList.find(cam => cam.id === id)) {
+        data = mockCameraList.find(cam => cam.id === id);
       }
-    };
-
-    fetchProductData();
-  }, []);
+      if (data) {
+        setProduct(data);
+        setError(null);
+      } else {
+        setError("Không tìm thấy sản phẩm.");
+      }
+      setLoading(false);
+    }, 1000);
+  }, [id]);
 
   const handleAddToCart = () => {
     // In a real app, this would make an API call to add the item to cart
@@ -56,9 +63,19 @@ const ProductDetailPage = () => {
     setQuantity(newQuantity);
   };
 
+  const isLaptop = product?.sku?.toLowerCase().includes("laptop") || product?.name?.toLowerCase().includes("laptop") || product?.name?.toLowerCase().includes("macbook");
+
+  // Thêm dòng này để xác định sản phẩm là camera
+  const isCamera = product?.sku?.toLowerCase().includes("camera") || product?.name?.toLowerCase().includes("camera");
+
+  // Sửa lại breadcrumbItems như sau:
   const breadcrumbItems = [
     { name: "Home", path: "/homepage" },
-    { name: "Phones", path: "/product-listing-page" },
+    isLaptop
+      ? { name: "Laptops", path: "/laptops" }
+      : isCamera
+        ? { name: "Cameras", path: "/cameras" }
+        : { name: "Phones", path: "/product-listing-page" },
     { name: product?.name || "Product", path: "" },
   ];
 
@@ -71,7 +88,7 @@ const ProductDetailPage = () => {
         
         {loading ? (
           <SkeletonLoader />
-        ) : error ? (
+        ) : error && !loading ? (
           <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-6">
@@ -274,4 +291,943 @@ const mockProductData = {
   ]
 };
 
+// Mock data for the laptop
+const mockLaptopList = [
+  {
+    id: "macbook-air-m2-2024",
+    name: "Apple Macbook Air M2 2024",
+    brand: "Apple",
+    price: 1299.99,
+    discountPrice: 1199.99,
+    rating: 4.9,
+    reviewCount: 120,
+    availability: "In Stock",
+    sku: "APL-MBAIR2024-512GB",
+    description: "The latest Macbook Air with M2 chip, ultra-thin design, and all-day battery life.",
+    shortDescription: "Apple's flagship ultrabook with M2 chip and Retina display.",
+    features: [
+      "13.6-inch Liquid Retina display",
+      "Apple M2 chip",
+      "Up to 18 hours battery life",
+      "Fanless design",
+      "MagSafe charging",
+      "Thunderbolt / USB 4 ports"
+    ],
+    colors: [
+      { name: "Midnight", code: "#24292F" },
+      { name: "Starlight", code: "#F3E8D7" },
+      { name: "Space Gray", code: "#6E6E73" }
+    ],
+    storage: [
+      { size: "256GB", price: 1199.99 },
+      { size: "512GB", price: 1299.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Apple Macbook Air M2 2024.webp",
+        alt: "Macbook Air M2 - Front"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "13.6 inches" },
+          { name: "Type", value: "Liquid Retina" },
+          { name: "Resolution", value: "2560 x 1664" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "Chip", value: "Apple M2" },
+          { name: "CPU", value: "8-core" },
+          { name: "GPU", value: "8-core" }
+        ]
+      }
+    ],
+    reviews: [
+      {
+        id: 1,
+        user: "Alice N.",
+        avatar: "https://randomuser.me/api/portraits/women/50.jpg",
+        rating: 5,
+        date: "2024-05-10",
+        title: "Best Macbook ever",
+        comment: "Super light, super fast, and the battery lasts all day. Perfect for work and travel!"
+      }
+    ]
+  },
+  {
+    id: "asus-vivobook-15-x1504va-bq2076w",
+    name: "Laptop Asus VivoBook 15 X1504VA-BQ2076W",
+    brand: "Asus",
+    price: 799.99,
+    discountPrice: 749.99,
+    rating: 4.7,
+    reviewCount: 210,
+    availability: "In Stock",
+    sku: "ASUS-VB15-X1504VA-BQ2076W",
+    description: "Laptop Asus VivoBook 15 với thiết kế mỏng nhẹ, hiệu năng ổn định cho học tập và làm việc.",
+    shortDescription: "Mỏng nhẹ, hiệu năng ổn định, màn hình 15.6 inch FHD.",
+    features: [
+      "15.6-inch FHD display",
+      "Intel Core i5",
+      "512GB SSD",
+      "8GB RAM",
+      "Windows 11"
+    ],
+    colors: [
+      { name: "Silver", code: "#C0C0C0" }
+    ],
+    storage: [
+      { size: "512GB", price: 799.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop Asus VivoBook 15 X1504VA-BQ2076W.webp",
+        alt: "Asus VivoBook 15"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "15.6 inches" },
+          { name: "Type", value: "FHD" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i5" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "asus-vivobook-s-16-oled-s5606ma-mx051w",
+    name: "Laptop Asus VivoBook S 16 OLED S5606MA-MX051W",
+    brand: "Asus",
+    price: 1099.99,
+    discountPrice: 999.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "ASUS-VB-S16-OLED-S5606MA-MX051W",
+    description: "Laptop Asus VivoBook S 16 OLED với màn hình OLED sắc nét, hiệu năng mạnh mẽ.",
+    shortDescription: "Màn hình OLED 16 inch, Intel Core i7, 1TB SSD.",
+    features: [
+      "16-inch OLED display",
+      "Intel Core i7",
+      "1TB SSD",
+      "16GB RAM"
+    ],
+    colors: [
+      { name: "Black", code: "#222" }
+    ],
+    storage: [
+      { size: "1TB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop Asus VivoBook S 16 OLED S5606MA-MX051W.webp",
+        alt: "Asus VivoBook S 16 OLED"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "16 inches" },
+          { name: "Type", value: "OLED" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i7" },
+          { name: "RAM", value: "16GB" },
+          { name: "Storage", value: "1TB SSD" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "acer-nitro-v-avn15-51-57b2",
+    name: "Laptop Gaming Acer Nitro V AVN15-51-57B2",
+    brand: "Acer",
+    price: 1099.99,
+    discountPrice: 1049.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "ACER-NITRO-V-AVN15-51-57B2",
+    description: "Laptop gaming mạnh mẽ với card đồ họa rời, màn hình 15.6 inch FULL HD.",
+    shortDescription: "Gaming, Intel Core i5-13420H, 512GB SSD, 8GB RAM.",
+    features: [
+      "15.6-inch FULL HD display",
+      "Intel Core i5-13420H",
+      "512GB SSD",
+      "8GB RAM",
+      "NVIDIA GeForce RTX"
+    ],
+    colors: [
+      { name: "Black", code: "#222" }
+    ],
+    storage: [
+      { size: "512GB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop Gaming Acer Nitro V AVN15-51-57B2.webp",
+        alt: "Acer Nitro V"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "15.6 inches" },
+          { name: "Type", value: "FULL HD" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i5-13420H" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" },
+          { name: "GPU", value: "NVIDIA GeForce RTX" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "hp-15-fc0086au",
+    name: "Laptop Hp 15-FC0086AU",
+    brand: "HP",
+    price: 1099.99,
+    discountPrice: 1049.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "HP-15-FC0086AU",
+    description: "Laptop HP 15 với thiết kế hiện đại, hiệu năng ổn định cho công việc và học tập.",
+    shortDescription: "15.6-inch FULL HD, R5-7430U, 512GB SSD.",
+    features: [
+      "15.6-inch FULL HD display",
+      "AMD Ryzen 5 7430U",
+      "512GB SSD",
+      "8GB RAM"
+    ],
+    colors: [
+      { name: "Silver", code: "#C0C0C0" }
+    ],
+    storage: [
+      { size: "512GB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop Hp 15-FC0086AU.webp",
+        alt: "HP 15"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "15.6 inches" },
+          { name: "Type", value: "FULL HD" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "AMD Ryzen 5 7430U" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "hp-gaming-victus-15-fa1139tx-8y6w3pa",
+    name: "Laptop HP Gaming Victus 15-FA1139TX 8Y6W3PA",
+    brand: "HP",
+    price: 1099.99,
+    discountPrice: 1049.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "HP-GAMING-VICTUS-15-FA1139TX-8Y6W3PA",
+    description: "Laptop gaming HP Victus với hiệu năng mạnh mẽ, card đồ họa rời.",
+    shortDescription: "15.6-inch FULL HD, Intel Core i5-12450H, 512GB SSD.",
+    features: [
+      "15.6-inch FULL HD display",
+      "Intel Core i5-12450H",
+      "512GB SSD",
+      "8GB RAM",
+      "NVIDIA GeForce RTX"
+    ],
+    colors: [
+      { name: "Black", code: "#222" }
+    ],
+    storage: [
+      { size: "512GB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop HP Gaming Victus 15-FA1139TX 8Y6W3PA.webp",
+        alt: "HP Gaming Victus 15"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "15.6 inches" },
+          { name: "Type", value: "FULL HD" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i5-12450H" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" },
+          { name: "GPU", value: "NVIDIA GeForce RTX" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "lenovo-ideapad-slim-3-14irh10-83l00008vn",
+    name: "Laptop Lenovo IdeaPad Slim 3 14IRH10 83L00008VN",
+    brand: "Lenovo",
+    price: 1099.99,
+    discountPrice: 1049.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "LENOVO-IDEAPAD-SLIM-3-14IRH10-83L00008VN",
+    description: "Laptop Lenovo IdeaPad Slim 3 với thiết kế mỏng nhẹ, hiệu năng ổn định.",
+    shortDescription: "14-inch WUXGA, Intel Core i5-13420H, 512GB SSD.",
+    features: [
+      "14-inch WUXGA display",
+      "Intel Core i5-13420H",
+      "512GB SSD",
+      "8GB RAM"
+    ],
+    colors: [
+      { name: "Gray", code: "#888" }
+    ],
+    storage: [
+      { size: "512GB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop Lenovo IdeaPad Slim 3 14IRH10 83L00008VN.webp",
+        alt: "Lenovo IdeaPad Slim 3"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "14 inches" },
+          { name: "Type", value: "WUXGA" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i5-13420H" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "msi-modern-14-c12mo-660vn",
+    name: "Laptop MSI Modern 14 C12MO-660VN",
+    brand: "MSI",
+    price: 1099.99,
+    discountPrice: 1049.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "MSI-MODERN-14-C12MO-660VN",
+    description: "Laptop MSI Modern 14 với thiết kế hiện đại, hiệu năng ổn định.",
+    shortDescription: "14-inch FULL HD, Intel Core i5-1235U, 512GB SSD.",
+    features: [
+      "14-inch FULL HD display",
+      "Intel Core i5-1235U",
+      "512GB SSD",
+      "8GB RAM"
+    ],
+    colors: [
+      { name: "Gray", code: "#888" }
+    ],
+    storage: [
+      { size: "512GB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Laptop MSI Modern 14 C12MO-660VN.webp",
+        alt: "MSI Modern 14"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "14 inches" },
+          { name: "Type", value: "FULL HD" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i5-1235U" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "asus-gaming-vivobook-k3605zc-rp564w",
+    name: "Latop Asus Gaming VivoBook K3605ZC-RP564W",
+    brand: "Asus",
+    price: 1099.99,
+    discountPrice: 1049.99,
+    rating: 4.8,
+    reviewCount: 180,
+    availability: "In Stock",
+    sku: "ASUS-GAMING-VB-K3605ZC-RP564W",
+    description: "Laptop Asus Gaming VivoBook với hiệu năng mạnh mẽ, màn hình lớn.",
+    shortDescription: "16-inch WUXGA, Intel Core i5-12500H, 512GB SSD.",
+    features: [
+      "16-inch WUXGA display",
+      "Intel Core i5-12500H",
+      "512GB SSD",
+      "8GB RAM",
+      "NVIDIA GeForce RTX"
+    ],
+    colors: [
+      { name: "Black", code: "#222" }
+    ],
+    storage: [
+      { size: "512GB", price: 1099.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/Latop Asus Gaming VivoBook K3605ZC-RP564W.webp",
+        alt: "Asus Gaming VivoBook"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "16 inches" },
+          { name: "Type", value: "WUXGA" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "CPU", value: "Intel Core i5-12500H" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "512GB SSD" },
+          { name: "GPU", value: "NVIDIA GeForce RTX" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "macbook-air-m4-13-inch-2025",
+    name: "MacBook Air M4 13 inch 2025",
+    brand: "Apple",
+    price: 1399.99,
+    discountPrice: 1299.99,
+    rating: 4.9,
+    reviewCount: 80,
+    availability: "In Stock",
+    sku: "APL-MBAIR-M4-13-2025",
+    description: "MacBook Air M4 13 inch 2025 với chip Apple M4, thiết kế siêu mỏng nhẹ.",
+    shortDescription: "13.6-inch 2.5K, Apple M4, 256GB SSD.",
+    features: [
+      "13.6-inch 2.5K display",
+      "Apple M4 chip",
+      "256GB SSD",
+      "8GB RAM"
+    ],
+    colors: [
+      { name: "Silver", code: "#C0C0C0" }
+    ],
+    storage: [
+      { size: "256GB", price: 1299.99 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Laptops/MacBook Air M4 13 inch 2025.webp",
+        alt: "MacBook Air M4 13 inch 2025"
+      }
+    ],
+    specifications: [
+      {
+        category: "Display",
+        items: [
+          { name: "Size", value: "13.6 inches" },
+          { name: "Type", value: "2.5K" }
+        ]
+      },
+      {
+        category: "Performance",
+        items: [
+          { name: "Chip", value: "Apple M4" },
+          { name: "RAM", value: "8GB" },
+          { name: "Storage", value: "256GB SSD" }
+        ]
+      }
+    ],
+    reviews: []
+  }
+];
+
+const mockCameraList = [
+  {
+    id: "camera-imou-ipc-a32e-khong-day-3mp_2",
+    name: "Camera Imou IPC-A32E Không Dây 3MP",
+    brand: "Imou",
+    price: 899,
+    discountPrice: 799,
+    rating: 4.8,
+    reviewCount: 120,
+    availability: "In Stock",
+    sku: "IMOU-IPC-A32E-3MP",
+    description: "Camera không dây Imou IPC-A32E độ phân giải 3MP, hỗ trợ thẻ nhớ 256GB.",
+    shortDescription: "Camera WiFi 3MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    features: [
+      "Độ phân giải 3MP",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 256GB",
+      "Night Vision"
+    ],
+    colors: [
+      { name: "White", code: "#fff" }
+    ],
+    storage: [
+      { size: "256GB", price: 899 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-imou-ipc-a32e-khong-day-3mp_2.webp",
+        alt: "Camera Imou IPC-A32E Không Dây 3MP"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "3MP" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 256GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-hong-ngoai-khong-day-5mp-ezviz-h6c-pro",
+    name: "Camera IP Hồng Ngoại Không Dây 5MP EZVIZ H6C Pro",
+    brand: "EZVIZ",
+    price: 129,
+    discountPrice: 119,
+    rating: 4.7,
+    reviewCount: 98,
+    availability: "In Stock",
+    sku: "EZVIZ-H6C-PRO-5MP",
+    description: "Camera EZVIZ H6C Pro 5MP, hỗ trợ thẻ nhớ 512GB, Night Vision.",
+    shortDescription: "Camera WiFi 5MP, hỗ trợ thẻ nhớ 512GB, Night Vision.",
+    features: [
+      "Độ phân giải 5MP",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 512GB",
+      "Night Vision"
+    ],
+    colors: [
+      { name: "White", code: "#fff" }
+    ],
+    storage: [
+      { size: "512GB", price: 129 }
+    ],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-hong-ngoai-khong-day-5mp-ezviz-h6c-pro.webp",
+        alt: "Camera IP Hồng Ngoại Không Dây 5MP EZVIZ H6C Pro"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "5MP" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 512GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-hong-ngoai-khong-day-5mp-imou-ipc-a52p",
+    name: "Camera IP Hồng Ngoại Không Dây 5MP Imou IPC-A52P",
+    brand: "Imou",
+    price: 135,
+    discountPrice: 115,
+    rating: 4.9,
+    reviewCount: 150,
+    availability: "In Stock",
+    sku: "IMOU-IPC-A52P-5MP",
+    description: "Camera Imou IPC-A52P 5MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    shortDescription: "Camera WiFi 5MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    features: [
+      "Độ phân giải 5MP",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 256GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "256GB", price: 135 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-hong-ngoai-khong-day-5mp-imou-ipc-a52p.webp",
+        alt: "Camera IP Hồng Ngoại Không Dây 5MP Imou IPC-A52P"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "5MP" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 256GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-hong-ngoai-khong-day-ezviz-c6n-3mp_3_",
+    name: "Camera IP Hồng Ngoại Không Dây EZVIZ C6N 3MP",
+    brand: "EZVIZ",
+    price: 990,
+    discountPrice: 910,
+    rating: 4.6,
+    reviewCount: 110,
+    availability: "In Stock",
+    sku: "EZVIZ-C6N-3MP",
+    description: "Camera EZVIZ C6N 3MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    shortDescription: "Camera WiFi 3MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    features: [
+      "Độ phân giải 3MP",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 256GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "256GB", price: 990 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-hong-ngoai-khong-day-ezviz-c6n-3mp_3_.webp",
+        alt: "Camera IP Hồng Ngoại Không Dây EZVIZ C6N 3MP"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "3MP" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 256GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-ngoai-troi-wifi-365-selection-oc1-2k_8_",
+    name: "Camera IP Ngoài Trời Wifi 365 Selection OC1 2K",
+    brand: "365 Selection",
+    price: 149,
+    discountPrice: 134,
+    rating: 4.7,
+    reviewCount: 90,
+    availability: "In Stock",
+    sku: "365-OC1-2K",
+    description: "Camera ngoài trời 2K, hỗ trợ thẻ nhớ 128GB, Night Vision.",
+    shortDescription: "Camera ngoài trời 2K, WiFi, Night Vision.",
+    features: [
+      "Độ phân giải 2K",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 128GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "128GB", price: 149 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-ngoai-troi-wifi-365-selection-oc1-2k_8_.webp",
+        alt: "Camera IP Ngoài Trời Wifi 365 Selection OC1 2K"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "2K" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 128GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-wifi-2k-365-selection-c1.1",
+    name: "Camera IP Wifi 2K 365 Selection C1.1",
+    brand: "365 Selection",
+    price: 119,
+    discountPrice: 111,
+    rating: 4.5,
+    reviewCount: 80,
+    availability: "In Stock",
+    sku: "365-C1.1-2K",
+    description: "Camera IP Wifi 2K 365 Selection C1.1, hỗ trợ thẻ nhớ 128GB, Night Vision.",
+    shortDescription: "Camera WiFi 2K, hỗ trợ thẻ nhớ 128GB, Night Vision.",
+    features: [
+      "Độ phân giải 2K",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 128GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "128GB", price: 119 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-wifi-2k-365-selection-c1.1.webp",
+        alt: "Camera IP Wifi 2K 365 Selection C1.1"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "2K" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 128GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-wifi-3k-365-selection-c2_5_",
+    name: "Camera IP Wifi 3K 365 Selection C2",
+    brand: "365 Selection",
+    price: 159,
+    discountPrice: 141,
+    rating: 4.8,
+    reviewCount: 105,
+    availability: "In Stock",
+    sku: "365-C2-3K",
+    description: "Camera IP Wifi 3K 365 Selection C2, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    shortDescription: "Camera WiFi 3K, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    features: [
+      "Độ phân giải 3K",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 256GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "256GB", price: 159 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-wifi-3k-365-selection-c2_5_.webp",
+        alt: "Camera IP Wifi 3K 365 Selection C2"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "3K" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 256GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-wifi-4mp-imou-ipc-a43.1",
+    name: "Camera IP Wifi 4MP Imou IPC-A43.1",
+    brand: "Imou",
+    price: 125,
+    discountPrice: 114,
+    rating: 4.7,
+    reviewCount: 92,
+    availability: "In Stock",
+    sku: "IMOU-IPC-A43.1-4MP",
+    description: "Camera Imou IPC-A43.1 4MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    shortDescription: "Camera WiFi 4MP, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    features: [
+      "Độ phân giải 4MP",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 256GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "256GB", price: 125 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-wifi-4mp-imou-ipc-a43.1.webp",
+        alt: "Camera IP Wifi 4MP Imou IPC-A43.1"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "4MP" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 256GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-wifi-ai-reoqoo-xt-x31b-2-5k-ngoai-troi",
+    name: "Camera IP Wifi AI Reoqoo XT-X31B 2.5K Ngoài Trời",
+    brand: "Reoqoo",
+    price: 169,
+    discountPrice: 147,
+    rating: 4.9,
+    reviewCount: 130,
+    availability: "In Stock",
+    sku: "REOQOO-XT-X31B-2.5K",
+    description: "Camera ngoài trời AI Reoqoo XT-X31B 2.5K, hỗ trợ thẻ nhớ 256GB, Night Vision.",
+    shortDescription: "Camera ngoài trời AI 2.5K, WiFi, Night Vision.",
+    features: [
+      "Độ phân giải 2.5K",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 256GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "256GB", price: 169 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-wifi-ai-reoqoo-xt-x31b-2-5k-ngoai-troi.webp",
+        alt: "Camera IP Wifi AI Reoqoo XT-X31B 2.5K Ngoài Trời"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "2.5K" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 256GB" }
+        ]
+      }
+    ],
+    reviews: []
+  },
+  {
+    id: "camera-ip-wifi-imou-ipc-a23p",
+    name: "Camera IP Wifi Imou IPC-A23P",
+    brand: "Imou",
+    price: 105,
+    discountPrice: 97,
+    rating: 4.6,
+    reviewCount: 85,
+    availability: "In Stock",
+    sku: "IMOU-IPC-A23P-2MP",
+    description: "Camera Imou IPC-A23P 2MP, hỗ trợ thẻ nhớ 128GB, Night Vision.",
+    shortDescription: "Camera WiFi 2MP, hỗ trợ thẻ nhớ 128GB, Night Vision.",
+    features: [
+      "Độ phân giải 2MP",
+      "Kết nối WiFi",
+      "Hỗ trợ thẻ nhớ 128GB",
+      "Night Vision"
+    ],
+    colors: [{ name: "White", code: "#fff" }],
+    storage: [{ size: "128GB", price: 105 }],
+    images: [
+      {
+        id: 1,
+        src: "/assets/images/Cameras/camera-ip-wifi-imou-ipc-a23p.webp",
+        alt: "Camera IP Wifi Imou IPC-A23P"
+      }
+    ],
+    specifications: [
+      {
+        category: "Camera",
+        items: [
+          { name: "Độ phân giải", value: "2MP" },
+          { name: "Kết nối", value: "WiFi" },
+          { name: "Night Vision", value: "Có" },
+          { name: "Lưu trữ", value: "Hỗ trợ thẻ nhớ 128GB" }
+        ]
+      }
+    ],
+    reviews: []
+  }
+];
+
 export default ProductDetailPage;
+export { mockCameraList };

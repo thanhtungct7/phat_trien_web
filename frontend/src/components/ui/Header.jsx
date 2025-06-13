@@ -14,13 +14,15 @@ const Header = ({
   const [isScrolled, setIsScrolled] = useState(false);
   // State để quản lý trạng thái mở/đóng của dropdown "Điện thoại"
   const [isPhonesDropdownOpen, setIsPhonesDropdownOpen] = useState(false); 
+  const [isLaptopsDropdownOpen, setIsLaptopsDropdownOpen] = useState(false); 
+  const [isCamerasDropdownOpen, setIsCamerasDropdownOpen] = useState(false); 
   const location = useLocation();
 
   const navigationItems = [
     // Thêm thuộc tính hasDropdown để đánh dấu mục nào có dropdown
     { name: 'Điện thoại', path: '/phones', hasDropdown: true },
-    { name: 'Máy tính bảng', path: '/tablets' },
-    { name: 'Camera', path: '/cameras' },
+    { name: 'Laptop', path: '/laptops', hasDropdown: true },
+    { name: 'Camera', path: '/cameras', hasDropdown: true },
   ];
 
   // Danh sách các hãng điện thoại
@@ -30,7 +32,22 @@ const Header = ({
     { name: 'Xiaomi', path: '/phones/xiaomi' },
     { name: 'Oppo', path: '/phones/oppo' },
     { name: 'Realme', path: '/phones/realme' },
-    // Thêm các hãng khác nếu cần
+  ];
+
+  const laptopBrands = [
+    { name: 'Apple', path: '/laptops/apple' },
+    { name: 'Dell', path: '/laptops/dell' },
+    { name: 'Asus', path: '/laptops/asus' },
+    { name: 'Lenovo', path: '/laptops/lenovo' },
+    { name: 'HP', path: '/laptops/hp' },
+  ];
+
+  const cameraBrands = [
+    { name: 'Ezviz', path: '/cameras/ezviz' },
+    { name: 'TpLink', path: '/cameras/tplink' },
+    { name: 'Imou', path: '/cameras/imou' },
+    { name: 'Tiandy', path: '/cameras/tiandy' },
+    { name: '365 Selection', path: '/cameras/365selection' },
   ];
 
   useEffect(() => {
@@ -118,55 +135,73 @@ const Header = ({
           </div>
           
           <nav className="hidden md:flex space-x-8">
-            {navigationItems.map((item) => (
-              // Bọc Link bằng div để xử lý dropdown
-              <div 
-                key={item.name} 
-                className="relative"
-                onMouseEnter={() => item.hasDropdown && setIsPhonesDropdownOpen(true)}
-                onMouseLeave={() => item.hasDropdown && setIsPhonesDropdownOpen(false)}
-              >
-                <Link
-                  to={item.path} // Link cho mục chính (ví dụ: /phones)
-                  className={`
-                    px-1 py-2 text-sm font-medium border-b-2 transition-colors
-                    ${
-                      // Logic để gạch chân item hiện tại hoặc khi dropdown của nó mở
-                      (item.name === 'Điện thoại' && (location.pathname.startsWith(item.path) || isPhonesDropdownOpen)) ||
-                      (item.name !== 'Điện thoại' && location.pathname.startsWith(item.path))
-                      ? 'border-white text-white' 
-                      : 'border-transparent text-gray-200 hover:text-white hover:border-gray-300'
-                    }
-                  `}
-                  aria-current={location.pathname === item.path ? 'page' : undefined}
+            {navigationItems.map((item) => {
+              // Xác định dropdown và state tương ứng
+              let brands = [];
+              let isDropdownOpen = false;
+              let setDropdownOpen = () => {};
+              if (item.name === 'Điện thoại') {
+                brands = phoneBrands;
+                isDropdownOpen = isPhonesDropdownOpen;
+                setDropdownOpen = setIsPhonesDropdownOpen;
+              } else if (item.name === 'Laptop') {
+                brands = laptopBrands;
+                isDropdownOpen = isLaptopsDropdownOpen;
+                setDropdownOpen = setIsLaptopsDropdownOpen;
+              } else if (item.name === 'Camera') {
+                brands = cameraBrands;
+                isDropdownOpen = isCamerasDropdownOpen;
+                setDropdownOpen = setIsCamerasDropdownOpen;
+              }
+
+              return (
+                <div
+                  key={item.name}
+                  className="relative"
+                  onMouseEnter={() => item.hasDropdown && setDropdownOpen(true)}
+                  onMouseLeave={() => item.hasDropdown && setDropdownOpen(false)}
                 >
-                  {item.name}
-                </Link>
-                {/* Dropdown cho "Điện thoại" */}
-                {item.hasDropdown && isPhonesDropdownOpen && (
-                  <div 
-                    className="absolute z-10 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-                    role="menu" 
-                    aria-orientation="vertical" 
-                    aria-labelledby="menu-button"
+                  <Link
+                    to={item.path}
+                    className={`
+                      px-1 py-2 text-sm font-medium border-b-2 transition-colors
+                      ${
+                        (item.hasDropdown && isDropdownOpen) ||
+                        location.pathname.startsWith(item.path)
+                          ? 'border-white text-white'
+                          : 'border-transparent text-gray-200 hover:text-white hover:border-gray-300'
+                      }
+                    `}
+                    aria-current={location.pathname === item.path ? 'page' : undefined}
                   >
-                    <div className="py-1" role="none">
-                      {phoneBrands.map(brand => (
-                        <Link 
-                          key={brand.name}
-                          to={brand.path}
-                          className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
-                          role="menuitem"
-                          onClick={() => setIsPhonesDropdownOpen(false)} // Đóng dropdown khi click vào hãng
-                        >
-                          {brand.name}
-                        </Link>
-                      ))}
+                    {item.name}
+                  </Link>
+                  {/* Dropdown cho các mục có dropdown */}
+                  {item.hasDropdown && isDropdownOpen && (
+                    <div
+                      className="absolute z-10 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      role="menu"
+                      aria-orientation="vertical"
+                      aria-labelledby="menu-button"
+                    >
+                      <div className="py-1" role="none">
+                        {brands.map(brand => (
+                          <Link
+                            key={brand.name}
+                            to={brand.path}
+                            className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                            role="menuitem"
+                            onClick={() => setDropdownOpen(false)}
+                          >
+                            {brand.name}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            ))}
+                  )}
+                </div>
+              );
+            })}
           </nav>
           
           <div className="hidden md:flex items-center space-x-4">
@@ -192,10 +227,10 @@ const Header = ({
             
             <Link to="/account">
               <Button 
-                variant="ghost" 
+                variant="ghost"
                 icon="User"
                 aria-label="Tài khoản"
-                className="text-gray-200 hover:text-white"
+                className="text-white hover:text-white"
               />
             </Link>
           </div>
