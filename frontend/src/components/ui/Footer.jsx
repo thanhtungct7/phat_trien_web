@@ -29,10 +29,10 @@ const Footer = ({
       { name: 'Accessibility', path: '/accessibility' },
     ],
     categories: [
-      { name: 'Electronics', path: '/product-listing-page?category=electronics' },
-      { name: 'Clothing', path: '/product-listing-page?category=clothing' },
-      { name: 'Home & Garden', path: '/product-listing-page?category=home' },
-      { name: 'Sports & Outdoors', path: '/product-listing-page?category=sports' },
+      { name: 'Electronics', path: '/phone-listing-page?category=electronics' },
+      { name: 'Clothing', path: '/phone-listing-page?category=clothing' },
+      { name: 'Home & Garden', path: '/phone-listing-page?category=home' },
+      { name: 'Sports & Outdoors', path: '/phone-listing-page?category=sports' },
     ],
   };
   

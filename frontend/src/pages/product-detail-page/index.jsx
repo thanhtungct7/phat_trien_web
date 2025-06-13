@@ -27,8 +27,8 @@ const ProductDetailPage = () => {
     setLoading(true);
     setTimeout(() => {
       let data = null;
-      if (id === "iphone-13-pro-max") {
-        data = mockProductData;
+      if (mockPhoneList.find(lap => lap.id === id)) {
+        data = mockPhoneList.find(lap => lap.id === id);
       } else if (mockLaptopList.find(lap => lap.id === id)) {
         data = mockLaptopList.find(lap => lap.id === id);
       } else if (mockCameraList.find(cam => cam.id === id)) {
@@ -57,7 +57,7 @@ const ProductDetailPage = () => {
       setProduct(mockProductData);
       setLoading(false);
     }, 1500);
-  };
+  }; 
 
   const handleQuantityChange = (newQuantity) => {
     setQuantity(newQuantity);
@@ -68,6 +68,8 @@ const ProductDetailPage = () => {
   // Thêm dòng này để xác định sản phẩm là camera
   const isCamera = product?.sku?.toLowerCase().includes("camera") || product?.name?.toLowerCase().includes("camera");
 
+  const isPhone = product?.sku?.toLowerCase().includes("phone") || product?.name?.toLowerCase().includes("phone");
+
   // Sửa lại breadcrumbItems như sau:
   const breadcrumbItems = [
     { name: "Home", path: "/homepage" },
@@ -75,7 +77,9 @@ const ProductDetailPage = () => {
       ? { name: "Laptops", path: "/laptops" }
       : isCamera
         ? { name: "Cameras", path: "/cameras" }
-        : { name: "Phones", path: "/product-listing-page" },
+        : isPhone
+          ? { name: "Phones", path: "/phones" }
+          : { name: "Products", path: "/products" },
     { name: product?.name || "Product", path: "" },
   ];
 
@@ -139,157 +143,312 @@ const ProductDetailPage = () => {
   );
 };
 
-// Mock data for the product
-const mockProductData = {
-  id: "iphone-13-pro-max",
-  name: "iPhone 13 Pro Max",
-  brand: "Apple",
-  price: 1099.99,
-  discountPrice: 999.99,
-  rating: 4.8,
-  reviewCount: 256,
-  availability: "In Stock",
-  sku: "APL-IPH13PMAX-128-GRN",
-  description: `Experience the ultimate iPhone with the iPhone 13 Pro Max. Featuring a stunning 6.7-inch Super Retina XDR display with ProMotion technology for a faster, more responsive feel. Powered by the A15 Bionic chip, the fastest chip ever in a smartphone. Includes a pro camera system with new 12MP Telephoto, Wide, and Ultra Wide cameras that capture stunning photos and 4K Dolby Vision HDR video. Get up to 28 hours of video playback, the best battery life ever in an iPhone. And with Ceramic Shield, it's tougher than any smartphone glass.`,
-  shortDescription: "Apple\'s flagship smartphone with a 6.7-inch display, A15 Bionic chip, and pro camera system.",
-  features: [
-    "6.7-inch Super Retina XDR display with ProMotion",
-    "A15 Bionic chip with 5-core GPU",
-    "Pro camera system: Telephoto, Wide, and Ultra Wide",
-    "Up to 28 hours of video playback",
-    "5G capable for faster downloads and streaming",
-    "Ceramic Shield front for 4x better drop protection",
-    "IP68 water resistance (up to 6m for 30 minutes)",
-    "iOS 15 with new features for Maps, Photos, and more"
-  ],
-  colors: [
-    { name: "Sierra Blue", code: "#9BB5CE" },
-    { name: "Silver", code: "#F5F5F0" },
-    { name: "Gold", code: "#F9E5C9" },
-    { name: "Graphite", code: "#5F5F5F" }
-  ],
-  storage: [
-    { size: "128GB", price: 999.99 },
-    { size: "256GB", price: 1099.99 },
-    { size: "512GB", price: 1299.99 },
-    { size: "1TB", price: 1499.99 }
-  ],
-  images: [
-    {
-      id: 1,
-      src: "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-      alt: "iPhone 13 Pro Max - Front View"
-    },
-    {
-      id: 2,
-      src: "https://images.unsplash.com/photo-1634618774956-36f5b1618be7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-      alt: "iPhone 13 Pro Max - Back View"
-    },
-    {
-      id: 3,
-      src: "https://images.unsplash.com/photo-1634618774956-36f5b1618be7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-      alt: "iPhone 13 Pro Max - Side View"
-    },
-    {
-      id: 4,
-      src: "https://images.unsplash.com/photo-1592813959730-5b8c5a2b2299?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-      alt: "iPhone 13 Pro Max - Camera Detail"
-    }
-  ],
-  specifications: [
-    {
-      category: "Display",
-      items: [
-        { name: "Size", value: "6.7 inches" },
-        { name: "Type", value: "Super Retina XDR OLED" },
-        { name: "Resolution", value: "2778 x 1284 pixels at 458 ppi" },
-        { name: "Technology", value: "ProMotion technology with adaptive refresh rate up to 120Hz" },
-        { name: "Brightness", value: "1000 nits max brightness (typical); 1200 nits max brightness (HDR)" }
-      ]
-    },
-    {
-      category: "Performance",
-      items: [
-        { name: "Chip", value: "A15 Bionic" },
-        { name: "CPU", value: "6-core CPU with 2 performance and 4 efficiency cores" },
-        { name: "GPU", value: "5-core GPU" },
-        { name: "Neural Engine", value: "16-core Neural Engine" }
-      ]
-    },
-    {
-      category: "Camera",
-      items: [
-        { name: "Rear Camera", value: "Pro 12MP camera system: Telephoto, Wide, and Ultra Wide cameras" },
-        { name: "Telephoto", value: "ƒ/2.8 aperture, 3x optical zoom" },
-        { name: "Wide", value: "ƒ/1.5 aperture" },
-        { name: "Ultra Wide", value: "ƒ/1.8 aperture and 120° field of view" },
-        { name: "Front Camera", value: "12MP TrueDepth camera with ƒ/2.2 aperture" }
-      ]
-    },
-    {
-      category: "Battery",
-      items: [
-        { name: "Video Playback", value: "Up to 28 hours" },
-        { name: "Audio Playback", value: "Up to 95 hours" },
-        { name: "Fast Charging", value: "Up to 50% charge in around 30 minutes with 20W adapter or higher" }
-      ]
-    },
-    {
-      category: "Storage",
-      items: [
-        { name: "Capacity", value: "128GB, 256GB, 512GB, 1TB" }
-      ]
-    },
-    {
-      category: "Connectivity",
-      items: [
-        { name: "5G", value: "Sub-6GHz and mmWave" },
-        { name: "Wi-Fi", value: "Wi-Fi 6 (802.11ax) with 2x2 MIMO" },
-        { name: "Bluetooth", value: "Bluetooth 5.0" },
-        { name: "NFC", value: "Yes, with reader mode" },
-        { name: "GPS", value: "Built-in GPS, GLONASS, Galileo, QZSS, and BeiDou" }
-      ]
-    }
-  ],
-  reviews: [
-    {
-      id: 1,
-      user: "John D.",
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      rating: 5,
-      date: "2023-03-15",
-      title: "Best iPhone I\'ve ever owned",
-      comment: "The camera quality is incredible, and the battery life is a game-changer. I can go almost two full days without charging with moderate use. The ProMotion display is also very noticeable coming from an older iPhone."
-    },
-    {
-      id: 2,
-      user: "Sarah M.",
-      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-      rating: 4,
-      date: "2023-02-28",
-      title: "Great phone but expensive",
-      comment: "This is definitely the best smartphone I\'ve used, but the price is hard to justify. The camera system is amazing, especially the macro photography capabilities. Battery life is excellent. My only complaint is the weight - it\'s noticeably heavier than previous models."
-    },
-    {
-      id: 3,
-      user: "Robert J.",
-      avatar: "https://randomuser.me/api/portraits/men/46.jpg",
-      rating: 5,
-      date: "2023-02-10",
-      title: "Worth every penny",
-      comment: "The 120Hz display makes everything so smooth. Gaming is a pleasure on this device, and the A15 chip handles everything I throw at it without breaking a sweat. The camera system is professional quality - I\'ve stopped carrying my DSLR for most occasions."
-    },
-    {
-      id: 4,
-      user: "Emily L.",
-      avatar: "https://randomuser.me/api/portraits/women/33.jpg",
-      rating: 3,
-      date: "2023-01-22",
-      title: "Good but not a huge upgrade",
-      comment: "Coming from the iPhone 12 Pro, this isn\'t a massive upgrade. Yes, the ProMotion display is nice and the battery is better, but I\'m not sure it was worth upgrading for. If you have an older iPhone though, this would be a significant improvement."
-    }
-  ]
-};
+const mockPhoneList = [
+  {
+    id: "iphone-15-pro-max",
+    name: "Apple iPhone 15 Pro Max",
+    brand: "Apple",
+    price: 1199.99,
+    discountPrice: 1079.99, // Giảm 10%
+    rating: 4.9,
+    reviewCount: 450,
+    availability: "In Stock",
+    sku: "APL-IPH15PMAX-256GB",
+    description: "iPhone 15 Pro Max là một bước nhảy vọt về công nghệ với chip A17 Pro mang lại hiệu năng đồ họa chưa từng có. Khung viền Titan chuẩn hàng không vũ trụ không chỉ sang trọng mà còn bền bỉ, nhẹ hơn các thế hệ trước. Hệ thống camera Pro mở ra khả năng nhiếp ảnh và quay phim chuyên nghiệp, đặc biệt với khả năng zoom quang học 5x.",
+    shortDescription: "Flagship cao cấp của Apple với khung Titan, chip A17 Pro và camera tele 5x.",
+    features: [
+      "Màn hình Super Retina XDR 6.7 inch với ProMotion",
+      "Chip Apple A17 Pro mạnh mẽ",
+      "Khung viền Titan chuẩn hàng không vũ trụ",
+      "Hệ thống camera Pro với camera chính 48MP và zoom quang 5x",
+      "Nút tác vụ (Action Button) tùy chỉnh nhanh",
+      "Cổng kết nối USB-C hỗ trợ USB 3 cho tốc độ truyền tải siêu nhanh",
+    ],
+    colors: [
+      { name: "Titan Tự Nhiên", code: "#8F8A81" },
+      { name: "Titan Xanh", code: "#4D5A68" },
+      { name: "Titan Trắng", code: "#F5F5F0" },
+      { name: "Titan Đen", code: "#5F5F5F" },
+    ],
+    storage: [ // Giả lập các tùy chọn dung lượng khác
+      { size: "256GB", price: 1199.99 },
+      { size: "512GB", price: 1399.99 },
+      { size: "1TB", price: 1599.99 },
+    ],
+    images: [
+      { id: 1, src: "/assets/images/Phones/Apple iPhone 15 Pro Max.webp", alt: "iPhone 15 Pro Max - Mặt trước" },
+      { id: 2, src: "/assets/images/Phones/Apple iPhone 15 Pro Max.webp", alt: "iPhone 15 Pro Max - Cụm camera" },
+    ],
+    specifications: [
+      {
+        category: "Màn hình",
+        items: [
+          { name: "Kích thước", value: "6.7 inch" },
+          { name: "Công nghệ", value: "Super Retina XDR với ProMotion" },
+          { name: "Tần số quét", value: "Thích ứng lên đến 120Hz" },
+        ],
+      },
+      {
+        category: "Hiệu năng",
+        items: [
+          { name: "Chip", value: "Apple A17 Pro" },
+          { name: "CPU", value: "6 lõi" },
+          { name: "GPU", value: "6 lõi" },
+        ],
+      },
+      {
+        category: "Camera",
+        items: [
+          { name: "Camera chính", value: "48MP, ƒ/1.78" },
+          { name: "Camera Ultra Wide", value: "12MP, ƒ/2.2" },
+          { name: "Camera Telephoto 5x", value: "12MP, ƒ/2.8" },
+        ],
+      },
+    ],
+    reviews: [],
+  },
+  {
+    id: "samsung-galaxy-s24-ultra",
+    name: "Samsung Galaxy S24 Ultra",
+    brand: "Samsung",
+    price: 1299.99,
+    discountPrice: 1104.99, // Giảm 15%
+    rating: 4.8,
+    reviewCount: 380,
+    availability: "In Stock",
+    sku: "SAM-S24ULTRA-512GB",
+    description: "Samsung Galaxy S24 Ultra định nghĩa lại trải nghiệm di động với Galaxy AI. Dịch trực tiếp cuộc gọi, khoanh vùng tìm kiếm thông minh và chỉnh sửa ảnh chuyên nghiệp bằng AI. Bút S Pen tích hợp mang đến sự chính xác tuyệt đối, kết hợp với camera 200MP và hiệu năng đỉnh cao từ Snapdragon 8 Gen 3 for Galaxy.",
+    shortDescription: "Điện thoại AI cao cấp với camera 200MP và bút S Pen tích hợp.",
+    features: [
+      "Màn hình Dynamic AMOLED 2X 6.8 inch",
+      "Chip Snapdragon 8 Gen 3 for Galaxy",
+      "Tích hợp các tính năng Galaxy AI",
+      "Camera chính 200MP với Space Zoom 100x",
+      "Bút S Pen tích hợp sẵn trong thân máy",
+      "Khung viền Titan bền bỉ",
+    ],
+    colors: [
+      { name: "Xám Titan", code: "#8D8D8B" },
+      { name: "Tím Titan", code: "#A49FAD" },
+      { name: "Vàng Titan", code: "#E3DDBB" },
+      { name: "Đen Titan", code: "#3E3D3B" },
+    ],
+    storage: [
+      { size: "256GB", price: 1199.99 },
+      { size: "512GB", price: 1299.99 },
+      { size: "1TB", price: 1499.99 },
+    ],
+    images: [
+      { id: 1, src: "/assets/images/Phones/Samsung Galaxy S24 Ultra.webp", alt: "Samsung Galaxy S24 Ultra - Mặt trước và bút S Pen" },
+      { id: 2, src: "/assets/images/Phones/Samsung Galaxy S24 Ultra.webp", alt: "Samsung Galaxy S24 Ultra - Cụm camera sau" },
+    ],
+    specifications: [
+      {
+        category: "Màn hình",
+        items: [
+          { name: "Kích thước", value: "6.8 inch" },
+          { name: "Công nghệ", value: "Dynamic AMOLED 2X" },
+          { name: "Độ sáng", value: "2600 nits (tối đa)" },
+        ],
+      },
+      {
+        category: "Hiệu năng",
+        items: [
+          { name: "Chip", value: "Snapdragon 8 Gen 3 for Galaxy" },
+          { name: "RAM", value: "12GB" },
+        ],
+      },
+      {
+        category: "Camera",
+        items: [
+          { name: "Camera chính", value: "200MP" },
+          { name: "Camera góc siêu rộng", value: "12MP" },
+          { name: "Camera Tele 1", value: "50MP (Zoom 5x)" },
+          { name: "Camera Tele 2", value: "10MP (Zoom 3x)" },
+        ],
+      },
+    ],
+    reviews: [],
+  },
+  {
+    id: "google-pixel-8-pro",
+    name: "Google Pixel 8 Pro",
+    brand: "Google",
+    price: 999.99,
+    discountPrice: 949.99, // Giảm 5%
+    rating: 4.7,
+    reviewCount: 310,
+    availability: "In Stock",
+    sku: "GGL-PIX8PRO-128GB",
+    description: "Pixel 8 Pro là chiếc điện thoại mạnh mẽ toàn diện từ Google. Với chip Google Tensor G3 và các tính năng AI độc quyền như Best Take, Magic Editor, đây là công cụ sáng tạo mạnh mẽ. Trải nghiệm Android gốc mượt mà và nhận cập nhật phần mềm trong 7 năm.",
+    shortDescription: "Điện thoại thông minh từ Google với chip Tensor G3 và 7 năm cập nhật.",
+    features: [
+      "Màn hình Super Actua 6.7 inch 120Hz",
+      "Chip Google Tensor G3 tùy chỉnh",
+      "Hệ thống ba camera chuyên nghiệp",
+      "Tính năng AI độc quyền: Best Take, Magic Editor, Audio Magic Eraser",
+      "7 năm cập nhật hệ điều hành và bảo mật",
+    ],
+    colors: [
+      { name: "Obsidian", code: "#181A1B" },
+      { name: "Porcelain", code: "#F2E9DE" },
+      { name: "Bay", code: "#A5C4DD" },
+    ],
+    storage: [
+      { size: "128GB", price: 999.99 },
+      { size: "256GB", price: 1059.99 },
+    ],
+    images: [
+      { id: 1, src: "/assets/images/Phones/Google Pixel 8 Pro.webp", alt: "Google Pixel 8 Pro" }
+    ],
+    specifications: [
+        { category: "Display", items: [{ name: "Size", value: "6.7-inch OLED" }, { name: "Chip", value: "Google Tensor G3" }] },
+        { category: "Camera", items: [{ name: "Main", value: "50MP Chính" }, { name: "Storage", value: "128GB" }] },
+    ],
+    reviews: []
+  },
+  {
+    id: "xiaomi-14-ultra",
+    name: "Xiaomi 14 Ultra",
+    brand: "Xiaomi",
+    price: 1099.00,
+    discountPrice: 1011.08, // Giảm 8%
+    rating: 4.8,
+    reviewCount: 250,
+    availability: "In Stock",
+    sku: "XIA-14ULTRA-512GB",
+    description: "Hợp tác cùng Leica, Xiaomi 14 Ultra mang đến một kiệt tác nhiếp ảnh di động. Với cảm biến 1 inch và ống kính có thể thay đổi khẩu độ, bạn có toàn quyền kiểm soát sáng tạo. Màn hình All Around Liquid Display cho trải nghiệm xem đắm chìm.",
+    shortDescription: "Camera Leica chuyên nghiệp với cảm biến 1-inch và hiệu năng hàng đầu.",
+    features: [
+        "Hệ thống camera Leica Vario-Summilux",
+        "Cảm biến chính 1-inch LYT-900",
+        "Màn hình 6.73-inch AMOLED C8 WQHD+",
+        "Chip Snapdragon 8 Gen 3",
+        "Sạc nhanh 90W có dây và 80W không dây",
+    ],
+    colors: [{ name: "Black", code: "#000000" }, { name: "White", code: "#FFFFFF" }],
+    storage: [{ size: "512GB", price: 1099.00 }],
+    images: [{ id: 1, src: "/assets/images/Phones/Xiaomi 14 Ultra.webp", alt: "Xiaomi 14 Ultra" }],
+    specifications: [
+        { category: "Performance", items: [{ name: "Chip", value: "Snapdragon 8 Gen 3" }, { name: "RAM", value: "16GB" }] },
+        { category: "Camera", items: [{ name: "Main Sensor", value: "Sony LYT-900 1-inch" }, { name: "Aperture", value: "ƒ/1.63 to ƒ/4.0" }] },
+    ],
+    reviews: []
+  },
+  {
+    id: "oppo-find-x7-ultra",
+    name: "Oppo Find X7 Ultra",
+    brand: "Oppo",
+    price: 1150.00,
+    discountPrice: 1150.00,
+    rating: 4.7,
+    reviewCount: 190,
+    availability: "In Stock",
+    sku: "OPP-FX7ULTRA-256GB",
+    description: "Oppo Find X7 Ultra là điện thoại đầu tiên trên thế giới có hệ thống camera tele kép tiềm vọng, hợp tác cùng Hasselblad. Mang lại khả năng zoom vượt trội và chất lượng hình ảnh chuyên nghiệp. Màn hình ProXDR siêu sáng và hiệu năng mạnh mẽ.",
+    shortDescription: "Camera tele kép tiềm vọng đầu tiên trên thế giới, hợp tác cùng Hasselblad.",
+    features: [
+      "Camera tele kép tiềm vọng",
+      "Hệ thống camera tinh chỉnh bởi Hasselblad",
+      "Màn hình 6.82-inch AMOLED LTPO QHD+",
+      "Chip Snapdragon 8 Gen 3",
+      "Sạc nhanh SUPERVOOC 100W",
+    ],
+    colors: [{ name: "Sepia Brown", code: "#7A5C4F" }, { name: "Ocean Blue", code: "#3B5998" }],
+    storage: [{ size: "256GB", price: 1150.00 }, { size: "512GB", price: 1250.00 }],
+    images: [{ id: 1, src: "/assets/images/Phones/Oppo Find X7 Ultra.webp", alt: "Oppo Find X7 Ultra" }],
+    specifications: [
+        { category: "Performance", items: [{ name: "Chip", value: "Snapdragon 8 Gen 3" }] },
+        { category: "Camera", items: [{ name: "Main Camera", value: "50MP Hasselblad Chính" }, { name: "Telephoto", value: "Dual Periscope" }] },
+    ],
+    reviews: []
+  },
+  {
+    id: "samsung-galaxy-z-fold-5",
+    name: "Samsung Galaxy Z Fold 5",
+    brand: "Samsung",
+    price: 1799.99,
+    discountPrice: 1583.99, // Giảm 12%
+    rating: 4.6,
+    reviewCount: 220,
+    availability: "In Stock",
+    sku: "SAM-ZFOLD5-512GB",
+    description: "Mở ra một thế giới mới với Samsung Galaxy Z Fold 5. Màn hình gập lớn 7.6 inch cho trải nghiệm như máy tính bảng, lý tưởng cho đa nhiệm và giải trí. Bản lề Flex mới gập phẳng hơn, thiết kế mỏng nhẹ hơn và hỗ trợ bút S Pen.",
+    shortDescription: "Điện thoại gập đa nhiệm với màn hình lớn và hỗ trợ bút S Pen.",
+    features: [
+      "Màn hình chính 7.6-inch Dynamic AMOLED 2X",
+      "Màn hình phụ 6.2-inch",
+      "Bản lề Flex gập không kẽ hở",
+      "Chip Snapdragon 8 Gen 2 for Galaxy",
+      "Thanh tác vụ thông minh cho đa nhiệm",
+    ],
+    colors: [{ name: "Icy Blue", code: "#A9D1E6" }, { name: "Phantom Black", code: "#181818" }],
+    storage: [{ size: "512GB", price: 1799.99 }],
+    images: [{ id: 1, src: "/assets/images/Phones/Samsung Galaxy Z Fold 5.webp", alt: "Samsung Galaxy Z Fold 5" }],
+    specifications: [
+        { category: "Display", items: [{ name: "Main", value: "7.6-inch Gập" }, { name: "Cover", value: "6.2-inch Phụ" }] },
+        { category: "Performance", items: [{ name: "Chip", value: "Snapdragon 8 Gen 2 for Galaxy" }] },
+    ],
+    reviews: []
+  },
+  {
+    id: "iphone-15",
+    name: "Apple iPhone 15",
+    brand: "Apple",
+    price: 799.99,
+    discountPrice: 759.99, // Giảm 5%
+    rating: 4.7,
+    reviewCount: 350,
+    availability: "In Stock",
+    sku: "APL-IPH15-128GB",
+    description: "iPhone 15 mang đến những nâng cấp đáng giá với Dynamic Island, camera chính 48MP và cổng USB-C. Chip A16 Bionic mạnh mẽ đảm bảo hiệu năng mượt mà cho mọi tác vụ. Thiết kế viền bo cong cho cảm giác cầm nắm thoải mái.",
+    shortDescription: "Nâng cấp đáng giá với Dynamic Island, camera 48MP và USB-C.",
+    features: [
+      "Màn hình Super Retina XDR 6.1 inch",
+      "Dynamic Island hiển thị thông báo linh hoạt",
+      "Chip Apple A16 Bionic",
+      "Camera chính 48MP với zoom 2x",
+      "Cổng kết nối USB-C",
+    ],
+    colors: [{ name: "Pink", code: "#FADADD" }, { name: "Blue", code: "#87CEEB" }, { name: "Green", code: "#90EE90" }],
+    storage: [{ size: "128GB", price: 799.99 }, { size: "256GB", price: 899.99 }],
+    images: [{ id: 1, src: "/assets/images/Phones/Apple iPhone 15.webp", alt: "Apple iPhone 15" }],
+    specifications: [
+        { category: "Performance", items: [{ name: "Chip", value: "Apple A16 Bionic" }] },
+        { category: "Display", items: [{ name: "Size", value: "6.1-inch Super Retina XDR" }] },
+    ],
+    reviews: []
+  },
+  {
+    id: "nothing-phone-2",
+    name: "Nothing Phone (2)",
+    brand: "Nothing",
+    price: 699.00,
+    discountPrice: 678.03, // Giảm 3%
+    rating: 4.5,
+    reviewCount: 150,
+    availability: "In Stock",
+    sku: "NOT-PHONE2-256GB",
+    description: "Nothing Phone (2) nổi bật với thiết kế trong suốt độc đáo và giao diện Glyph Interface cải tiến. Hệ điều hành Nothing OS 2.0 mang đến trải nghiệm Android gốc được tùy biến tinh tế, tập trung vào sự tối giản và hiệu quả.",
+    shortDescription: "Thiết kế trong suốt độc đáo và giao diện Glyph Interface.",
+    features: [
+      "Giao diện Glyph Interface với đèn LED thông báo",
+      "Thiết kế mặt lưng trong suốt",
+      "Hệ điều hành Nothing OS 2.0",
+      "Màn hình 6.7-inch OLED LTPO",
+      "Chip Snapdragon 8+ Gen 1",
+    ],
+    colors: [{ name: "White", code: "#FFFFFF" }, { name: "Dark Gray", code: "#A9A9A9" }],
+    storage: [{ size: "256GB", price: 699.00 }],
+    images: [{ id: 1, src: "/assets/images/Phones/Nothing Phone 2.webp", alt: "Nothing Phone (2)" }],
+    specifications: [
+        { category: "Performance", items: [{ name: "Chip", value: "Snapdragon 8+ Gen 1" }] },
+        { category: "Display", items: [{ name: "Size", value: "6.7-inch OLED LTPO" }] },
+    ],
+    reviews: []
+  },
+];
+
 
 // Mock data for the laptop
 const mockLaptopList = [
@@ -1231,3 +1390,5 @@ const mockCameraList = [
 
 export default ProductDetailPage;
 export { mockCameraList };
+export { mockLaptopList };
+export { mockPhoneList };
