@@ -164,7 +164,7 @@ const ShoppingCart = () => {
             </div>
             <h2 className="text-2xl font-semibold text-gray-900 mb-2">Your cart is empty</h2>
             <p className="text-gray-600 mb-6">Looks like you haven't added any products to your cart yet.</p>
-            <Link to="/product-listing-page">
+            <Link to="/phonehone-listing-page">
               <Button 
                 variant="primary" 
                 icon="ShoppingBag"

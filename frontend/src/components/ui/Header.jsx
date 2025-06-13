@@ -20,7 +20,7 @@ const Header = ({
 
   const navigationItems = [
     // Thêm thuộc tính hasDropdown để đánh dấu mục nào có dropdown
-    { name: 'Điện thoại', path: '/phones', hasDropdown: true },
+    { name: 'Phone', path: '/phones', hasDropdown: true },
     { name: 'Laptop', path: '/laptops', hasDropdown: true },
     { name: 'Camera', path: '/cameras', hasDropdown: true },
   ];
@@ -140,7 +140,7 @@ const Header = ({
               let brands = [];
               let isDropdownOpen = false;
               let setDropdownOpen = () => {};
-              if (item.name === 'Điện thoại') {
+              if (item.name === 'Phone') {
                 brands = phoneBrands;
                 isDropdownOpen = isPhonesDropdownOpen;
                 setDropdownOpen = setIsPhonesDropdownOpen;
