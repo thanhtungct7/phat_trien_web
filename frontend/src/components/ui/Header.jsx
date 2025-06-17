@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import Icon from '../../components/AppIcon'; // Đảm bảo đường dẫn này đúng
-import Button from './Button'; // Đảm bảo đường dẫn này đúng
-import Input from './Input'; // Đảm bảo đường dẫn này đúng
+import Icon from '../../components/AppIcon';
+import Button from './Button';
+import Input from './Input';
+import { CiMedal } from "react-icons/ci";
+import { RiExchangeFill } from "react-icons/ri";
+import { GiMaterialsScience } from "react-icons/gi";
 
 const Header = ({
   variant = 'default',
@@ -95,45 +98,54 @@ const Header = ({
       <div className="sr-only">
         <a href="#main-content">Skip to content</a>
       </div>
-      
-      <div className="bg-blue-700 text-white text-sm py-1.5">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-end items-center space-x-4">
-              <Link to="/login" className="hover:text-gray-200">Đăng nhập</Link>
-              <Link to="/register" className="hover:text-gray-200">Đăng ký</Link>
+
+      {/* Phần Header top */}
+      <div className="w-full bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left rounded-lg">
+          <div className="flex items-center space-x-2 text-[#001a72] font-medium">
+            <span className="flex items-center">
+              <RiExchangeFill className="w-8 h-8" />
+            </span>
+            <span className="font-bold">Thu cũ</span>
+            <span className="text-[14px] opacity-70">Giá ngon</span>
+            <span>-</span>
+            <span className="font-bold">Lên đời</span>
+            <span className="text-[14px] opacity-70">tiết kiệm</span>
           </div>
+          <div className="flex items-center space-x-2 text-[#001a72] font-medium">
+            <span  className="flex items-center">
+              < CiMedal className="w-8 h-8" />
+            </span>
+            <span className="text-[14px] opacity-70">Sản phẩm</span>
+            <span className="font-bold">Chính hãng</span>
+            <span>-</span>
+            <span className="font-bold">Xuất VAT</span>
+            <span className="text-[14px] opacity-70">đầy đủ</span>
+          </div>
+          <div className="flex items-center space-x-2 text-[#001a72] font-medium">
+            <span className="flex items-center">
+              <GiMaterialsScience className="w-8 h-8" />
+            </span>
+            <span className="font-bold">Tải App Smember</span>
+            <span className="text-[14px] opacity-70">- Tích điểm & nhận ưu đãi</span>
+          </div>
+        </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-12"> 
+        <div className="flex justify-between items-center h-16"> 
+
+          {/* Logo và tên thương hiệu */}
           <div className="flex-shrink-0">
             <Link to="/homepage" className="flex items-center">
-              <svg 
-                className="h-8 w-auto text-white" 
-                viewBox="0 0 40 40" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path 
-                  d="M20 5L30 10V30L20 35L10 30V10L20 5Z" 
-                  fill="currentColor" 
-                  fillOpacity="0.2"
-                />
-                <path 
-                  d="M20 5L30 10V30L20 35L10 30V10L20 5Z" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round"
-                />
-                <path 
-                  d="M20 15L25 17.5V25L20 27.5L15 25V17.5L20 15Z" 
-                  fill="currentColor"
-                />
-              </svg>
+              <span className="flex items-center">
+                <GiMaterialsScience className="w-8 h-8 bg-white rounded-lg" />
+              </span>
               <span className="ml-2 text-xl font-bold text-white">ShopHub</span>
             </Link>
           </div>
           
+          {/* Menu chính */}
           <nav className="hidden md:flex space-x-8">
             {navigationItems.map((item) => {
               // Xác định dropdown và state tương ứng
@@ -164,12 +176,12 @@ const Header = ({
                   <Link
                     to={item.path}
                     className={`
-                      px-1 py-2 text-sm font-medium border-b-2 transition-colors
+                      px-1 py-2 text-sm font-medium border-b-2 transition-colors text-[16px]
                       ${
                         (item.hasDropdown && isDropdownOpen) ||
                         location.pathname.startsWith(item.path)
                           ? 'border-white text-white'
-                          : 'border-transparent text-gray-200 hover:text-white hover:border-gray-300'
+                          : 'border-transparent text-white hover:text-white hover:border-gray-300'
                       }
                     `}
                     aria-current={location.pathname === item.path ? 'page' : undefined}
@@ -204,6 +216,7 @@ const Header = ({
             })}
           </nav>
           
+          {/* Phần tìm kiếm và đăng nhập/đăng ký */}
           <div className="hidden md:flex items-center space-x-4">
             {variant !== 'compact' && (
               <form onSubmit={handleSearchSubmit} className="relative">
@@ -219,12 +232,21 @@ const Header = ({
                 />
               </form>
             )}
-            
+
+            {/* Nút đăng nhập/đăng ký */}
+            <div className="flex items-center space-x-2 ml-2">
+              <Link to="/login" className="text-white hover:text-gray-200">Đăng nhập</Link>
+              <span className="text-white">/</span>
+              <Link to="/register" className="text-white hover:text-gray-200">Đăng ký</Link>
+            </div>
+
+            {/* Biểu tượng giỏ hàng và tài khoản */}
             <Link to="/shopping-cart" className="relative p-2 text-gray-200 hover:text-white">
               <Icon name="ShoppingCart" size={24} />
               <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">3</span>
             </Link>
             
+            {/* Biểu tượng tài khoản */}
             <Link to="/account">
               <Button 
                 variant="ghost"
@@ -322,7 +344,9 @@ const Header = ({
             </div>
           </div>
         </div>
+      
       </div>
+
     </header>
   );
 };
