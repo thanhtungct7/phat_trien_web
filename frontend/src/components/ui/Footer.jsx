@@ -1,306 +1,90 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Icon from '../../components/AppIcon';
+import React from "react";
+import { FaFacebook, FaYoutube, FaInstagram, FaTiktok, FaTwitter } from "react-icons/fa";
 
-const Footer = ({
-  variant = 'full',
-  className = '',
-  ...props
-}) => {
-  const baseClasses = 'bg-white border-t border-gray-200';
-  
-  const footerLinks = {
-    company: [
-      { name: 'About Us', path: '/about' },
-      { name: 'Careers', path: '/careers' },
-      { name: 'Press', path: '/press' },
-      { name: 'Blog', path: '/blog' },
-    ],
-    support: [
-      { name: 'Contact Us', path: '/contact' },
-      { name: 'Help Center', path: '/help' },
-      { name: 'Returns & Exchanges', path: '/returns' },
-      { name: 'Shipping Information', path: '/shipping' },
-    ],
-    legal: [
-      { name: 'Terms of Service', path: '/terms' },
-      { name: 'Privacy Policy', path: '/privacy' },
-      { name: 'Cookie Policy', path: '/cookies' },
-      { name: 'Accessibility', path: '/accessibility' },
-    ],
-    categories: [
-      { name: 'Electronics', path: '/phone-listing-page?category=electronics' },
-      { name: 'Clothing', path: '/phone-listing-page?category=clothing' },
-      { name: 'Home & Garden', path: '/phone-listing-page?category=home' },
-      { name: 'Sports & Outdoors', path: '/phone-listing-page?category=sports' },
-    ],
-  };
-  
-  const socialLinks = [
-    { name: 'Facebook', icon: 'Facebook', url: 'https://facebook.com' },
-    { name: 'Twitter', icon: 'Twitter', url: 'https://twitter.com' },
-    { name: 'Instagram', icon: 'Instagram', url: 'https://instagram.com' },
-    { name: 'YouTube', icon: 'Youtube', url: 'https://youtube.com' },
-  ];
-
-  const renderFullFooter = () => (
-    <footer className={`${baseClasses} ${className}`} {...props}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Logo and company info */}
-          <div className="lg:col-span-2">
-            <Link to="/homepage" className="flex items-center">
-              <svg 
-                className="h-8 w-auto text-primary-600" 
-                viewBox="0 0 40 40" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path 
-                  d="M20 5L30 10V30L20 35L10 30V10L20 5Z" 
-                  fill="currentColor" 
-                  fillOpacity="0.2"
-                />
-                <path 
-                  d="M20 5L30 10V30L20 35L10 30V10L20 5Z" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round"
-                />
-                <path 
-                  d="M20 15L25 17.5V25L20 27.5L15 25V17.5L20 15Z" 
-                  fill="currentColor"
-                />
-              </svg>
-              <span className="ml-2 text-xl font-bold text-gray-900">ShopHub</span>
-            </Link>
-            <p className="mt-4 text-gray-600">
-              Your one-stop destination for quality products at competitive prices. Shop with confidence and enjoy a seamless shopping experience.
-            </p>
-            <div className="mt-6">
-              <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">Follow Us</h3>
-              <div className="mt-2 flex space-x-4">
-                {socialLinks.map((social) => (
-                  <a 
-                    key={social.name}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-primary-600"
-                    aria-label={social.name}
-                  >
-                    <Icon name={social.icon} size={24} />
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          {/* Footer links */}
+const Footer = () => (
+  <footer className="bg-gray-100 border-t mt-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-10 text-center md:text-left">
+      {/* Hệ thống cửa hàng */}
+      <div>
+        <h4 className="font-semibold text-yellow-600 mb-4">📍 HỆ THỐNG CỬA HÀNG</h4>
+        <div className="text-sm text-gray-700 space-y-4">
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">Company</h3>
-            <ul className="mt-4 space-y-2">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <Link to={link.path} className="text-gray-600 hover:text-primary-600">
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <strong>Hà Nội</strong>
+            <p>120 Thái Hà, Q. Đống Đa | <a href="https://www.google.com/maps/place/MobileCity+Th%C3%A1i+H%C3%A0/@21.0119347,105.8188591,17z/data=!3m1!4b1!4m6!3m5!1s0x3135ab7dbc584289:0x67ad89a2aa290186!8m2!3d21.0119347!4d105.821434!16s%2Fg%2F11b63rj_6q?entry=ttu&g_ep=EgoyMDI1MDYxMS4wIKXMDSoASAFQAw%3D%3D" 
+            target="blank" className="text-blue-600 hover:underline">Xem bản đồ</a></p>
+            <p>Điện thoại: 0123.456.789 - 0987.654.321</p>
           </div>
-          
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">Support</h3>
-            <ul className="mt-4 space-y-2">
-              {footerLinks.support.map((link) => (
-                <li key={link.name}>
-                  <Link to={link.path} className="text-gray-600 hover:text-primary-600">
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <p>398 Cầu Giấy, Q. Cầu Giấy | <a href="https://www.google.com/maps/place/S%E1%BB%ADa+%C4%91i%E1%BB%87n+tho%E1%BA%A1i+iPhone+C%E1%BA%A7u+Gi%E1%BA%A5y+(MobileCity+Care)/@21.036368,105.7880147,17z/data=!3m1!4b1!4m6!3m5!1s0x3135ab49d66d6f0d:0x8706a412aad866b3!8m2!3d21.036368!4d105.7905896!16s%2Fg%2F11css0qc9r?entry=ttu&g_ep=EgoyMDI1MDYxMS4wIKXMDSoASAFQAw%3D%3D" 
+            target="blank" className="text-blue-600 hover:underline">Xem bản đồ</a></p>
+            <p>Điện thoại: 0123.456.789 - 0987.654.321</p>
           </div>
-          
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">Categories</h3>
-            <ul className="mt-4 space-y-2">
-              {footerLinks.categories.map((link) => (
-                <li key={link.name}>
-                  <Link to={link.path} className="text-gray-600 hover:text-primary-600">
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <p>42 Phố Vọng, Hai Bà Trưng | <a href="https://www.google.com/maps/place/42+P.+V%E1%BB%8Dng,+Ph%C6%B0%C6%A1ng+%C4%90%C3%ACnh,+Hai+B%C3%A0+Tr%C6%B0ng,+H%C3%A0+N%E1%BB%99i+100000,+Vi%E1%BB%87t+Nam/@20.9991754,105.8391721,17z/data=!3m1!4b1!4m6!3m5!1s0x3135ac706465cef3:0xc9ba89873239e694!8m2!3d20.9991754!4d105.841747!16s%2Fg%2F11hkpn11rf?entry=ttu&g_ep=EgoyMDI1MDYxMS4wIKXMDSoASAFQAw%3D%3D" 
+            target="blank" className="text-blue-600 hover:underline">Xem bản đồ</a></p>
+            <p>Điện thoại: 0123.456.789 - 0987.654.321</p>
           </div>
-        </div>
-        
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-gray-400">
-              &copy; {new Date().getFullYear()} ShopHub. All rights reserved.
-            </p>
-            <div className="mt-4 md:mt-0">
-              <ul className="flex space-x-6">
-                {footerLinks.legal.map((link) => (
-                  <li key={link.name}>
-                    <Link to={link.path} className="text-sm text-gray-400 hover:text-primary-600">
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div>
+            <p>300 Đ. Nguyễn Trãi, Thanh Xuân, Hà Nội | <a href="https://www.google.com/maps/place/cellphone+S/@20.986139,105.7878504,16z/data=!4m6!3m5!1s0x3135ad05eb2ddcff:0x340eff9708bb25dd!8m2!3d20.9970579!4d105.8108377!16s%2Fg%2F11fmrpp2tx?entry=ttu&g_ep=EgoyMDI1MDYxMS4wIKXMDSoASAFQAw%3D%3D"
+             target="blank" className="text-blue-600 hover:underline">Xem bản đồ</a></p>
+            <p>Điện thoại: 0123.456.789 - 0987.654.321</p>
+          </div>
+          <div>
+            <strong>Hồ Chí Minh</strong>
+            <p>123 Trần Quang Khải, Q.1 | <a href="https://www.google.com/maps/place/123+%C4%90.+Tr%E1%BA%A7n+Quang+Kh%E1%BA%A3i,+Ph%C6%B0%E1%BB%9Dng+T%C3%A2n+%C4%90%E1%BB%8Bnh,+Qu%E1%BA%ADn+1,+H%E1%BB%93+Ch%C3%AD+Minh,+Vi%E1%BB%87t+Nam/@10.7918837,106.6896406,17z/data=!3m1!4b1!4m6!3m5!1s0x317528ccf1629e1d:0xd4c38c1cf125fd3!8m2!3d10.7918837!4d106.6922155!16s%2Fg%2F11c2g80kw0?entry=ttu&g_ep=EgoyMDI1MDYxMS4wIKXMDSoASAFQAw%3D%3D"
+             target="blank" className="text-blue-600 hover:underline">Xem bản đồ</a></p>
+            <p>Điện thoại: 0123.456.789 - 0987.654.321</p>
+          </div>
+          <div>
+            <p>602 Lê Hồng Phong, P.10 | <a href="https://www.google.com/maps/place/MobileCity+602+L%C3%AA+H%E1%BB%93ng+Phong/@10.7692706,106.6713544,17z/data=!3m1!4b1!4m6!3m5!1s0x31752f7704d5a065:0x92ae8fc1d586ac40!8m2!3d10.7692706!4d106.6739293!16s%2Fg%2F11fm184hsb?entry=ttu&g_ep=EgoyMDI1MDYxMS4wIKXMDSoASAFQAw%3D%3D"
+             target="blank" className="text-blue-600 hover:underline">Xem bản đồ</a></p>
+            <p>Điện thoại: 0123.456.789 - 0987.654.321</p>
           </div>
         </div>
       </div>
-    </footer>
-  );
-  
-  const renderCompactFooter = () => (
-    <footer className={`${baseClasses} ${className}`} {...props}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="flex items-center">
-            <Link to="/homepage" className="flex items-center">
-              <svg 
-                className="h-6 w-auto text-primary-600" 
-                viewBox="0 0 40 40" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path 
-                  d="M20 5L30 10V30L20 35L10 30V10L20 5Z" 
-                  fill="currentColor" 
-                  fillOpacity="0.2"
-                />
-                <path 
-                  d="M20 5L30 10V30L20 35L10 30V10L20 5Z" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round"
-                />
-                <path 
-                  d="M20 15L25 17.5V25L20 27.5L15 25V17.5L20 15Z" 
-                  fill="currentColor"
-                />
-              </svg>
-              <span className="ml-2 text-lg font-bold text-gray-900">ShopHub</span>
-            </Link>
-            <p className="ml-4 text-sm text-gray-600">
-              &copy; {new Date().getFullYear()} ShopHub. All rights reserved.
-            </p>
-          </div>
-          
-          <div className="mt-4 md:mt-0 flex space-x-6">
-            {socialLinks.map((social) => (
-              <a 
-                key={social.name}
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-primary-600"
-                aria-label={social.name}
-              >
-                <Icon name={social.icon} size={20} />
-              </a>
-            ))}
-          </div>
-        </div>
-        
-        <div className="mt-4 flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2">
-          {[...footerLinks.legal].map((link) => (
-            <Link key={link.name} to={link.path} className="text-xs text-gray-400 hover:text-primary-600">
-              {link.name}
-            </Link>
-          ))}
-        </div>
-      </div>
-    </footer>
-  );
-  
-  const renderMobileFooter = () => (
-    <footer className={`${baseClasses} ${className}`} {...props}>
-      <div className="px-4 py-6">
-        <div className="flex justify-center">
-          <Link to="/homepage" className="flex items-center">
-            <svg 
-              className="h-6 w-auto text-primary-600" 
-              viewBox="0 0 40 40" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path 
-                d="M20 5L30 10V30L20 35L10 30V10L20 5Z" 
-                fill="currentColor" 
-                fillOpacity="0.2"
-              />
-              <path 
-                d="M20 5L30 10V30L20 35L10 30V10L20 5Z" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              />
-              <path 
-                d="M20 15L25 17.5V25L20 27.5L15 25V17.5L20 15Z" 
-                fill="currentColor"
-              />
-            </svg>
-            <span className="ml-2 text-lg font-bold text-gray-900">ShopHub</span>
-          </Link>
-        </div>
-        
-        <div className="mt-4 flex justify-center space-x-6">
-          {socialLinks.map((social) => (
-            <a 
-              key={social.name}
-              href={social.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-primary-600"
-              aria-label={social.name}
-            >
-              <Icon name={social.icon} size={20} />
-            </a>
-          ))}
-        </div>
-        
-        <div className="mt-6 grid grid-cols-2 gap-y-4 gap-x-8">
-          <Link to="/contact" className="text-sm text-center text-gray-600 hover:text-primary-600">
-            Contact
-          </Link>
-          <Link to="/help" className="text-sm text-center text-gray-600 hover:text-primary-600">
-            Help
-          </Link>
-          <Link to="/terms" className="text-sm text-center text-gray-600 hover:text-primary-600">
-            Terms
-          </Link>
-          <Link to="/privacy" className="text-sm text-center text-gray-600 hover:text-primary-600">
-            Privacy
-          </Link>
-        </div>
-        
-        <p className="mt-6 text-xs text-center text-gray-400">
-          &copy; {new Date().getFullYear()} ShopHub. All rights reserved.
-        </p>
-      </div>
-    </footer>
-  );
 
-  switch (variant) {
-    case 'compact':
-      return renderCompactFooter();
-    case 'mobile':
-      return renderMobileFooter();
-    case 'full':
-    default:
-      return renderFullFooter();
-  }
-};
+      {/* Quy định - Chính sách */}
+      <div>
+        <h4 className="font-semibold text-yellow-600 mb-4">📜 QUY ĐỊNH - CHÍNH SÁCH</h4>
+        <ul className="text-sm text-gray-700 space-y-3">
+          <li><a href="/policy" className="hover:underline">Chính sách bảo hành</a></li>
+          <li><a href="/policy" className="hover:underline">Chính sách vận chuyển</a></li>
+          <li><a href="/policy" className="hover:underline">Chính sách đổi trả hàng</a></li>
+          <li><a href="/policy" className="hover:underline">Chính sách bảo mật thông tin</a></li>
+          <li><a href="/policy" className="hover:underline">Hướng dẫn thanh toán</a></li>
+          <li><a href="/policy" className="hover:underline">Hướng dẫn mua hàng Online</a></li>
+          <li><a href="/policy" className="hover:underline">Dịch vụ Ship COD Toàn quốc</a></li>
+          <li><a href="/policy" className="hover:underline">Chính sách đại lý linh, phụ kiện</a></li>
+        </ul>
+      </div>
+
+      {/* Tổng đài hỗ trợ */}
+      <div>
+        <h4 className="font-semibold text-yellow-600 mb-4">📞 TỔNG ĐÀI HỖ TRỢ MIỄN PHÍ</h4>
+        <div className="text-sm text-gray-700 space-y-2">
+          <p>Mua hàng - bảo hành <strong>1800.2097</strong> (7h30 - 22h00)</p>
+          <p>Kiếu nại <strong>1800.2063</strong> (8h00 - 21h30)</p>
+        </div>
+      </div>
+
+      {/* Liên kết */}
+      <div>
+        <h4 className="font-semibold text-yellow-600 mb-4">🔗 LIÊN KẾT</h4>
+        <ul className="text-sm text-gray-700 space-y-3">
+          <li><a href="https://www.facebook.com/" target="blank" className="flex items-center space-x-2 hover:underline"><FaFacebook className="text-blue-600" /> <span>Facebook</span></a></li>
+          <li><a href="https://www.youtube.com/" target="blank" className="flex items-center space-x-2 hover:underline"><FaYoutube className="text-red-500" /> <span>Youtube</span></a></li>
+          <li><a href="https://www.instagram.com/" target="blank" className="flex items-center space-x-2 hover:underline"><FaInstagram className="text-pink-500" /> <span>Instagram</span></a></li>
+          <li><a href="https://www.tiktok.com/" target="blank" className="flex items-center space-x-2 hover:underline"><FaTiktok className="text-black" /> <span>Tiktok</span></a></li>
+          <li><a href="https://x.com/X." target="blank" className="flex items-center space-x-2 hover:underline"><FaTwitter className="text-blue-400" /> <span>Twitter</span></a></li>
+          <li><a href="https://www.youtube.com/" target="blank" className="flex items-center space-x-2 hover:underline"><FaYoutube className="text-blue-400" /> <span>Youtube</span></a></li>
+        </ul>
+      </div>
+      
+    </div>
+    <div className="text-center text-xs text-gray-400 py-4 border-t">
+      &copy; {new Date().getFullYear()} ShopHub. All rights reserved.
+    </div>
+  </footer>
+);
 
 export default Footer;
