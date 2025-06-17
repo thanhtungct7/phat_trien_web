@@ -15,6 +15,9 @@ import NotFound from "./pages/NotFound";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import Policy from "./pages/PolicyPage";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
+import HelpCenterPage from "./pages/HelpCenterPage";
 
 const Routes = () => {
   return (
@@ -35,6 +38,9 @@ const Routes = () => {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/policy" element={<Policy />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/help" element={<HelpCenterPage />} />
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
       </ErrorBoundary>
