@@ -5,16 +5,25 @@ import Icon from "../../../components/AppIcon";
 import ProductCard from "./ProductCard";
 import ProductCardSkeleton from "./ProductCardSkeleton";
 
-const FeaturedProducts = ({ products, isLoading, hasError, onRefresh, className = "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" }) => {
+const FeaturedProducts = ({
+  products,
+  isLoading,
+  hasError,
+  onRefresh,
+  className = "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+  title = "Featured Devices",
+  subtitle = "Explore our most popular smartphones",
+  viewAllLink = "/product-detail-page"
+}) => {
   return (
     <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Featured Devices</h2>
-            <p className="text-gray-600 mt-2">Explore our most popular smartphones</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{title}</h2>
+            <p className="text-gray-600 mt-2">{subtitle}</p>
           </div>
-          <Link to="/product-detail-page">  
+          <Link to={viewAllLink}>
             <Button variant="ghost" icon="ArrowRight" iconPosition="right">
               View All
             </Button>
