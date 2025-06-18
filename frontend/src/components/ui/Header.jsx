@@ -92,7 +92,8 @@ const Header = ({
 
   return (
     <header 
-      className={`${baseClasses} ${variantClasses[variant]} ${className}`}
+      className={`sticky top-0 ${baseClasses} ${variantClasses[variant]} ${className}`}
+      style={{ zIndex: 50 }}
       {...props}
     >
       <div className="sr-only">
@@ -132,6 +133,7 @@ const Header = ({
         </div>
       </div>
 
+      {/* Phần Header chính */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16"> 
 
@@ -217,7 +219,7 @@ const Header = ({
           </nav>
           
           {/* Phần tìm kiếm và đăng nhập/đăng ký */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-6">
             {variant !== 'compact' && (
               <form onSubmit={handleSearchSubmit} className="relative">
                 <Input
@@ -227,14 +229,14 @@ const Header = ({
                   onChange={handleSearchChange}
                   icon="Search"
                   iconPosition="left"
-                  className="w-64"
+                  className="w-80 md:w-96"
                   isSearch={true}
                 />
               </form>
             )}
 
             {/* Nút đăng nhập/đăng ký */}
-            <div className="flex items-center space-x-2 ml-2">
+            <div className="flex items-center space-x-2 ml-2 text-sm">
               <Link to="/login" className="text-white hover:text-gray-200">Đăng nhập</Link>
               <span className="text-white">/</span>
               <Link to="/register" className="text-white hover:text-gray-200">Đăng ký</Link>
@@ -245,16 +247,7 @@ const Header = ({
               <Icon name="ShoppingCart" size={24} />
               <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">3</span>
             </Link>
-            
-            {/* Biểu tượng tài khoản */}
-            <Link to="/account">
-              <Button 
-                variant="ghost"
-                icon="User"
-                aria-label="Tài khoản"
-                className="text-white hover:text-white"
-              />
-            </Link>
+
           </div>
           
           <div className="flex md:hidden">
