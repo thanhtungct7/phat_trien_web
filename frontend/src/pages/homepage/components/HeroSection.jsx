@@ -80,11 +80,12 @@ const HeroSection = () => {
           
           <div className="w-full text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Discover the Latest Mobile Technology
+              Chào mừng đến với ShopHub
             </h1>
             <p className="text-lg text-gray-600 mb-6 max-w-3xl mx-auto">
-              Explore our wide selection of premium smartphones at competitive prices. 
-              Find the perfect device that matches your lifestyle and needs.
+              Khám phá những sản phẩm công nghệ mới nhất và ưu đãi hấp dẫn. 
+              <br/>
+              Tìm kiếm các sản phẩm yêu thích của bạn và tận hưởng trải nghiệm mua sắm trực tuyến tuyệt vời nhất.
             </p>
           </div>
           
