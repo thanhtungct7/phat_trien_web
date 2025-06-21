@@ -15,20 +15,18 @@ const Header = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
-  // State để quản lý trạng thái mở/đóng của dropdown "Điện thoại"
-  const [isPhonesDropdownOpen, setIsPhonesDropdownOpen] = useState(false); 
-  const [isLaptopsDropdownOpen, setIsLaptopsDropdownOpen] = useState(false); 
-  const [isCamerasDropdownOpen, setIsCamerasDropdownOpen] = useState(false); 
+  // State để quản lý trạng thái mở/đóng của dropdown
+  const [isPhonesDropdownOpen, setIsPhonesDropdownOpen] = useState(false);
+  const [isLaptopsDropdownOpen, setIsLaptopsDropdownOpen] = useState(false);
+  const [isCamerasDropdownOpen, setIsCamerasDropdownOpen] = useState(false);
   const location = useLocation();
 
   const navigationItems = [
-    // Thêm thuộc tính hasDropdown để đánh dấu mục nào có dropdown
     { name: 'Phone', path: '/phones', hasDropdown: true },
     { name: 'Laptop', path: '/laptops', hasDropdown: true },
     { name: 'Camera', path: '/cameras', hasDropdown: true },
   ];
 
-  // Danh sách các hãng điện thoại
   const phoneBrands = [
     { name: 'Samsung', path: '/phones/samsung' },
     { name: 'iPhone', path: '/phones/iphone' },
@@ -63,9 +61,10 @@ const Header = ({
   }, []);
 
   useEffect(() => {
-    // Đóng cả menu di động và dropdown điện thoại khi route thay đổi
     setIsMenuOpen(false);
-    setIsPhonesDropdownOpen(false); 
+    setIsPhonesDropdownOpen(false);
+    setIsLaptopsDropdownOpen(false);
+    setIsCamerasDropdownOpen(false);
   }, [location]);
 
   const handleSearchChange = (e) => {
@@ -75,35 +74,34 @@ const Header = ({
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     console.log('Search submitted:', searchValue);
-    // Thêm logic chuyển hướng hoặc tìm kiếm ở đây nếu cần
   };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const baseClasses = 'w-full z-50';
-  
+  const baseClasses = 'w-full z-50 sticky top-0';
+
   const variantClasses = {
     default: `bg-blue-600 shadow-sm ${isScrolled ? 'shadow-md' : ''}`,
     compact: 'bg-blue-600 shadow-sm py-2',
     transparent: `${isScrolled ? 'bg-blue-600 shadow-md' : 'bg-transparent'} transition-all duration-300`,
   };
 
+  const interactiveClasses = 'transition-transform duration-200 ease-in-out hover:scale-105 active:scale-95';
+
   return (
-    <header 
-      className={`sticky top-0 ${baseClasses} ${variantClasses[variant]} ${className}`}
-      style={{ zIndex: 50 }}
+    <header
+      className={`${baseClasses} ${variantClasses[variant]} ${className}`}
       {...props}
     >
       <div className="sr-only">
         <a href="#main-content">Skip to content</a>
       </div>
 
-      {/* Phần Header top */}
       <div className="w-full bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left rounded-lg">
-          <div className="flex items-center space-x-2 text-[#001a72] font-medium">
+          <div className="flex items-center justify-center md:justify-start space-x-2 text-[#001a72] font-medium">
             <span className="flex items-center">
               <RiExchangeFill className="w-8 h-8" />
             </span>
@@ -113,9 +111,9 @@ const Header = ({
             <span className="font-bold">Lên đời</span>
             <span className="text-[14px] opacity-70">tiết kiệm</span>
           </div>
-          <div className="flex items-center space-x-2 text-[#001a72] font-medium">
-            <span  className="flex items-center">
-              < CiMedal className="w-8 h-8" />
+          <div className="flex items-center justify-center md:justify-start space-x-2 text-[#001a72] font-medium">
+            <span className="flex items-center">
+              <CiMedal className="w-8 h-8" />
             </span>
             <span className="text-[14px] opacity-70">Sản phẩm</span>
             <span className="font-bold">Chính hãng</span>
@@ -123,11 +121,11 @@ const Header = ({
             <span className="font-bold">Xuất VAT</span>
             <span className="text-[14px] opacity-70">đầy đủ</span>
           </div>
-          <div className="flex items-center space-x-2 text-[#001a72] font-medium">
+          <div className="flex items-center justify-center md:justify-start space-x-2 text-[#001a72] font-medium">
             <span className="flex items-center">
               <GiMaterialsScience className="w-8 h-8" />
             </span>
-            <span className="font-bold">Tải App Smember</span>
+            <span className="font-bold">Tải App MemberVIP</span>
             <span className="text-[14px] opacity-70">- Tích điểm & nhận ưu đãi</span>
           </div>
         </div>
@@ -135,22 +133,19 @@ const Header = ({
 
       {/* Phần Header chính */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16"> 
+        <div className="flex justify-between items-center h-16">
 
-          {/* Logo và tên thương hiệu */}
           <div className="flex-shrink-0">
-            <Link to="/homepage" className="flex items-center">
+            <Link to="/homepage" className={`flex items-center ${interactiveClasses}`}>
               <span className="flex items-center">
                 <GiMaterialsScience className="w-8 h-8 bg-white rounded-lg" />
               </span>
               <span className="ml-2 text-xl font-bold text-white">ShopHub</span>
             </Link>
           </div>
-          
-          {/* Menu chính */}
+
           <nav className="hidden md:flex space-x-8">
             {navigationItems.map((item) => {
-              // Xác định dropdown và state tương ứng
               let brands = [];
               let isDropdownOpen = false;
               let setDropdownOpen = () => {};
@@ -178,33 +173,27 @@ const Header = ({
                   <Link
                     to={item.path}
                     className={`
-                      px-1 py-2 text-sm font-medium border-b-2 transition-colors text-[16px]
-                      ${
-                        (item.hasDropdown && isDropdownOpen) ||
-                        location.pathname.startsWith(item.path)
-                          ? 'border-white text-white'
-                          : 'border-transparent text-white hover:text-white hover:border-gray-300'
+                      px-1 py-2 text-sm font-medium border-b-2 text-[16px]
+                      transition-all duration-200 ease-in-out hover:opacity-80
+                      ${(isDropdownOpen) || location.pathname.startsWith(item.path)
+                        ? 'border-white text-white'
+                        : 'border-transparent text-white hover:border-gray-300'
                       }
                     `}
                     aria-current={location.pathname === item.path ? 'page' : undefined}
                   >
                     {item.name}
                   </Link>
-                  {/* Dropdown cho các mục có dropdown */}
                   {item.hasDropdown && isDropdownOpen && (
                     <div
                       className="absolute z-10 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-                      role="menu"
-                      aria-orientation="vertical"
-                      aria-labelledby="menu-button"
                     >
-                      <div className="py-1" role="none">
+                      <div className="py-1">
                         {brands.map(brand => (
                           <Link
                             key={brand.name}
                             to={brand.path}
-                            className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
-                            role="menuitem"
+                            className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200"
                             onClick={() => setDropdownOpen(false)}
                           >
                             {brand.name}
@@ -217,9 +206,8 @@ const Header = ({
               );
             })}
           </nav>
-          
-          {/* Phần tìm kiếm và đăng nhập/đăng ký */}
-          <div className="hidden md:flex items-center space-x-6">
+
+          <div className="hidden md:flex items-center space-x-4">
             {variant !== 'compact' && (
               <form onSubmit={handleSearchSubmit} className="relative">
                 <Input
@@ -235,30 +223,36 @@ const Header = ({
               </form>
             )}
 
-            {/* Nút đăng nhập/đăng ký */}
-            <div className="flex items-center space-x-2 ml-2 text-sm">
-              <Link to="/login" className="text-white hover:text-gray-200">Đăng nhập</Link>
+            <div className="flex items-center space-x-2 ml-2">
+              <Link to="/login" className={`text-white hover:text-gray-200 ${interactiveClasses}`}>Đăng nhập</Link>
               <span className="text-white">/</span>
-              <Link to="/register" className="text-white hover:text-gray-200">Đăng ký</Link>
+              <Link to="/register" className={`text-white hover:text-gray-200 ${interactiveClasses}`}>Đăng ký</Link>
             </div>
 
-            {/* Biểu tượng giỏ hàng và tài khoản */}
-            <Link to="/shopping-cart" className="relative p-2 text-gray-200 hover:text-white">
+            <Link to="/shopping-cart" className={`relative p-2 text-gray-200 hover:text-white ${interactiveClasses}`}>
               <Icon name="ShoppingCart" size={24} />
               <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">3</span>
             </Link>
 
+            <Link to="/account" className={interactiveClasses}>
+              <Button
+                variant="ghost"
+                icon="User"
+                aria-label="Tài khoản"
+                className="text-white hover:text-white"
+              />
+            </Link>
           </div>
-          
+
           <div className="flex md:hidden">
-            <Link to="/shopping-cart" className="relative p-2 mr-2 text-gray-200 hover:text-white">
+            <Link to="/shopping-cart" className={`relative p-2 mr-2 text-gray-200 hover:text-white ${interactiveClasses}`}>
               <Icon name="ShoppingCart" size={24} />
               <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">3</span>
             </Link>
-            
+
             <button
               type="button"
-              className="p-2 rounded-md text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              className={`p-2 rounded-md text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white ${interactiveClasses}`}
               onClick={toggleMenu}
               aria-expanded={isMenuOpen}
             >
@@ -268,8 +262,7 @@ const Header = ({
           </div>
         </div>
       </div>
-      
-      {/* Mobile menu - Bạn cũng cần thêm dropdown cho mobile nếu muốn */}
+
       <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'} bg-blue-600`}>
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           <form onSubmit={handleSearchSubmit} className="mb-4 px-2">
@@ -283,27 +276,24 @@ const Header = ({
               isSearch={true}
             />
           </form>
-          
+
           {navigationItems.map((item) => (
             <React.Fragment key={item.name}>
               <Link
                 to={item.path}
                 className={`
-                  block px-3 py-2 rounded-md text-base font-medium
-                  ${location.pathname.startsWith(item.path) 
-                    ? 'bg-blue-700 text-white' 
-                    :'text-gray-200 hover:bg-blue-500 hover:text-white'}
+                  block px-3 py-2 rounded-md text-base font-medium transition-all duration-200 active:bg-blue-700
+                  ${location.pathname.startsWith(item.path)
+                    ? 'bg-blue-700 text-white'
+                    : 'text-gray-200 hover:bg-blue-500 hover:text-white'}
                 `}
                 aria-current={location.pathname === item.path ? 'page' : undefined}
-                // Tùy chọn: Bạn có thể thêm logic dropdown cho mobile menu tại đây nếu muốn
-                // Ví dụ: onClick={() => item.hasDropdown && setIsPhonesDropdownOpen(!isPhonesDropdownOpen)}
               >
                 {item.name}
               </Link>
-              {/* Nếu bạn muốn dropdown cho mobile menu, bạn sẽ thêm logic tương tự ở đây */}
             </React.Fragment>
           ))}
-          
+
           <div className="pt-4 pb-3 border-t border-blue-700">
             <div className="flex items-center px-3">
               <div className="flex-shrink-0">
@@ -319,25 +309,25 @@ const Header = ({
             <div className="mt-3 space-y-1 px-2">
               <Link
                 to="/profile"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors duration-200"
               >
                 Your Profile
               </Link>
               <Link
                 to="/settings"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors duration-200"
               >
                 Settings
               </Link>
               <button
-                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white"
+                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors duration-200"
               >
                 Sign out
               </button>
             </div>
           </div>
         </div>
-      
+
       </div>
 
     </header>
