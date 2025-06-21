@@ -6,7 +6,7 @@ const Footer = () => (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-10 text-center md:text-left">
       {/* Hệ thống cửa hàng - Phần bấm được là "Xem bản đồ" */}
       <div>
-        <h4 className="font-semibold text-yellow-600 mb-4">📍 HỆ THỐNG CỬA HÀNG</h4>
+        <h4 className="font-semibold text-blue-600 mb-4">📍 HỆ THỐNG CỬA HÀNG</h4>
         <div className="text-sm text-gray-700 space-y-4">
           <div>
             <strong>Hà Nội</strong>
@@ -45,7 +45,7 @@ const Footer = () => (
 
       {/* Quy định - Chính sách - Toàn bộ các mục trong danh sách này đều bấm được */}
       <div>
-        <h4 className="font-semibold text-yellow-600 mb-4">📜 QUY ĐỊNH - CHÍNH SÁCH</h4>
+        <h4 className="font-semibold text-blue-600 mb-4">📜 QUY ĐỊNH - CHÍNH SÁCH</h4>
         <ul className="text-sm text-gray-700 space-y-3">
           <li><a href="/policy" className="hover:underline hover:text-yellow-700 transition-colors duration-300">Chính sách bảo hành</a></li>
           <li><a href="/policy" className="hover:underline hover:text-yellow-700 transition-colors duration-300">Chính sách vận chuyển</a></li>
@@ -60,16 +60,16 @@ const Footer = () => (
 
       {/* Tổng đài hỗ trợ - Phần này không có gì để bấm */}
       <div>
-        <h4 className="font-semibold text-yellow-600 mb-4">📞 TỔNG ĐÀI HỖ TRỢ MIỄN PHÍ</h4>
+        <h4 className="font-semibold text-blue-600 mb-4">📞 TỔNG ĐÀI HỖ TRỢ MIỄN PHÍ</h4>
         <div className="text-sm text-gray-700 space-y-2">
           <p>Mua hàng - bảo hành <strong>1800.2097</strong> (7h30 - 22h00)</p>
-          <p>Kiếu nại <strong>1800.2063</strong> (8h00 - 21h30)</p>
+          <p>Khiếu nại <strong>1800.2063</strong> (8h00 - 21h30)</p>
         </div>
       </div>
 
       {/* Liên kết - Toàn bộ các mục trong danh sách này đều bấm được */}
       <div>
-        <h4 className="font-semibold text-yellow-600 mb-4">🔗 LIÊN KẾT</h4>
+        <h4 className="font-semibold text-blue-600 mb-4">🔗 LIÊN KẾT</h4>
         <ul className="text-sm text-gray-700 space-y-3">
           <li><a href="https://www.facebook.com/" target="blank" className="flex items-center space-x-2 hover:text-yellow-700 transform hover:-translate-y-1 transition-all duration-300"><FaFacebook className="text-blue-600" /> <span>Facebook</span></a></li>
           <li><a href="https://www.youtube.com/" target="blank" className="flex items-center space-x-2 hover:text-yellow-700 transform hover:-translate-y-1 transition-all duration-300"><FaYoutube className="text-red-500" /> <span>Youtube</span></a></li>

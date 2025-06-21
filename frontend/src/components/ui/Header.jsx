@@ -125,12 +125,13 @@ const Header = ({
             <span className="flex items-center">
               <GiMaterialsScience className="w-8 h-8" />
             </span>
-            <span className="font-bold">Tải App Smember</span>
+            <span className="font-bold">Tải App MemberVIP</span>
             <span className="text-[14px] opacity-70">- Tích điểm & nhận ưu đãi</span>
           </div>
         </div>
       </div>
 
+      {/* Phần Header chính */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
 
@@ -216,7 +217,7 @@ const Header = ({
                   onChange={handleSearchChange}
                   icon="Search"
                   iconPosition="left"
-                  className="w-64"
+                  className="w-80 md:w-96"
                   isSearch={true}
                 />
               </form>
