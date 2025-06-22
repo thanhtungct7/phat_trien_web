@@ -4,9 +4,10 @@ import com.kmacode.camera_web.dto.request.CameraRequestDTO;
 import com.kmacode.camera_web.dto.response.ApiResponse;
 import com.kmacode.camera_web.dto.response.CameraResponseDTO;
 import com.kmacode.camera_web.service.CameraService;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/cameras")
 @RequiredArgsConstructor
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CameraController {
     CameraService cameraService;
 
@@ -51,4 +52,34 @@ public class CameraController {
                 .result(cameraService.getAllCameras())
                 .build();
     }
+
+    @GetMapping("/asc")
+    ApiResponse<List<CameraResponseDTO>> getAllCameraAsc() {
+        return ApiResponse.<List<CameraResponseDTO>>builder()
+                .result(cameraService.getCamerasByPriceASC())
+                .build();
+    }
+
+    @GetMapping("/desc")
+    ApiResponse<List<CameraResponseDTO>> getAllCameraDesc() {
+        return ApiResponse.<List<CameraResponseDTO>>builder()
+                .result(cameraService.getCamerasByPriceDESC())
+                .build();
+    }
+
+    @GetMapping("/prices")
+    ApiResponse<List<CameraResponseDTO>> getCameraPrices( @RequestParam("minPrice") Long minPrice, @RequestParam("maxPrice") Long maxPrice) {
+        return ApiResponse.<List<CameraResponseDTO>>builder()
+                .result(cameraService.getCamerasByPrice(minPrice, maxPrice))
+                .build();
+    }
+
+
+    @GetMapping("/brands/{brand}")
+    ApiResponse<List<CameraResponseDTO>> getCameraByBrand(@PathVariable String brand) {
+        return ApiResponse.<List<CameraResponseDTO>>builder()
+                .result(cameraService.getAllCamerasByBrand(brand))
+                .build();
+    }
+
 }

@@ -2,11 +2,13 @@ package com.kmacode.camera_web.controller;
 
 import com.kmacode.camera_web.dto.request.LaptopRequestDTO;
 import com.kmacode.camera_web.dto.response.ApiResponse;
+import com.kmacode.camera_web.dto.response.CameraResponseDTO;
 import com.kmacode.camera_web.dto.response.LaptopResponseDTO;
 import com.kmacode.camera_web.service.LaptopService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,6 +52,35 @@ public class LaptopController {
     ApiResponse<List<LaptopResponseDTO>> getAllLaptops() {
         return ApiResponse.<List<LaptopResponseDTO>>builder()
                 .result(laptopService.getAllLaptops())
+                .build();
+    }
+
+    @GetMapping("/asc")
+    ApiResponse<List<LaptopResponseDTO>> getLaptopByASC() {
+        return ApiResponse.<List<LaptopResponseDTO>>builder()
+                .result(laptopService.getByPriceASC())
+                .build();
+    }
+
+    @GetMapping("/desc")
+    ApiResponse<List<LaptopResponseDTO>> getAllLaptopDesc() {
+        return ApiResponse.<List<LaptopResponseDTO>>builder()
+                .result(laptopService.getByPriceDESC())
+                .build();
+    }
+
+    @GetMapping("/prices/")
+    ApiResponse<List<LaptopResponseDTO>> getLaptopPrices(@RequestParam("minPrice") Long minPrice, @RequestParam("maxPrice") Long maxPrice) {
+        return ApiResponse.<List<LaptopResponseDTO>>builder()
+                .result(laptopService.getByPrice(minPrice, maxPrice))
+                .build();
+    }
+
+
+    @GetMapping("/brands/{brand}")
+    ApiResponse<List<LaptopResponseDTO>> getLaptopByBrand(@PathVariable String brand) {
+        return ApiResponse.<List<LaptopResponseDTO>>builder()
+                .result(laptopService.getAllByBrand(brand))
                 .build();
     }
 }

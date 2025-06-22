@@ -3,12 +3,14 @@ package com.kmacode.camera_web.controller;
 
 import com.kmacode.camera_web.dto.request.SmartPhoneRequestDTO;
 import com.kmacode.camera_web.dto.response.ApiResponse;
+import com.kmacode.camera_web.dto.response.LaptopResponseDTO;
 import com.kmacode.camera_web.dto.response.SmartPhoneResponseDTO;
 import com.kmacode.camera_web.service.SmartPhoneService;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,6 +54,35 @@ public class SmartPhoneController {
     ApiResponse<List<SmartPhoneResponseDTO>> getAllSmartPhones() {
         return ApiResponse.<List<SmartPhoneResponseDTO>>builder()
                 .result(smartPhoneService.getAllSmartPhones())
+                .build();
+    }
+
+    @GetMapping("/asc")
+    ApiResponse<List<SmartPhoneResponseDTO>> getAllSmartPhonesAsc() {
+        return ApiResponse.<List<SmartPhoneResponseDTO>>builder()
+                .result(smartPhoneService.getByPriceASC())
+                .build();
+    }
+
+    @GetMapping("/desc")
+    ApiResponse<List<SmartPhoneResponseDTO>> getAllSmartPhonesDesc() {
+        return ApiResponse.<List<SmartPhoneResponseDTO>>builder()
+                .result(smartPhoneService.getByPriceDESC())
+                .build();
+    }
+
+    @GetMapping("/prices/")
+    ApiResponse<List<SmartPhoneResponseDTO>> getSmartPhonesPrices(@RequestParam("minPrice") Long minPrice, @RequestParam("maxPrice") Long maxPrice) {
+        return ApiResponse.<List<SmartPhoneResponseDTO>>builder()
+                .result(smartPhoneService.getByPrice(minPrice, maxPrice))
+                .build();
+    }
+
+
+    @GetMapping("/brands/{brand}")
+    ApiResponse<List<SmartPhoneResponseDTO>> getSmartPhonesByBrand(@PathVariable String brand) {
+        return ApiResponse.<List<SmartPhoneResponseDTO>>builder()
+                .result(smartPhoneService.getAllByBrand(brand))
                 .build();
     }
 }

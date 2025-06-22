@@ -1,26 +1,31 @@
 package com.kmacode.camera_web.service;
 
+import com.kmacode.camera_web.constant.PredefinedRole;
 import com.kmacode.camera_web.dto.request.UserRequestDTO;
 import com.kmacode.camera_web.dto.response.UserResponseDTO;
+import com.kmacode.camera_web.entity.Role;
 import com.kmacode.camera_web.entity.User;
-import com.kmacode.camera_web.enums.Role;
 import com.kmacode.camera_web.mapper.UserMapper;
+import com.kmacode.camera_web.repository.RoleRepository;
 import com.kmacode.camera_web.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
     UserRepository userRepository;
+    RoleRepository roleRepository;
     UserMapper userMapper;
 
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
@@ -31,9 +36,8 @@ public class UserService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
 
-        HashSet<String> roles = new HashSet<>();
-        roles.add(Role.USER.name());
-//        roles.add(Role.ADMIN.name());
+        Set<String> roles = new HashSet<>();
+        roles.add(PredefinedRole.USER_ROLE); // Default role
         user.setRoles(roles);
 
         // Convert saved entity back to DTO
@@ -64,6 +68,7 @@ public class UserService {
         return userMapper.toUserResponseDTO(user);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(Long id) {
         // Check if user exists
         if (!userRepository.existsById(id)) {
@@ -73,6 +78,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponseDTO> getAllUsers() {
         // Fetch all users from the repository
         List<User> users = userRepository.findAll();

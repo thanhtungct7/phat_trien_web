@@ -1,6 +1,5 @@
 package com.kmacode.camera_web.dto.response;
 
-import com.kmacode.camera_web.entity.Permission;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +16,7 @@ import java.util.Set;
 public class RoleResponse {
     String name;
     String description;
-    Set<Permission> permissions;
+
 
 
 }

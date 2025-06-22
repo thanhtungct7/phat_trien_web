@@ -1,13 +1,14 @@
 package com.kmacode.camera_web.service;
 
 import com.kmacode.camera_web.dto.request.SmartPhoneRequestDTO;
+import com.kmacode.camera_web.dto.response.LaptopResponseDTO;
 import com.kmacode.camera_web.dto.response.SmartPhoneResponseDTO;
 import com.kmacode.camera_web.entity.SmartPhone;
 import com.kmacode.camera_web.mapper.SmartPhoneMapper;
 import com.kmacode.camera_web.repository.SmartPhoneRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,12 +20,14 @@ public class SmartPhoneService {
     SmartPhoneRepository smartPhoneRepository;
      SmartPhoneMapper smartPhoneMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public SmartPhoneResponseDTO createSmartPhone(SmartPhoneRequestDTO smartPhoneRequestDTO) {
         SmartPhone smartPhone = smartPhoneMapper.toSmartPhone(smartPhoneRequestDTO);
         smartPhone = smartPhoneRepository.save(smartPhone);
         return smartPhoneMapper.toSmartPhoneResponseDTO(smartPhone);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public SmartPhoneResponseDTO updateSmartPhone(Long id, SmartPhoneRequestDTO smartPhoneRequestDTO) {
         SmartPhone smartPhone = smartPhoneRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Smartphone not found"));
@@ -32,11 +35,15 @@ public class SmartPhoneService {
         smartPhone = smartPhoneRepository.save(smartPhone);
         return smartPhoneMapper.toSmartPhoneResponseDTO(smartPhone);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     public SmartPhoneResponseDTO getSmartPhoneById(Long id) {
         SmartPhone smartPhone = smartPhoneRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Smartphone not found"));
         return smartPhoneMapper.toSmartPhoneResponseDTO(smartPhone);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteSmartPhone(Long id) {
         if (!smartPhoneRepository.existsById(id)) {
             throw new RuntimeException("Smartphone not found");
@@ -48,4 +55,31 @@ public class SmartPhoneService {
                 .map(smartPhoneMapper::toSmartPhoneResponseDTO)
                 .toList();
     }
+
+    public List<SmartPhoneResponseDTO> getAllByBrand(String brand) {
+        return smartPhoneRepository.findByBrand(brand).stream()
+                .map(smartPhoneMapper::toSmartPhoneResponseDTO)
+                .toList();
+    }
+
+    public List<SmartPhoneResponseDTO> getByPrice(Long minPrice, Long maxPrice) {
+        return smartPhoneRepository.findByPrice(minPrice, maxPrice).stream()
+                .map(smartPhoneMapper::toSmartPhoneResponseDTO)
+                .toList();
+    }
+
+
+    public List<SmartPhoneResponseDTO> getByPriceASC() {
+        return smartPhoneRepository.findByPriceASC().stream()
+                .map(smartPhoneMapper::toSmartPhoneResponseDTO)
+                .toList();
+    }
+
+    public List<SmartPhoneResponseDTO> getByPriceDESC() {
+        return smartPhoneRepository.findByPriceDESC().stream()
+                .map(smartPhoneMapper::toSmartPhoneResponseDTO)
+                .toList();
+    }
+
+
 }
