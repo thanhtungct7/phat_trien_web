@@ -17,6 +17,7 @@ import LoginPage from "./pages/LoginPage";
 import Policy from "./pages/PolicyPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import ManageProduct from "./pages/ManageProductPage";
 
 const Routes = () => {
   return (
@@ -39,6 +40,7 @@ const Routes = () => {
           <Route path="/policy" element={<Policy />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/manage" element={<ManageProduct />} />
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
       </ErrorBoundary>
