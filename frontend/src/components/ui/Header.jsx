@@ -141,7 +141,7 @@ const Header = ({
               <span className="flex items-center">
                 <GiMaterialsScience className="w-8 h-8 bg-white rounded-lg" />
               </span>
-              <span className="ml-2 text-xl font-bold text-white">ShopHub</span>
+              <span className="ml-2 text-xl font-bold text-white">Mobile City</span>
             </Link>
           </div>
 
