@@ -193,7 +193,7 @@ const Header = ({
                         {brands.map(brand => (
                           <Link
                             key={brand.name}
-                            to={brand.path}
+                            to={`${item.path}?brand=${brand.name.toLowerCase().replace(/\s+/g, '')}`}
                             className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200"
                             onClick={() => setDropdownOpen(false)}
                           >
