@@ -81,7 +81,8 @@ const Footer = () => (
       
     </div>
     <div className="text-center text-xs text-gray-400 py-4 border-t">
-      © {new Date().getFullYear()} ShopHub. All rights reserved.
+
+      © {new Date().getFullYear()} Mobile City. All rights reserved.
     </div>
   </footer>
 );
