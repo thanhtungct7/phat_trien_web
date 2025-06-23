@@ -80,7 +80,7 @@ const HeroSection = () => {
           
           <div className="w-full text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Chào mừng đến với ShopHub
+              Chào mừng đến với Mobile City
             </h1>
             <p className="text-lg text-gray-600 mb-6 max-w-3xl mx-auto">
               Khám phá những sản phẩm công nghệ mới nhất và ưu đãi hấp dẫn. 
