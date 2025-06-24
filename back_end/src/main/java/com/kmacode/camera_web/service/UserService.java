@@ -3,12 +3,9 @@ package com.kmacode.camera_web.service;
 import com.kmacode.camera_web.constant.PredefinedRole;
 import com.kmacode.camera_web.dto.request.UserRequestDTO;
 import com.kmacode.camera_web.dto.response.UserResponseDTO;
-import com.kmacode.camera_web.entity.Role;
 import com.kmacode.camera_web.entity.User;
 import com.kmacode.camera_web.mapper.UserMapper;
-import com.kmacode.camera_web.repository.RoleRepository;
 import com.kmacode.camera_web.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +22,6 @@ import java.util.Set;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
     UserRepository userRepository;
-    RoleRepository roleRepository;
     UserMapper userMapper;
 
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
@@ -40,6 +36,7 @@ public class UserService {
         roles.add(PredefinedRole.USER_ROLE); // Default role
         user.setRoles(roles);
 
+        userRepository.save(user);
         // Convert saved entity back to DTO
         return userMapper.toUserResponseDTO(user);
     }
@@ -68,8 +65,9 @@ public class UserService {
         return userMapper.toUserResponseDTO(user);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteUser(Long id) {
+
         // Check if user exists
         if (!userRepository.existsById(id)) {
             throw new RuntimeException("User not found");
@@ -78,7 +76,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<UserResponseDTO> getAllUsers() {
         // Fetch all users from the repository
         List<User> users = userRepository.findAll();

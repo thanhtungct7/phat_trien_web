@@ -27,14 +27,14 @@ public class LaptopService {
                 .map(laptopMapper::toLaptopResponseDTO)
                 .orElseThrow(() -> new RuntimeException("Laptop not found with id: " + id));
     }
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public LaptopResponseDTO createLaptop(LaptopRequestDTO laptopRequestDTO) {
         Laptop laptop = laptopMapper.toLaptop(laptopRequestDTO);
         laptop = laptopRepository.save(laptop);
         return laptopMapper.toLaptopResponseDTO(laptop);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public LaptopResponseDTO updateLaptop(Long id, LaptopRequestDTO laptopRequestDTO) {
         Laptop laptop = laptopRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Laptop not found with id: " + id));
@@ -42,7 +42,7 @@ public class LaptopService {
         laptop = laptopRepository.save(laptop);
         return laptopMapper.toLaptopResponseDTO(laptop);
     }
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteLaptop(Long id) {
         if (!laptopRepository.existsById(id)) {
             throw new RuntimeException("Laptop not found with id: " + id);
