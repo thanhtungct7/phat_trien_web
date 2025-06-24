@@ -88,4 +88,9 @@ public class CameraService {
                 .toList();
     }
 
+    public List<CameraResponseDTO> getCamerasByManyBrand(List<String> brands) {
+        return cameraRepository.findCameraByManyBrand(brands).stream()
+                .map(cameraMapper::toCameraResponseDTO)
+                .toList();
+    }
 }

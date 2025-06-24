@@ -19,5 +19,8 @@ public interface CameraRepository extends JpaRepository<Camera, Long> {
     @Query(value = "select * from camera order by price desc ", nativeQuery = true)
     List<Camera> findCameraByPriceDESC();
 
+    @Query("SELECT c FROM Camera c WHERE c.brand IN :brands")
+    List<Camera> findCameraByManyBrand(@Param("brands") List<String> brand);
+
 
 }

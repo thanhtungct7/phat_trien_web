@@ -4,6 +4,7 @@ import com.kmacode.camera_web.dto.request.LaptopRequestDTO;
 import com.kmacode.camera_web.dto.response.ApiResponse;
 import com.kmacode.camera_web.dto.response.CameraResponseDTO;
 import com.kmacode.camera_web.dto.response.LaptopResponseDTO;
+import com.kmacode.camera_web.dto.response.SmartPhoneResponseDTO;
 import com.kmacode.camera_web.service.LaptopService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +82,14 @@ public class LaptopController {
     ApiResponse<List<LaptopResponseDTO>> getLaptopByBrand(@PathVariable String brand) {
         return ApiResponse.<List<LaptopResponseDTO>>builder()
                 .result(laptopService.getAllByBrand(brand))
+                .build();
+    }
+
+    @GetMapping("/much-brands/")
+    ApiResponse<List<LaptopResponseDTO>> getLaptopsByMuchBrand(@RequestParam("brands") String brands) {
+        List<String> brandList = List.of(brands.split(","));
+        return ApiResponse.<List<LaptopResponseDTO>>builder()
+                .result(laptopService.getLaptopsByManyBrand(brandList))
                 .build();
     }
 }

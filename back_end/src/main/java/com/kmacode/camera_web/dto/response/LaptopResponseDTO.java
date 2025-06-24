@@ -31,51 +31,18 @@ public class LaptopResponseDTO  {
 
     Integer stock = 0;
     String yearOfManufacture;
+
+    String screenSize ;
+
+    String resolution ;
+
+    String chipSet ;
+
+    String cpuCores;
+
+    String gpuCores;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
-
-//
-//    String graphicsCardType;
-//
-//    String cpuType;
-//
-//    String ramCapacity;
-//
-//    String storage;
-//
-//    String maxUpgrade;
-//
-//    boolean touchScreen = false;
-//
-//    String panelMaterial = "no";
-//
-//    String screenSize = "no";
-//
-//    String screenTechnology = "no";
-//
-//    String screenResolution = "no";
-//
-//    String audioTechnology;
-//
-//    String dimensions = "0 x 0 x 0 mm";
-//
-//    double weight = 0.0;
-//
-//    boolean hasBattery = false;
-//
-//    boolean webcam = false;
-//
-//    String operatingSystem = "no";
-//
-//    boolean wifi = false;
-//
-//    String ports = "0";
-//
-//    String material = "no";
-//
-//    String security = "no";
-//
-//    String otherFeatures = "no";
 
 }

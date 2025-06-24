@@ -20,4 +20,7 @@ public interface SmartPhoneRepository extends JpaRepository<SmartPhone, Long> {
 
     @Query(value = "select * from smart_phone order by price desc ", nativeQuery = true)
     List<SmartPhone> findByPriceDESC();
+
+    @Query("SELECT c FROM SmartPhone c WHERE c.brand IN :brands")
+    List<SmartPhone> findSmartPhonesByManyBrand(@Param("brands") List<String> brand);
 }

@@ -14,11 +14,12 @@ public interface LaptopRepository extends JpaRepository<Laptop, Long> {
     @Query("SELECT l FROM Laptop l WHERE :minPrice <= l.price AND l.price <= :maxPrice")
     List<Laptop> findByPrice(@Param("minPrice") Long minPrice, @Param("maxPrice") Long maxPrice);
 
-
-
     @Query(value = "select * from Laptop order by price asc ", nativeQuery = true)
     List<Laptop> findByPriceASC();
 
     @Query(value = "select * from Laptop order by price desc ", nativeQuery = true)
     List<Laptop> findByPriceDESC();
+
+    @Query("SELECT c FROM Laptop c WHERE c.brand IN :brands")
+    List<Laptop> findLaptopsByManyBrand(@Param("brands") List<String> brand);
 }

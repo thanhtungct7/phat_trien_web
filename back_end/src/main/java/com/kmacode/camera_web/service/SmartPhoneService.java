@@ -81,5 +81,11 @@ public class SmartPhoneService {
                 .toList();
     }
 
+    public List<SmartPhoneResponseDTO> getSmartPhonesByManyBrand(List<String> brands) {
+        return smartPhoneRepository.findSmartPhonesByManyBrand(brands).stream()
+                .map(smartPhoneMapper::toSmartPhoneResponseDTO)
+                .toList();
+    }
+
 
 }

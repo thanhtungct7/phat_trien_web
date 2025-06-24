@@ -78,4 +78,10 @@ public class LaptopService {
                 .map(laptopMapper::toLaptopResponseDTO)
                 .toList();
     }
+
+    public List<LaptopResponseDTO> getLaptopsByManyBrand(List<String> brands) {
+        return laptopRepository.findLaptopsByManyBrand(brands).stream()
+                .map(laptopMapper::toLaptopResponseDTO)
+                .toList();
+    }
 }
