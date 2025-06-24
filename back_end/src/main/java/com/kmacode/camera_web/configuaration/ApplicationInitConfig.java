@@ -1,7 +1,6 @@
 package com.kmacode.camera_web.configuaration;
 
 import com.kmacode.camera_web.constant.PredefinedRole;
-import com.kmacode.camera_web.entity.Role;
 import com.kmacode.camera_web.entity.User;
 import com.kmacode.camera_web.repository.UserRepository;
 import lombok.AccessLevel;
