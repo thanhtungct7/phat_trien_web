@@ -45,69 +45,16 @@ public class Camera {
 
     @Column(name = "year_of_manufacture", nullable = true)
     String yearOfManufacture;
+    @Column(name="resolution", nullable = true)
+    @Builder.Default
+     String resolution = "no";
+    @Column(name="wifi_connect", nullable = true)
+    @Builder.Default
+     String wifiConnect = "no";
 
-//
-//    @Builder.Default
-//     String resolution = "no";
-//    @Builder.Default
-//     Integer horizontalAngle = 0;
-//    @Builder.Default
-//     Integer verticalAngle = 0;
-//    @Builder.Default
-//     String blindSpotAngle = "no";
-//    @Builder.Default
-//     Integer infraredRange = 0;
-//    @Builder.Default
-//     String waterproofStandard = "no";
-//    @Builder.Default
-//     Boolean motionDetection = false;
-//    @Builder.Default
-//     Boolean alarmSound = false;
-//    @Builder.Default
-//     Boolean sirenIntegration = false;
-//    @Builder.Default
-//     Boolean humanDetection = false;
-//    @Builder.Default
-//     Boolean smartTracking = false;
-//    @Builder.Default
-//     Boolean phoneAlert = false;
-//    @Builder.Default
-//     Boolean twoWayTalk = false;
-//    @Builder.Default
-//    // Kết nối & Lưu trữ
-//     String connectionType = "no";
-//    @Builder.Default
-//     String wifiBand = "no";
-//    @Builder.Default
-//     Integer concurrentUsers = 1;
-//    @Builder.Default
-//     String storage = "no";
-//    @Builder.Default
-//    // Nguồn điện & Điều kiện sử dụng
-//     String powerInput = "no";
-//    @Builder.Default
-//     String chargingPort = "no";
-//    @Builder.Default
-//     Boolean adapterIncluded = false;
-//    @Builder.Default
-//     String operatingTemperature = "no";
-//    @Builder.Default
-//     String humidity = "no";
-//    @Builder.Default
-//    // Lắp đặt & Thiết bị hỗ trợ
-//     String installationLocation = "no";
-//    @Builder.Default
-//     String supportedDevices = "no";
-//    @Builder.Default
-//     String controlApp = "no";
-//    @Builder.Default
-//     String dimensions = "no";
-//    @Builder.Default
-//     Float weight = 1.0f;
-//
-//    @Builder.Default
-//     String manufacturer = "no";
-
+    @Column(name = "storage", nullable = true)
+    @Builder.Default
+     String storage = "no";
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
