@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
     salePrice,
     image,
     rating,
-    specs,
+    // specs, // Không dùng specs vì backend chưa có
     inStock
   } = product;
 
@@ -72,8 +72,9 @@ const ProductCard = ({ product }) => {
           </div>
         </div>
 
-        {/* Key specs */}
+        {/* Key specs - Tạm thời comment lại để tránh lỗi */}
         <div className="grid grid-cols-2 gap-2 mb-4">
+          {/*
           <div className="flex items-center text-xs text-gray-600">
             <Icon name="HardDrive" size={14} className="mr-1 text-gray-400" />
             {specs.storage}
@@ -90,6 +91,7 @@ const ProductCard = ({ product }) => {
             <Icon name="Battery" size={14} className="mr-1 text-gray-400" />
             {specs.battery}
           </div>
+          */}
         </div>
 
         {/* CTA Button */}

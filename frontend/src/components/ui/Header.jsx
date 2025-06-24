@@ -30,15 +30,15 @@ const Header = ({
 
   const phoneBrands = [
     { name: 'Samsung', path: '/phones/samsung' },
-    { name: 'iPhone', path: '/phones/iphone' },
+    { name: 'Apple', path: '/phones/apple' },
     { name: 'Xiaomi', path: '/phones/xiaomi' },
     { name: 'Oppo', path: '/phones/oppo' },
-    { name: 'Realme', path: '/phones/realme' },
+    { name: 'Google', path: '/phones/google' },
   ];
 
   const laptopBrands = [
     { name: 'Apple', path: '/laptops/apple' },
-    { name: 'Dell', path: '/laptops/dell' },
+    { name: 'Acer', path: '/laptops/acer' },
     { name: 'Asus', path: '/laptops/asus' },
     { name: 'Lenovo', path: '/laptops/lenovo' },
     { name: 'HP', path: '/laptops/hp' },
@@ -48,8 +48,8 @@ const Header = ({
     { name: 'Ezviz', path: '/cameras/ezviz' },
     { name: 'TpLink', path: '/cameras/tplink' },
     { name: 'Imou', path: '/cameras/imou' },
-    { name: 'Tiandy', path: '/cameras/tiandy' },
-    { name: '365 Selection', path: '/cameras/365selection' },
+    { name: 'Reoqoo', path: '/cameras/reoqoo' },
+    { name: '365Selection', path: '/cameras/365selection' },
   ];
 
   useEffect(() => {
