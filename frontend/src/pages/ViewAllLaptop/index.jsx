@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
 import Header from "../../components/ui/Header";
-
-
 import Footer from "../../components/ui/Footer";
 import Button from "../../components/ui/Button";
 import Icon from "../../components/AppIcon";
-
-
-// Components
 import ProductCard from "./components/ProductCard";
 import Pagination from "./components/Pagination";
 import FilterSidebar from "./components/FilterSidebar";
 import ProductSkeleton from "./components/ProductSkeleton";
 
 const ViewAllLaptop = () => {
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const brand = query.get("brand"); // Thêm dòng này nếu muốn lấy brand từ URL
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -23,250 +23,64 @@ const ViewAllLaptop = () => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalFilteredProducts, setTotalFilteredProducts] = useState(0);
   const [isLaptopFilterOpen, setLaptopFilterOpen] = useState(false);
   const [sortBy, setSortBy] = useState("popularity");
   const productsPerPage = 12;
 
-  // Mock data for products
-  const mockProducts = [
-    {
-      id: "macbook-air-m2-2024",
-      name: "Apple Macbook Air M2 2024",
-      brand: "Apple",
-      price: 1299.99,
-      image: "/assets/images/Laptops/Apple Macbook Air M2 2024.webp",
-      rating: 4.9,
-      reviews: 320,
-      discount: 8,
-      isNew: true,
-      specs: {
-        storage: "512GB SSD",
-        cpu: "Apple M2",
-        display: "13.6-inch Retina",
-      },
-      inStock: true,
-    },
-    {
-      id: "asus-vivobook-15-x1504va-bq2076w",
-      name: "Laptop Asus VivoBook 15 X1504VA-BQ2076W",
-      brand: "Asus",
-      price: 799.99,
-      image: "/assets/images/Laptops/Laptop Asus VivoBook 15 X1504VA-BQ2076W.webp",
-      rating: 4.7,
-      reviews: 210,
-      discount: 12,
-      isNew: false,
-      specs: {
-        storage: "512GB SSD",
-        cpu: "Intel Core i5",
-        display: "15.6-inch FHD",
-      },
-      inStock: true,
-    },
-    {
-      id: "asus-vivobook-s-16-oled-s5606ma-mx051w",
-      name: "Laptop Asus VivoBook S 16 OLED S5606MA-MX051W",
-      brand: "Asus",
-      price: 1099.99,
-      image: "/assets/images/Laptops/Laptop Asus VivoBook S 16 OLED S5606MA-MX051W.webp",
-      rating: 4.8,
-      reviews: 180,
-      discount: 10,
-      isNew: true,
-      specs: {
-        storage: "1TB SSD",
-        cpu: "Intel Core i7",
-        display: "16-inch OLED",
-      },
-      inStock: true,
-    },
-    {
-      id: "acer-nitro-v-avn15-51-57b2",
-      name: "Laptop Gaming Acer Nitro V AVN15-51-57B2",
-      brand: "Acer",
-      price: 1099.99,
-      image: "/assets/images/Laptops/Laptop Gaming Acer Nitro V AVN15-51-57B2.webp",
-      rating: 4.8,
-      reviews: 180,
-      discount: 10,
-      isNew: true,
-      specs: {
-        storage: "512GB SSD",
-        cpu: "Intel Core i5-13420H",
-        display: "15.6-inch FULL HD",
-      },
-      inStock: true,
-    },
-    {
-      id: "hp-15-fc0086au",
-      name: "Laptop Hp 15-FC0086AU",
-      brand: "HP",
-      price: 1099.99,
-      image: "/assets/images/Laptops/Laptop Hp 15-FC0086AU.webp",
-      rating: 4.8,
-      reviews: 180,
-      discount: 10,
-      isNew: true,
-      specs: {
-        storage: "512GB SSD",
-        cpu: "R5-7430U",
-        display: "15.6-inch FULL HD",
-      },
-      inStock: true,
-    },
-    {
-      id: "hp-gaming-victus-15-fa1139tx-8y6w3pa",
-      name: "Laptop HP Gaming Victus 15-FA1139TX 8Y6W3PA",
-      brand: "HP",
-      price: 1099.99,
-      image: "/assets/images/Laptops/Laptop HP Gaming Victus 15-FA1139TX 8Y6W3PA.webp",
-      rating: 4.8,
-      reviews: 180,
-      discount: 10,
-      isNew: true,
-      specs: {
-        storage: "512GB SSD",
-        cpu: "Intel Core i5-12450H",
-        display: "15.6-inch FULL HD",
-      },
-      inStock: true,
-    },
-    {
-      id: "lenovo-ideapad-slim-3-14irh10-83l00008vn",
-      name: "Laptop Lenovo IdeaPad Slim 3 14IRH10 83L00008VN",
-      brand: "Lenovo",
-      price: 1099.99,
-      image: "/assets/images/Laptops/Laptop Lenovo IdeaPad Slim 3 14IRH10 83L00008VN.webp",
-      rating: 4.8,
-      reviews: 180,
-      discount: 10,
-      isNew: true,
-      specs: {
-        storage: "512GB SSD",
-        cpu: "Intel Core i5-13420H",
-        display: "14-inch WUXGA",
-      },
-      inStock: true,
-    },
-    {
-      id: "msi-modern-14-c12mo-660vn",
-      name: "Laptop MSI Modern 14 C12MO-660VN",
-      brand: "MSI",
-      price: 1099.99,
-      image: "/assets/images/Laptops/Laptop MSI Modern 14 C12MO-660VN.webp",
-      rating: 4.8,
-      reviews: 180,
-      discount: 10,
-      isNew: true,
-      specs: {
-        storage: "512GB SSD",
-        cpu: "Intel Core i5-1235U",
-        display: "14-inch FULL HD",
-      },
-      inStock: true,
-    },
-    {
-      id: "asus-gaming-vivobook-k3605zc-rp564w",
-      name: "Latop Asus Gaming VivoBook K3605ZC-RP564W",
-      brand: "Asus",
-      price: 1099.99,
-      image: "/assets/images/Laptops/Latop Asus Gaming VivoBook K3605ZC-RP564W.webp",
-      rating: 4.8,
-      reviews: 180,
-      discount: 10,
-      isNew: true,
-      specs: {
-        storage: "512GB SSD",
-        cpu: "Intel Core i5-12500H",
-        display: "16-inch WUXGA",
-      },
-      inStock: true,
-    },
-    {
-      id: "macbook-air-m4-13-inch-2025",
-      name: "MacBook Air M4 13 inch 2025",
-      brand: "Apple",
-      price: 1099.99,
-      image: "/assets/images/Laptops/MacBook Air M4 13 inch 2025.webp",
-      rating: 4.8,
-      reviews: 180,
-      discount: 10,
-      isNew: true,
-      specs: {
-        storage: "256GB SSD",
-        cpu: "Apple M4",
-        display: "13.6-inch 2.5K",
-      },
-      inStock: true,
-    },
-  ];
-
-  // Available brands for filtering
   const availableBrands = ["Apple", "Dell", "Asus", "Lenovo", "HP", "MSI"];
 
-  // Simulate API call to fetch products
   useEffect(() => {
     setLoading(true);
-    
-    // Simulate network delay
-    const timer = setTimeout(() => {
-      // Filter products based on selected filters
-      let filteredProducts = [...mockProducts];
-      
-      // Apply brand filter
-      if (filters.brands.length > 0) {
-        filteredProducts = filteredProducts.filter(product => 
-          filters.brands.includes(product.brand)
+    let url = "/api/laptops/";
+    axios.get(url)
+      .then(res => {
+        let data = Array.isArray(res.data.result) ? res.data.result : [];
+        // Lọc theo nhiều hãng ở frontend (không phân biệt hoa thường)
+        if (filters.brands.length > 0) {
+          data = data.filter(product =>
+            filters.brands.map(b => b.toLowerCase()).includes((product.brand || "").toLowerCase())
+          );
+        }
+        // Lọc theo price range
+        data = data.filter(product =>
+          product.price >= filters.priceRange.min &&
+          product.price <= filters.priceRange.max
         );
-      }
-      
-      // Apply price range filter
-      filteredProducts = filteredProducts.filter(product => 
-        (product.salePrice || product.price) >= filters.priceRange.min && 
-        (product.salePrice || product.price) <= filters.priceRange.max
-      );
-      
-      // Apply sorting
-      switch (sortBy) {
-        case "price-low-high":
-          filteredProducts.sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price));
-          break;
-        case "price-high-low":
-          filteredProducts.sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price));
-          break;
-        case "rating":
-          filteredProducts.sort((a, b) => b.rating - a.rating);
-          break;
-        case "popularity":
-        default:
-          // Already sorted by popularity in the mock data
-          break;
-      }
-      
-      // Calculate total pages
-      const totalFilteredPages = Math.ceil(filteredProducts.length / productsPerPage);
-      setTotalPages(totalFilteredPages);
-      
-      // Adjust current page if it exceeds the new total pages
-      if (currentPage > totalFilteredPages) {
-        setCurrentPage(1);
-      }
-      
-      // Paginate results
-      const startIndex = (currentPage - 1) * productsPerPage;
-      const paginatedProducts = filteredProducts.slice(startIndex, startIndex + productsPerPage);
-      
-      setProducts(paginatedProducts);
-      setLoading(false);
-    }, 1000); // 1 second delay to simulate network request
-    
-    return () => clearTimeout(timer);
+        // Sắp xếp
+        switch (sortBy) {
+          case "price-low-high":
+            data.sort((a, b) => a.price - b.price);
+            break;
+          case "price-high-low":
+            data.sort((a, b) => b.price - a.price);
+            break;
+          case "rating":
+            data.sort((a, b) => b.rating - a.rating);
+            break;
+          case "popularity":
+          default:
+            data.sort((a, b) => b.reviews - a.reviews);
+            break;
+        }
+        setTotalFilteredProducts(data.length);
+        const totalFilteredPages = Math.ceil(data.length / productsPerPage);
+        setTotalPages(totalFilteredPages);
+
+        // Nếu currentPage vượt quá totalPages (do filter mới), reset về 1
+        const safePage = Math.max(1, Math.min(currentPage, totalFilteredPages));
+        const startIndex = (safePage - 1) * productsPerPage;
+        setProducts(data.slice(startIndex, startIndex + productsPerPage));
+        if (currentPage !== safePage) setCurrentPage(safePage);
+      })
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false));
   }, [filters, currentPage, sortBy]);
 
   // Handle filter changes
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1); // Đúng rồi!
   };
 
   // Handle page change
@@ -303,7 +117,9 @@ const ViewAllLaptop = () => {
         {/* Page header */}
         <div className="bg-white shadow-sm">
           <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-2xl font-bold text-gray-900">Laptops</h1>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {brand ? `Laptop hãng ${brand}` : "Tất cả Laptop"}
+            </h1>
             <p className="mt-1 text-sm text-gray-600">
               Browse our collection of the latest laptops for work, gaming, and study
             </p>
@@ -371,7 +187,7 @@ const ViewAllLaptop = () => {
                   ) : products.length === 0 ? (
                     "No products found"
                   ) : (
-                    `Showing ${(currentPage - 1) * productsPerPage + 1}-${Math.min(currentPage * productsPerPage, (totalPages - 1) * productsPerPage + products.length)} of ${(totalPages - 1) * productsPerPage + products.length} products`
+                    `Showing ${(currentPage - 1) * productsPerPage + 1}-${Math.min(currentPage * productsPerPage, totalFilteredProducts)} of ${totalFilteredProducts} products`
                   )}
                 </p>
                 
@@ -464,7 +280,6 @@ const ViewAllLaptop = () => {
                 <div className="text-center py-12 bg-white rounded-lg shadow-sm">
                   <Icon name="SearchX" size={48} className="mx-auto text-gray-400 mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">No products match your criteria</h3>
-                  <p className="text-gray-600 mb-6">Try adjusting your filters or search terms</p>
                   <Button 
                     variant="primary" 
                     onClick={clearFilters}

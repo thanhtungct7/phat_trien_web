@@ -32,11 +32,6 @@ const RegisterPage = () => {
       </button>
       <h1 className="text-3xl font-bold text-blue-600 mb-2">Đăng ký trở thành Member của Mobile City</h1>
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-lg mt-8">
-        <button className="w-full flex items-center justify-center border border-gray-300 rounded px-4 py-2 mb-4 hover:bg-gray-100">
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5 mr-2" />
-          Đăng ký bằng Google
-        </button>
-        <div className="text-center text-gray-400 mb-4">Hoặc điền thông tin sau</div>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="block text-gray-700">Họ và tên</label>

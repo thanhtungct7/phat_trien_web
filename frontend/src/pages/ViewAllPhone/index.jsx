@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import axios from "axios";
 import Header from "../../components/ui/Header";
 import Footer from "../../components/ui/Footer";
 import Button from "../../components/ui/Button";
@@ -18,219 +18,55 @@ const ViewAllPhone = () => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalFilteredProducts, setTotalFilteredProducts] = useState(0);
   const [isPhoneFilterOpen, setIsPhoneFilterOpen] = useState(false); 
   const [sortBy, setSortBy] = useState("popularity");
   const productsPerPage = 12;
 
-  
-  const mockPhoneProducts = [
-    {
-        id: "iphone-15-pro-max",
-        name: "Apple iPhone 15 Pro Max",
-        brand: "Apple", 
-        price: 1199.99,
-        image: "/assets/images/Phones/Apple iPhone 15 Pro Max.webp",
-        rating: 4.9,
-        reviews: 450,
-        discount: 10,
-        isNew: true,
-        specs: {
-            storage: "256GB",
-            chip: "Apple A17 Bionic",
-            display: "6.7-inch Super Retina XDR",
-            camera: "48MP Chính",
-        },
-        inStock: true,
-    },
-    {
-        id: "samsung-galaxy-s24-ultra",
-        name: "Samsung Galaxy S24 Ultra",
-        brand: "Samsung", 
-        price: 1299.99,
-        image: "/assets/images/Phones/Samsung Galaxy S24 Ultra.webp",
-        rating: 4.8,
-        reviews: 380,
-        discount: 15,
-        isNew: true,
-        specs: {
-            storage: "512GB",
-            chip: "Snapdragon 8 Gen 3 for Galaxy",
-            display: "6.8-inch Dynamic AMOLED 2X",
-            camera: "200MP Chính",
-        },
-        inStock: true,
-    },
-    {
-        id: "google-pixel-8-pro",
-        name: "Google Pixel 8 Pro",
-        brand: "Google",
-        price: 999.99,
-        image: "/assets/images/Phones/Google Pixel 8 Pro.webp",
-        rating: 4.7,
-        reviews: 310,
-        discount: 5,
-        isNew: false,
-        specs: {
-            storage: "128GB",
-            chip: "Google Tensor G3",
-            display: "6.7-inch OLED",
-            camera: "50MP Chính",
-        },
-        inStock: true,
-    },
-    {
-        id: "xiaomi-14-ultra",
-        name: "Xiaomi 14 Ultra",
-        brand: "Xiaomi", 
-        price: 1099.00,
-        image: "/assets/images/Phones/Xiaomi 14 Ultra.webp",
-        rating: 4.8,
-        reviews: 250,
-        discount: 8,
-        isNew: true,
-        specs: {
-            storage: "512GB",
-            chip: "Snapdragon 8 Gen 3",
-            display: "6.73-inch AMOLED",
-            camera: "50MP Leica Chính",
-        },
-        inStock: true,
-    },
-    {
-        id: "oppo-find-x7-ultra",
-        name: "Oppo Find X7 Ultra",
-        brand: "Oppo", 
-        price: 1150.00,
-        image: "/assets/images/Phones/Oppo Find X7 Ultra.webp",
-        rating: 4.7,
-        reviews: 190,
-        discount: 0,
-        isNew: true,
-        specs: {
-            storage: "256GB",
-            chip: "Snapdragon 8 Gen 3",
-            display: "6.82-inch AMOLED LTPO",
-            camera: "50MP Hasselblad Chính",
-        },
-        inStock: true,
-    },
-    {
-        id: "samsung-galaxy-z-fold-5",
-        name: "Samsung Galaxy Z Fold 5",
-        brand: "Samsung", 
-        price: 1799.99,
-        image: "/assets/images/Phones/Samsung Galaxy Z Fold 5.webp",
-        rating: 4.6,
-        reviews: 220,
-        discount: 12,
-        isNew: false,
-        specs: {
-            storage: "512GB",
-            chip: "Snapdragon 8 Gen 2 for Galaxy",
-            display: "7.6-inch Gập & 6.2-inch Phụ",
-            camera: "50MP Chính",
-        },
-        inStock: true,
-    },
-    {
-        id: "iphone-15",
-        name: "Apple iPhone 15",
-        brand: "Apple", 
-        price: 799.99,
-        image: "/assets/images/Phones/Apple iPhone 15.webp",
-        rating: 4.7,
-        reviews: 350,
-        discount: 5,
-        isNew: true,
-        specs: {
-            storage: "128GB",
-            chip: "Apple A16 Bionic",
-            display: "6.1-inch Super Retina XDR",
-            camera: "48MP Chính",
-        },
-        inStock: true,
-    },
-    {
-        id: "nothing-phone-2",
-        name: "Nothing Phone 2",
-        brand: "Nothing", 
-        price: 699.00,
-        image: "/assets/images/Phones/Nothing Phone 2.webp",
-        rating: 4.5,
-        reviews: 150,
-        discount: 3,
-        isNew: false,
-        specs: {
-            storage: "256GB",
-            chip: "Snapdragon 8+ Gen 1",
-            display: "6.7-inch OLED LTPO",
-            camera: "50MP Chính",
-        },
-        inStock: true,
-    },
-  ];
+  // Lấy danh sách brands từ backend nếu muốn động, hoặc giữ tĩnh như cũ
+  const availableBrands = ["Apple", "Samsung", "Google", "Xiaomi", "Oppo"];
 
-  // Danh sách các thương hiệu có sẵn để lọc
-  const availableBrands = ["Apple", "Samsung", "Google", "Xiaomi", "Oppo", "Nothing"];
-
-  // Mô phỏng gọi API để lấy sản phẩm
   useEffect(() => {
     setLoading(true);
-    
-    // Mô phỏng độ trễ mạng
-    const timer = setTimeout(() => {
-      // Lọc sản phẩm dựa trên các bộ lọc đã chọn
-      let filteredProducts = [...mockPhoneProducts];
-      
-      // Áp dụng bộ lọc thương hiệu
-      if (filters.brands.length > 0) {
-        filteredProducts = filteredProducts.filter(product => 
-          filters.brands.includes(product.brand)
+    let url = "/api/smartphones/";
+    axios.get(url)
+      .then(res => {
+        let data = Array.isArray(res.data.result) ? res.data.result : [];
+        // Lọc theo nhiều hãng ở frontend (không phân biệt hoa thường)
+        if (filters.brands.length > 0) {
+          data = data.filter(product =>
+            filters.brands.map(b => b.toLowerCase()).includes((product.brand || "").toLowerCase())
+          );
+        }
+        // Lọc theo price range
+        data = data.filter(product =>
+          product.price >= filters.priceRange.min &&
+          product.price <= filters.priceRange.max
         );
-      }
-      
-      // Áp dụng bộ lọc khoảng giá
-      filteredProducts = filteredProducts.filter(product => 
-        (product.price) >= filters.priceRange.min && 
-        (product.price) <= filters.priceRange.max
-      );
-      
-      // Áp dụng sắp xếp
-      switch (sortBy) {
-        case "price-low-high":
-          filteredProducts.sort((a, b) => a.price - b.price);
-          break;
-        case "price-high-low":
-          filteredProducts.sort((a, b) => b.price - a.price);
-          break;
-        case "rating":
-          filteredProducts.sort((a, b) => b.rating - a.rating);
-          break;
-        case "popularity":
-        default:
-          // Sắp xếp mặc định theo reviews, có thể thay đổi logic này
-          filteredProducts.sort((a, b) => b.reviews - a.reviews);
-          break;
-      }
-      
-      // Tính tổng số trang
-      const totalFilteredPages = Math.ceil(filteredProducts.length / productsPerPage);
-      setTotalPages(totalFilteredPages);
-      
-      // Điều chỉnh trang hiện tại nếu nó vượt quá tổng số trang mới
-      if (currentPage > totalFilteredPages && totalFilteredPages > 0) {
-        setCurrentPage(1);
-      }
-      
-      // Phân trang kết quả
-      const startIndex = (currentPage - 1) * productsPerPage;
-      const paginatedProducts = filteredProducts.slice(startIndex, startIndex + productsPerPage);
-      
-      setProducts(paginatedProducts);
-      setLoading(false);
-    }, 1000); // Độ trễ 1 giây
-    
-    return () => clearTimeout(timer);
+        // Sắp xếp
+        switch (sortBy) {
+          case "price-low-high":
+            data.sort((a, b) => a.price - b.price);
+            break;
+          case "price-high-low":
+            data.sort((a, b) => b.price - a.price);
+            break;
+          case "rating":
+            data.sort((a, b) => b.rating - a.rating);
+            break;
+          case "popularity":
+          default:
+            data.sort((a, b) => b.reviews - a.reviews);
+            break;
+        }
+        setTotalFilteredProducts(data.length);
+        const totalFilteredPages = Math.ceil(data.length / productsPerPage);
+        setTotalPages(totalFilteredPages);
+        const startIndex = (currentPage - 1) * productsPerPage;
+        setProducts(data.slice(startIndex, startIndex + productsPerPage));
+      })
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false));
   }, [filters, currentPage, sortBy]);
 
   // Xử lý thay đổi bộ lọc
@@ -341,7 +177,7 @@ const ViewAllPhone = () => {
                   ) : products.length === 0 ? (
                     "Không tìm thấy sản phẩm"
                   ) : (
-                    `Hiển thị ${(currentPage - 1) * productsPerPage + 1}-${Math.min(currentPage * productsPerPage, mockPhoneProducts.filter(p => (filters.brands.length === 0 || filters.brands.includes(p.brand)) && p.price >= filters.priceRange.min && p.price <= filters.priceRange.max).length)} của ${mockPhoneProducts.filter(p => (filters.brands.length === 0 || filters.brands.includes(p.brand)) && p.price >= filters.priceRange.min && p.price <= filters.priceRange.max).length} sản phẩm`
+                    `Hiển thị ${(currentPage - 1) * productsPerPage + 1}-${Math.min(currentPage * productsPerPage, totalFilteredProducts)} của ${totalFilteredProducts} sản phẩm`
                   )}
                 </p>
                 
