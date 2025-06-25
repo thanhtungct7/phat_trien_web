@@ -92,8 +92,12 @@ const Header = ({
   const interactiveClasses = 'transition-transform duration-200 ease-in-out hover:scale-105 active:scale-95';
 
   return (
+
     <header
       className={`${baseClasses} ${variantClasses[variant]} ${className}`}
+    <header 
+      className={`sticky top-0 ${baseClasses} ${variantClasses[variant]} ${className}`}
+      style={{ zIndex: 50 }}
       {...props}
     >
       <div className="sr-only">
@@ -209,6 +213,10 @@ const Header = ({
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
+          
+          {/* Phần tìm kiếm và đăng nhập/đăng ký */}
+          <div className="hidden md:flex items-center space-x-6">
+
             {variant !== 'compact' && (
               <form onSubmit={handleSearchSubmit} className="relative">
                 <Input
@@ -226,6 +234,10 @@ const Header = ({
 
             <div className="flex items-center space-x-2 ml-2">
               <Link to="/login" className={`text-white hover:text-gray-200 text-sm ${interactiveClasses}`}>Đăng nhập</Link>
+              <Link to="/login" className={`text-white hover:text-gray-200 ${interactiveClasses}`}>Đăng nhập</Link>
+            {/* Nút đăng nhập/đăng ký */}
+            <div className="flex items-center space-x-2 ml-2 text-sm">
+              <Link to="/login" className="text-white hover:text-gray-200">Đăng nhập</Link>
               <span className="text-white">/</span>
               <Link to="/register" className={`text-white hover:text-gray-200 text-sm ${interactiveClasses}`}>Đăng ký</Link>
             </div>
@@ -240,6 +252,7 @@ const Header = ({
               onMouseEnter={() => setIsAccountDropdownOpen(true)}
               onMouseLeave={() => setIsAccountDropdownOpen(false)}
             >
+            <Link to="/account" className={interactiveClasses}>
               <Button
                 variant="ghost"
                 icon="User"
