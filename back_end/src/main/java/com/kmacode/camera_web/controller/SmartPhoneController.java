@@ -86,7 +86,7 @@ public class SmartPhoneController {
                 .build();
     }
 
-    @GetMapping("/much-brands/")
+    @GetMapping("/many-brands/")
     ApiResponse<List<SmartPhoneResponseDTO>> getSmartPhonesByMuchBrand(@RequestParam("brands") String brands) {
         List<String> brandList = List.of(brands.split(","));
         return ApiResponse.<List<SmartPhoneResponseDTO>>builder()

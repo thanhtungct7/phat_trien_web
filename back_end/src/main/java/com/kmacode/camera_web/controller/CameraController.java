@@ -82,7 +82,7 @@ public class CameraController {
                 .build();
     }
 
-    @GetMapping("/much-brands/")
+    @GetMapping("/many-brands/")
     ApiResponse<List<CameraResponseDTO>> getCamerasByManyBrand(@RequestParam("brands") String brands) {
         List<String> brandList = List.of(brands.split(","));
         return ApiResponse.<List<CameraResponseDTO>>builder()
