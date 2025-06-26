@@ -11,7 +11,7 @@ const ContactPage = () => (
         <p className="text-gray-700">
           Địa chỉ: 123 Đường Chiến Thắng, huyện Thanh Trì, thành phố Hà Nội<br />
           Hotline: <a href="tel:0123456789" className="text-blue-600">0123 456 789</a><br />
-          Email: <a href="mailto:support@shophub.com" className="text-blue-600">support@shophub.com</a>
+          Email: <a href="mailto:support@mobilecity.com" className="text-blue-600">support@mobilecity.com</a>
         </p>
       </div>
     </main>

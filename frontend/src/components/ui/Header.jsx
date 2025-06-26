@@ -19,6 +19,7 @@ const Header = ({
   const [isPhonesDropdownOpen, setIsPhonesDropdownOpen] = useState(false);
   const [isLaptopsDropdownOpen, setIsLaptopsDropdownOpen] = useState(false);
   const [isCamerasDropdownOpen, setIsCamerasDropdownOpen] = useState(false);
+  const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const location = useLocation();
 
   const navigationItems = [
@@ -29,15 +30,15 @@ const Header = ({
 
   const phoneBrands = [
     { name: 'Samsung', path: '/phones/samsung' },
-    { name: 'iPhone', path: '/phones/iphone' },
+    { name: 'Apple', path: '/phones/apple' },
     { name: 'Xiaomi', path: '/phones/xiaomi' },
     { name: 'Oppo', path: '/phones/oppo' },
-    { name: 'Realme', path: '/phones/realme' },
+    { name: 'Google', path: '/phones/google' },
   ];
 
   const laptopBrands = [
     { name: 'Apple', path: '/laptops/apple' },
-    { name: 'Dell', path: '/laptops/dell' },
+    { name: 'Acer', path: '/laptops/acer' },
     { name: 'Asus', path: '/laptops/asus' },
     { name: 'Lenovo', path: '/laptops/lenovo' },
     { name: 'HP', path: '/laptops/hp' },
@@ -47,8 +48,8 @@ const Header = ({
     { name: 'Ezviz', path: '/cameras/ezviz' },
     { name: 'TpLink', path: '/cameras/tplink' },
     { name: 'Imou', path: '/cameras/imou' },
-    { name: 'Tiandy', path: '/cameras/tiandy' },
-    { name: '365 Selection', path: '/cameras/365selection' },
+    { name: 'Reoqoo', path: '/cameras/reoqoo' },
+    { name: '365Selection', path: '/cameras/365selection' },
   ];
 
   useEffect(() => {
@@ -144,7 +145,7 @@ const Header = ({
               <span className="flex items-center">
                 <GiMaterialsScience className="w-8 h-8 bg-white rounded-lg" />
               </span>
-              <span className="ml-2 text-xl font-bold text-white">ShopHub</span>
+              <span className="ml-2 text-xl font-bold text-white">Mobile City</span>
             </Link>
           </div>
 
@@ -196,7 +197,7 @@ const Header = ({
                         {brands.map(brand => (
                           <Link
                             key={brand.name}
-                            to={brand.path}
+                            to={`${item.path}?brand=${brand.name.toLowerCase().replace(/\s+/g, '')}`}
                             className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200"
                             onClick={() => setDropdownOpen(false)}
                           >
@@ -232,18 +233,25 @@ const Header = ({
             )}
 
             <div className="flex items-center space-x-2 ml-2">
+              <Link to="/login" className={`text-white hover:text-gray-200 text-sm ${interactiveClasses}`}>Đăng nhập</Link>
               <Link to="/login" className={`text-white hover:text-gray-200 ${interactiveClasses}`}>Đăng nhập</Link>
             {/* Nút đăng nhập/đăng ký */}
             <div className="flex items-center space-x-2 ml-2 text-sm">
               <Link to="/login" className="text-white hover:text-gray-200">Đăng nhập</Link>
               <span className="text-white">/</span>
-              <Link to="/register" className={`text-white hover:text-gray-200 ${interactiveClasses}`}>Đăng ký</Link>
+              <Link to="/register" className={`text-white hover:text-gray-200 text-sm ${interactiveClasses}`}>Đăng ký</Link>
             </div>
 
             <Link to="/shopping-cart" className={`relative p-2 text-gray-200 hover:text-white ${interactiveClasses}`}>
               <Icon name="ShoppingCart" size={24} />
               <span className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">3</span>
             </Link>
+
+            <div
+              className="relative"
+              onMouseEnter={() => setIsAccountDropdownOpen(true)}
+              onMouseLeave={() => setIsAccountDropdownOpen(false)}
+            >
             <Link to="/account" className={interactiveClasses}>
               <Button
                 variant="ghost"
@@ -251,7 +259,19 @@ const Header = ({
                 aria-label="Tài khoản"
                 className="text-white hover:text-white"
               />
-            </Link>
+              {isAccountDropdownOpen && (
+                <div className="absolute right-0 top-full w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                  <div className="py-1">
+                    <Link
+                      to="/manage"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+                    >
+                      Quản lý sản phẩm
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="flex md:hidden">
