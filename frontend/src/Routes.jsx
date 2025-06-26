@@ -1,4 +1,4 @@
-// src/Routes.jsx
+// src/Routes.jsx (PHIÊN BẢN ĐÃ GIẢI QUYẾT XUNG ĐỘT)
 
 import React from "react";
 import { BrowserRouter, Routes as RouterRoutes, Route } from "react-router-dom";
@@ -22,6 +22,8 @@ import ContactPage from "./pages/ContactPage";
 import MyAccountPage from "pages/userInfo";
 import AdminPage from "pages/adminPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ManageProduct from "./pages/ManageProductPage";
+
 const Routes = () => {
   return (
     <BrowserRouter>
@@ -59,6 +61,8 @@ const Routes = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="/manage" element={<ManageProduct />} />
+          
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
       </ErrorBoundary>
