@@ -1,16 +1,22 @@
+
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useAuth } from "../components/AuthContext";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const LoginPage = () => {
-  const [form, setForm] = useState({
-    phone: "",
-    password: "",
-  });
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
+  const [form, setForm] = useState({ phone: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    if (error) setError("");
   };
 
   const handleSubmit = (e) => {
@@ -20,13 +26,27 @@ const LoginPage = () => {
       return;
     }
     setError("");
-    alert("Đăng nhập thành công!");
+
+    if (form.phone === "admin" && form.password === "admin123") {
+      const adminData = { name: "Quản trị viên", phone: form.phone, role: "admin" };
+      login(adminData);
+      navigate(from === '/' ? '/admin' : from, { replace: true });
+      return;
+    }
+
+    if (form.password === "user123") {
+      const userData = { name: `Khách hàng ${form.phone}`, phone: form.phone, role: "user" };
+      login(userData);
+      navigate(from === '/' ? '/account' : from, { replace: true });
+      return;
+    }
+
+    setError("Số điện thoại hoặc mật khẩu không chính xác.");
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
       <div className="flex flex-col md:flex-row w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden">
-        {/* Left: Info/Promotion */}
         <div className="hidden md:flex flex-col justify-center items-center bg-gray-50 w-1/2 p-10">
           <h2 className="text-2xl font-bold text-blue-600 mb-2 text-center">
             Nhập hội khách hàng thành viên{" "}
