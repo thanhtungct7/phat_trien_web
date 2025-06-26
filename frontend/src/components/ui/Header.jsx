@@ -92,9 +92,6 @@ const Header = ({
   const interactiveClasses = 'transition-transform duration-200 ease-in-out hover:scale-105 active:scale-95';
 
   return (
-
-    <header
-      className={`${baseClasses} ${variantClasses[variant]} ${className}`}
     <header 
       className={`sticky top-0 ${baseClasses} ${variantClasses[variant]} ${className}`}
       style={{ zIndex: 50 }}
@@ -232,10 +229,7 @@ const Header = ({
               </form>
             )}
 
-            <div className="flex items-center space-x-2 ml-2">
-              <Link to="/login" className={`text-white hover:text-gray-200 text-sm ${interactiveClasses}`}>Đăng nhập</Link>
-              <Link to="/login" className={`text-white hover:text-gray-200 ${interactiveClasses}`}>Đăng nhập</Link>
-            {/* Nút đăng nhập/đăng ký */}
+            <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-2 ml-2 text-sm">
               <Link to="/login" className="text-white hover:text-gray-200">Đăng nhập</Link>
               <span className="text-white">/</span>
@@ -252,13 +246,14 @@ const Header = ({
               onMouseEnter={() => setIsAccountDropdownOpen(true)}
               onMouseLeave={() => setIsAccountDropdownOpen(false)}
             >
-            <Link to="/account" className={interactiveClasses}>
-              <Button
-                variant="ghost"
-                icon="User"
-                aria-label="Tài khoản"
-                className="text-white hover:text-white"
-              />
+              <Link to="/account" className={interactiveClasses}>
+                <Button
+                  variant="ghost"
+                  icon="User"
+                  aria-label="Tài khoản"
+                  className="text-white hover:text-white"
+                />
+              </Link>
               {isAccountDropdownOpen && (
                 <div className="absolute right-0 top-full w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                   <div className="py-1">
@@ -290,6 +285,10 @@ const Header = ({
               <Icon name={isMenuOpen ? "X" : "Menu"} size={24} />
             </button>
           </div>
+          </div>
+          </div>
+                {/* <Link to="/login" className={`text-white hover:text-gray-200 text-sm ${interactiveClasses}`}>Đăng nhập</Link>
+        <Link to="/login" className={`text-white hover:text-gray-200 ${interactiveClasses}`}>Đăng nhập</Link> */}
         </div>
       </div>
 

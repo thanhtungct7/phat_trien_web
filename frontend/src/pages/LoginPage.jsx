@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { OAuthConfig } from "../configuration/configuaration.js";
 
 const LoginPage = () => {
   const [form, setForm] = useState({
@@ -21,6 +22,20 @@ const LoginPage = () => {
     }
     setError("");
     alert("Đăng nhập thành công!");
+  };
+
+  const handleContinueWithGoogle = () => {
+    const callbackUrl = OAuthConfig.redirectUri;
+    const authUrl = OAuthConfig.authUri;
+    const googleClientId = OAuthConfig.clientId;
+
+    const targetUrl = `${authUrl}?redirect_uri=${encodeURIComponent(
+        callbackUrl
+    )}&response_type=code&client_id=${googleClientId}&scope=openid%20email%20profile`;
+
+    console.log(targetUrl);
+
+    window.location.href = targetUrl;
   };
 
   return (
@@ -162,7 +177,7 @@ const LoginPage = () => {
               </span>
               <div className="flex-grow h-px bg-gray-200" />
             </div>
-            <button className="w-full flex items-center justify-center border border-gray-300 rounded px-4 py-2 hover:bg-gray-100 mb-4">
+            <button className="w-full flex items-center justify-center border border-gray-300 rounded px-4 py-2 hover:bg-gray-100 mb-4" onClick={handleContinueWithGoogle}>
               <img
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
                 alt="Google"

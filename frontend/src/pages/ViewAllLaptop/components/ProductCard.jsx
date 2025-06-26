@@ -7,14 +7,23 @@ import Button from "../../../components/ui/Button";
 const ProductCard = ({ product }) => {
   const {
     id,
-    name,
     brand,
-    price,
-    salePrice,
+    description,
     image,
+    name,
+    price,
+    stock,
+    yearOfManufacture,
+    chipset,
+    cpuCores,
+    gpuCores,
+    resolution,
+    screenSize,
     rating,
-    //specs,
-    inStock
+    reviews,
+    discount,
+    isNew,
+    salePrice
   } = product;
 
   // Calculate discount percentage if there's a sale price
@@ -29,7 +38,7 @@ const ProductCard = ({ product }) => {
             {discountPercentage}% OFF
           </div>
         )}
-        {!inStock && (
+        {!stock && (
           <div className="absolute top-2 right-2 bg-gray-800 bg-opacity-70 text-white text-xs font-medium px-2 py-1 rounded-md">
             Out of Stock
           </div>
@@ -74,34 +83,48 @@ const ProductCard = ({ product }) => {
 
         {/* Key specs */}
         <div className="grid grid-cols-2 gap-2 mb-4">
-          {/*
           <div className="flex items-center text-xs text-gray-600">
-            <Icon name="HardDrive" size={14} className="mr-1 text-gray-400" />
-            {specs.storage}
+            <Icon name="Factory" size={14} className="mr-1 text-gray-400" />
+            Hãng: {brand || "?"}
+          </div>
+          <div className="flex items-center text-xs text-gray-600">
+            <Icon name="Calendar" size={14} className="mr-1 text-gray-400" />
+            Năm SX: {yearOfManufacture || "?"}
+          </div>
+          <div className="flex items-center text-xs text-gray-600">
+            <Icon name="Cpu" size={14} className="mr-1 text-gray-400" />
+            Chip: {chipset || "?"}
+          </div>
+          <div className="flex items-center text-xs text-gray-600">
+            <Icon name="Cpu" size={14} className="mr-1 text-gray-400" />
+            Số nhân CPU: {cpuCores || "?"}
+          </div>
+          <div className="flex items-center text-xs text-gray-600">
+            <Icon name="Gpu" size={14} className="mr-1 text-gray-400" />
+            Số nhân GPU: {gpuCores || "?"}
+          </div>
+          <div className="flex items-center text-xs text-gray-600">
+            <Icon name="Monitor" size={14} className="mr-1 text-gray-400" />
+            Độ phân giải: {resolution || "?"}
           </div>
           <div className="flex items-center text-xs text-gray-600">
             <Icon name="Smartphone" size={14} className="mr-1 text-gray-400" />
-            {specs.screenSize}
+            Kích thước màn: {screenSize || "?"}
           </div>
           <div className="flex items-center text-xs text-gray-600">
-            <Icon name="Camera" size={14} className="mr-1 text-gray-400" />
-            {specs.camera}
+            <Icon name="Box" size={14} className="mr-1 text-gray-400" />
+            Tồn kho: {stock}
           </div>
-          <div className="flex items-center text-xs text-gray-600">
-            <Icon name="Battery" size={14} className="mr-1 text-gray-400" />
-            {specs.battery}
-          </div>
-          */}
         </div>
 
         {/* CTA Button */}
         <Link to={`/product-detail-page?id=${id}`} className="block">
           <Button
-            variant={inStock ? "primary" : "secondary"}
+            variant={stock ? "primary" : "secondary"}
             className="w-full"
-            disabled={!inStock}
+            disabled={!stock}
           >
-            {inStock ? "View Details" : "Out of Stock"}
+            {stock ? "View Details" : "Out of Stock"}
           </Button>
         </Link>
       </div>
