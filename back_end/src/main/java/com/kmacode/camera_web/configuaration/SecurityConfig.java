@@ -67,6 +67,7 @@ public class SecurityConfig {
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowCredentials(true); // Important for cookies/auth headers
+
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }

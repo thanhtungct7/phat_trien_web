@@ -4,7 +4,6 @@ package com.kmacode.camera_web.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -37,5 +36,6 @@ public class CameraResponseDTO  {
 
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+
 
 }

@@ -23,4 +23,5 @@ public interface CameraRepository extends JpaRepository<Camera, Long> {
     List<Camera> findCameraByManyBrand(@Param("brands") List<String> brand);
 
 
+
 }

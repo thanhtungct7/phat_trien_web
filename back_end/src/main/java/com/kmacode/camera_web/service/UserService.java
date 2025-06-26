@@ -6,6 +6,7 @@ import com.kmacode.camera_web.dto.response.UserResponseDTO;
 import com.kmacode.camera_web.entity.User;
 import com.kmacode.camera_web.mapper.UserMapper;
 import com.kmacode.camera_web.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +38,7 @@ public class UserService {
         user.setRoles(roles);
 
         userRepository.save(user);
+
         // Convert saved entity back to DTO
         return userMapper.toUserResponseDTO(user);
     }
@@ -68,6 +70,7 @@ public class UserService {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteUser(Long id) {
 
+
         // Check if user exists
         if (!userRepository.existsById(id)) {
             throw new RuntimeException("User not found");
@@ -77,6 +80,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     public List<UserResponseDTO> getAllUsers() {
         // Fetch all users from the repository
         List<User> users = userRepository.findAll();

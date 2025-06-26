@@ -2,9 +2,8 @@ package com.kmacode.camera_web.controller;
 
 import com.kmacode.camera_web.dto.request.LaptopRequestDTO;
 import com.kmacode.camera_web.dto.response.ApiResponse;
-import com.kmacode.camera_web.dto.response.CameraResponseDTO;
 import com.kmacode.camera_web.dto.response.LaptopResponseDTO;
-import com.kmacode.camera_web.dto.response.SmartPhoneResponseDTO;
+
 import com.kmacode.camera_web.service.LaptopService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -91,5 +90,6 @@ public class LaptopController {
         return ApiResponse.<List<LaptopResponseDTO>>builder()
                 .result(laptopService.getLaptopsByManyBrand(brandList))
                 .build();
-    }
+
+}
 }

@@ -20,6 +20,8 @@ public interface LaptopRepository extends JpaRepository<Laptop, Long> {
     @Query(value = "select * from Laptop order by price desc ", nativeQuery = true)
     List<Laptop> findByPriceDESC();
 
+
     @Query("SELECT c FROM Laptop c WHERE c.brand IN :brands")
     List<Laptop> findLaptopsByManyBrand(@Param("brands") List<String> brand);
+
 }

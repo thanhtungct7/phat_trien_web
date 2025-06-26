@@ -27,6 +27,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -78,10 +79,13 @@ public class AuthenticationService {
     protected final String GRANT_TYPE = "authorization_code";
 
 
+
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
 
+
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+
 
         SignedJWT signedJWT = SignedJWT.parse(token);
 
@@ -93,6 +97,7 @@ public class AuthenticationService {
                 .valid(verified && expityTime.after(new Date()))
                 .build();
     }
+
 
     public AuthenticationResponse outboundAuthenticate(String code){
         var response = outboundIdentityClient.exchangeToken(ExchangeTokenRequest.builder()
@@ -145,6 +150,7 @@ public class AuthenticationService {
         }
     }
 
+
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_EXISTED));
@@ -181,6 +187,8 @@ public class AuthenticationService {
 
         try {
             jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
+
+
             return jwsObject.serialize();
         } catch (JOSEException e) {
             log.error("Cannot create token", e);
@@ -210,6 +218,7 @@ public class AuthenticationService {
         // 5. Token hợp lệ
         return signedJWT;
     }
+
 
 
 

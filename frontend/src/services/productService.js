@@ -114,18 +114,5 @@ export const fetchCamerasByBrand = async (brand) => {
         throw error;
     }
 };
-export const fetchCamerasByManyBrand = async (brands) => {
-    const brandsString = brands.join(',');
-    try {
-        const response = await fetch(`${API_URL}/cameras/many-brands?brands=${brandsString}`);
-        if (!response.ok) throw new Error('Network response was not ok');
-        return await response.json();
-    } catch (error) {
-        console.error(`Error fetching cameras by brands ${brands}:`, error);
-        throw error;
-    }
-};
-
-
 
 // Phone and Laptop functions would go here when those APIs are implemented

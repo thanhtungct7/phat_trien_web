@@ -15,6 +15,7 @@ public class CameraWebApplication {
         // Nạp tất cả biến môi trường vào hệ thống
         dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
 
+
         SpringApplication.run(CameraWebApplication.class, args);
     }
 

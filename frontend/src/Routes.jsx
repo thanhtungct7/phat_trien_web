@@ -1,3 +1,4 @@
+
 import React from "react";
 import { BrowserRouter, Routes as RouterRoutes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
@@ -17,6 +18,9 @@ import LoginPage from "./pages/LoginPage";
 import Policy from "./pages/PolicyPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import MyAccountPage from "pages/userInfo";
+import AdminPage from "pages/adminPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 import ManageProduct from "./pages/ManageProductPage";
 import Authenticate from "./pages/Authenticate";
 
@@ -41,8 +45,25 @@ const Routes = () => {
           <Route path="/policy" element={<Policy />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/authenticate" element={<Authenticate/>}/>
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute allowedRoles={['user']}>
+                <MyAccountPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/manage" element={<ManageProduct />} />
-          <Route path="/authenticate" element={<Authenticate />} />
+          
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
       </ErrorBoundary>

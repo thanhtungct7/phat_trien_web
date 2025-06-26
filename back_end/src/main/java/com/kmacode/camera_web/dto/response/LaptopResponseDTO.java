@@ -41,8 +41,5 @@ public class LaptopResponseDTO  {
     String cpuCores;
 
     String gpuCores;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
-
 
 }

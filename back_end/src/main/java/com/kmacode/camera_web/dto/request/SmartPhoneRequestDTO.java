@@ -1,12 +1,7 @@
 package com.kmacode.camera_web.dto.request;
 
-import com.kmacode.camera_web.entity.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
@@ -26,8 +21,6 @@ public class SmartPhoneRequestDTO {
      Integer stock = 0;
     String yearOfManufacture;
 
-
-
     String screenSize = "0";
 
     String technology;
@@ -43,5 +36,6 @@ public class SmartPhoneRequestDTO {
     String cameraUltraWide;
 
     String cameraTelephoto;
+
 
 }

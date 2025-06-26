@@ -12,7 +12,11 @@ target/
 .settings
 .springBeans
 .sts4-cache
+<<<<<<< HEAD
 **/.env
+=======
+
+>>>>>>> dien-thoai
 ### IntelliJ IDEA ###
 .idea
 *.iws

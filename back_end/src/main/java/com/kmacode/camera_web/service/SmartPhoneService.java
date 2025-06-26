@@ -21,6 +21,7 @@ public class SmartPhoneService {
      SmartPhoneMapper smartPhoneMapper;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     public SmartPhoneResponseDTO createSmartPhone(SmartPhoneRequestDTO smartPhoneRequestDTO) {
         SmartPhone smartPhone = smartPhoneMapper.toSmartPhone(smartPhoneRequestDTO);
         smartPhone = smartPhoneRepository.save(smartPhone);
@@ -28,6 +29,7 @@ public class SmartPhoneService {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     public SmartPhoneResponseDTO updateSmartPhone(Long id, SmartPhoneRequestDTO smartPhoneRequestDTO) {
         SmartPhone smartPhone = smartPhoneRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Smartphone not found"));
@@ -44,6 +46,7 @@ public class SmartPhoneService {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     public void deleteSmartPhone(Long id) {
         if (!smartPhoneRepository.existsById(id)) {
             throw new RuntimeException("Smartphone not found");

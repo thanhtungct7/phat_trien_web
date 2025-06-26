@@ -1,7 +1,7 @@
 package com.kmacode.camera_web.dto.request;
 
 import com.kmacode.camera_web.entity.User;
-import jakarta.persistence.Column;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -35,7 +35,6 @@ public class LaptopRequestDTO{
      String cpuCores = "no";
 
      String gpuCores = "no";
-
 
 
 }

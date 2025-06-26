@@ -55,7 +55,6 @@ public class Camera {
     @Column(name = "storage", nullable = true)
     @Builder.Default
      String storage = "no";
-
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     LocalDateTime createdAt;

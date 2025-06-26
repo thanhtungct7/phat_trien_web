@@ -1,6 +1,6 @@
 package com.kmacode.camera_web.dto.request;
 
-import jakarta.persistence.Column;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -29,5 +29,5 @@ public class CameraRequestDTO  {
     String resolution = "no";
     String wifiConnect = "no";
     String storage = "no";
-//
+
 }

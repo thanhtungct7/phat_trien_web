@@ -34,6 +34,7 @@ public class CameraService {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     public CameraResponseDTO updateCamera(Long id, CameraRequestDTO cameraRequestDTO) {
         Camera camera = cameraRepository.findById(id).orElseThrow(() -> new RuntimeException("Camera not found"));
         cameraMapper.updateCameraFromDTO(camera, cameraRequestDTO);
@@ -42,6 +43,7 @@ public class CameraService {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     public void deleteCamera(Long id) {
         if (!cameraRepository.existsById(id)) {
             throw new RuntimeException("Camera not found");
@@ -93,4 +95,5 @@ public class CameraService {
                 .map(cameraMapper::toCameraResponseDTO)
                 .toList();
     }
+
 }

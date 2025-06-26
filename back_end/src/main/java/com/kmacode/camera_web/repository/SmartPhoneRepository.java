@@ -23,4 +23,5 @@ public interface SmartPhoneRepository extends JpaRepository<SmartPhone, Long> {
 
     @Query("SELECT c FROM SmartPhone c WHERE c.brand IN :brands")
     List<SmartPhone> findSmartPhonesByManyBrand(@Param("brands") List<String> brand);
+
 }

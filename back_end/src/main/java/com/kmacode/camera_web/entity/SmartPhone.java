@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -36,10 +37,12 @@ public class SmartPhone {
     @Column(name = "image", nullable = true)
     String image = "no";
 
+
     @Column(name = "price" )
     Long price;
 
     @Column(name = "stock" )
+
     Integer stock = 0;
 
     @Column(name = "year_of_manufacture", nullable = true)

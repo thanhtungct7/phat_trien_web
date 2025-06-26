@@ -74,9 +74,10 @@ const ProductCard = ({ product }) => {
 
         {/* Key specs */}
         <div className="grid grid-cols-2 gap-2 mb-4">
+          {/* 
           <div className="flex items-center text-xs text-gray-600">
             <Icon name="HardDrive" size={14} className="mr-1 text-gray-400" />
-            {specs.storage}
+            {product.specs && product.specs.storage ? product.specs.storage : "N/A"}
           </div>
           <div className="flex items-center text-xs text-gray-600">
             <Icon name="Smartphone" size={14} className="mr-1 text-gray-400" />
@@ -90,7 +91,15 @@ const ProductCard = ({ product }) => {
             <Icon name="Battery" size={14} className="mr-1 text-gray-400" />
             {specs.battery}
           </div>
+          */}
         </div>
+
+        {/* 
+        <div>
+          <span>Lưu trữ: </span>
+          <span>{product.specs?.storage || product.storage || "N/A"}</span>
+        </div>
+        */}
 
         {/* CTA Button */}
         <Link to={`/product-detail-page?id=${id}`} className="block">
