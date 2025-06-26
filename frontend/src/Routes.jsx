@@ -1,4 +1,3 @@
-// src/Routes.jsx (PHIÊN BẢN ĐÃ GIẢI QUYẾT XUNG ĐỘT)
 
 import React from "react";
 import { BrowserRouter, Routes as RouterRoutes, Route } from "react-router-dom";
