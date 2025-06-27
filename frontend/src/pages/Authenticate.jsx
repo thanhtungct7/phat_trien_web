@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { setToken } from "../services/localStorageService";
 import "../styles/Authenticate.css"; // You'll need to create this CSS file
+import {jwtDecode} from "jwt-decode";
 
 export default function Authenticate() {
     const navigate = useNavigate();
@@ -29,8 +30,32 @@ export default function Authenticate() {
                     console.log(data);
 
                     setToken(data.result?.token);
+
+                    // Decode token để lấy thông tin scope/roles
+                    let userInfo = {};
+                    if (data.result?.token) {
+                        const payload = jwtDecode(data.result.token);
+                        // Lấy scope từ token
+                        const scope = payload.scope;
+                        // Nếu scope là "ADMIN USER" thì tách thành mảng
+                        const roles = typeof scope === "string" ? scope.split(" ") : (scope || []);
+                        // Có thể lấy thêm name/email/username trong payload (tùy backend)
+                        userInfo = {
+                            username: payload.username || payload.sub || "", // sub là thường dùng trong JWT
+                            name: payload.name || payload.username || payload.sub || "",
+                            authenticated: true,
+                            roles,
+                            // Nếu backend cho thêm trường khác trong token
+                            ...payload,
+                        };
+                        // Lưu vào localStorage
+                        localStorage.setItem("userInfo", JSON.stringify(userInfo));
+                        console.log("Saved userInfo:", userInfo);
+                    }
+
                     setIsLoggedin(true);
                 });
+
         }
     }, []);
 

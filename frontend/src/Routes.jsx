@@ -46,6 +46,7 @@ const Routes = () => {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/authenticate" element={<Authenticate/>}/>
+          <Route path="/admin" element={<AdminPage />} />
           <Route
             path="/account"
             element={
