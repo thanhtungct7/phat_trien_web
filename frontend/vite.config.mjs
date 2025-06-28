@@ -13,6 +13,8 @@ export default defineConfig({
   },
   plugins: [tsconfigPaths(), react(), tagger()],
   server: {
+    port: 4028, // Đổi thành cổng bạn muốn
+    host: true,  // Cho phép truy cập từ các IP khác (tùy chọn)
     proxy: {
       '/api': 'http://localhost:8080',
     },

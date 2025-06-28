@@ -1,9 +1,8 @@
 package com.kmacode.camera_web.configuaration;
 
 import com.kmacode.camera_web.constant.PredefinedRole;
-import com.kmacode.camera_web.entity.Role;
 import com.kmacode.camera_web.entity.User;
-import com.kmacode.camera_web.repository.RoleRepository;
+
 import com.kmacode.camera_web.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -39,22 +38,9 @@ public class ApplicationInitConfig {
             name = "driver-class-name",
             havingValue = "com.mysql.cj.jdbc.Driver"
     )
-    ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
+    ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
-            if (userRepository.findByUsername(ADMIN_USER_NAME).isEmpty()) {
 
-                roleRepository.save(Role.builder()
-                        .name(PredefinedRole.USER_ROLE)
-                        .description("User role")
-                        .build());
-
-
-                roleRepository.save(
-                        Role.builder()
-                                .name(PredefinedRole.ADMIN_ROLE)
-                                .description("Admin role")
-                                .build()
-                );
 
 
                 var roles = new HashSet<String>();
@@ -66,10 +52,13 @@ public class ApplicationInitConfig {
                         .roles(roles)
                         .build();
 
+            try {
                 userRepository.save(user);
-
-                log.warn("admin user has been created with default password: admin, please change it");
+            } catch (Exception e) {
+                log.warn("User with username {} already exists, skipping creation", ADMIN_USER_NAME);
             }
+
+            log.warn("admin user has been created with default password: admin, please change it");
             log.info("Application initialization completed");
         };
     }
