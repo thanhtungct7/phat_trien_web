@@ -7,6 +7,7 @@ import ProductCardSkeleton from "./ProductCardSkeleton";
 
 const FeaturedProducts = ({
   products,
+  type,
   isLoading,
   hasError,
   onRefresh,
@@ -51,7 +52,7 @@ const FeaturedProducts = ({
                   <ProductCardSkeleton key={index} />
                 ))
               : products.map(product => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard key={product.id} product={product} type={type} />
                 ))
             }
           </div>

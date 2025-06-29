@@ -7,14 +7,21 @@ import Button from "../../../components/ui/Button";
 const ProductCard = ({ product }) => {
   const {
     id,
-    name,
     brand,
-    price,
-    salePrice,
+    description,
     image,
+    name,
+    price,
+    stock,
+    yearOfManufacture,
+    resolution,
+    storage,
+    wifiConnect,
     rating,
-    // specs, // Không dùng specs vì backend chưa có
-    inStock
+    reviews,
+    discount,
+    isNew,
+    salePrice
   } = product;
 
   // Calculate discount percentage if there's a sale price
@@ -29,12 +36,12 @@ const ProductCard = ({ product }) => {
             {discountPercentage}% OFF
           </div>
         )}
-        {!inStock && (
+        {!stock && (
           <div className="absolute top-2 right-2 bg-gray-800 bg-opacity-70 text-white text-xs font-medium px-2 py-1 rounded-md">
             Out of Stock
           </div>
         )}
-        <Link to={`/product-detail-page?id=${id}`} className="block aspect-w-1 aspect-h-1">
+        <Link to={`/camera-detail-page/${id}`} className="block aspect-w-1 aspect-h-1">
           <Image
             src={image}
             alt={name}
@@ -47,7 +54,7 @@ const ProductCard = ({ product }) => {
       <div className="p-4">
         <div className="mb-2">
           <span className="text-xs font-medium text-gray-500">{brand}</span>
-          <Link to={`/product-detail-page?id=${id}`} className="block">
+          <Link to={`/camera-detail-page/${id}`} className="block">
             <h3 className="text-lg font-medium text-gray-900 hover:text-primary-600 transition-colors line-clamp-2">
               {name}
             </h3>
@@ -72,36 +79,38 @@ const ProductCard = ({ product }) => {
           </div>
         </div>
 
-        {/* Key specs - Tạm thời comment lại để tránh lỗi */}
+        {/* Key specs */}
         <div className="grid grid-cols-2 gap-2 mb-4">
-          {/*
           <div className="flex items-center text-xs text-gray-600">
-            <Icon name="HardDrive" size={14} className="mr-1 text-gray-400" />
-            {specs.storage}
-          </div>
-          <div className="flex items-center text-xs text-gray-600">
-            <Icon name="Smartphone" size={14} className="mr-1 text-gray-400" />
-            {specs.screenSize}
+            <Icon name="Calendar" size={14} className="mr-1 text-gray-400" />
+            Năm SX: {yearOfManufacture || "Chưa cập nhật"}
           </div>
           <div className="flex items-center text-xs text-gray-600">
             <Icon name="Camera" size={14} className="mr-1 text-gray-400" />
-            {specs.camera}
+            Độ phân giải: {resolution || "Chưa cập nhật"}
           </div>
           <div className="flex items-center text-xs text-gray-600">
-            <Icon name="Battery" size={14} className="mr-1 text-gray-400" />
-            {specs.battery}
+            <Icon name="HardDrive" size={14} className="mr-1 text-gray-400" />
+            Lưu trữ: {storage || "Chưa cập nhật"}
           </div>
-          */}
+          <div className="flex items-center text-xs text-gray-600">
+            <Icon name="Wifi" size={14} className="mr-1 text-gray-400" />
+            Wifi: {wifiConnect ? wifiConnect : "Không"}
+          </div>
+          <div className="flex items-center text-xs text-gray-600">
+            <Icon name="Box" size={14} className="mr-1 text-gray-400" />
+            Tồn kho: {stock}
+          </div>
         </div>
 
         {/* CTA Button */}
-        <Link to={`/product-detail-page?id=${id}`} className="block">
+        <Link to={`/camera-detail-page/${id}`} className="block">
           <Button
-            variant={inStock ? "primary" : "secondary"}
+            variant={stock ? "primary" : "secondary"}
             className="w-full"
-            disabled={!inStock}
+            disabled={!stock}
           >
-            {inStock ? "View Details" : "Out of Stock"}
+            {stock ? "View Details" : "Out of Stock"}
           </Button>
         </Link>
       </div>
