@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { useAuth } from '../../../components/AuthContext';
 
@@ -8,12 +6,17 @@ const adminNavItems = [
     { key: 'logout', label: 'Đăng xuất', icon: '🚪' },
 ];
 
-const AdminSidebar = ({ activeView, setActiveView }) => {
-    const { logout } = useAuth();
+const AdminSidebar = ({ activeView, setActiveView, openLogoutModal }) => {
+    // Không cần useAuth nếu dùng modal
 
     const handleNavItemClick = (item) => {
         if (item.key === 'logout') {
-            logout(); 
+            // Gọi openLogoutModal để hiện modal xác nhận
+            if (openLogoutModal && typeof openLogoutModal === 'function') {
+                openLogoutModal();
+            } else {
+                console.error('openLogoutModal prop is missing!');
+            }
         } else {
             setActiveView(item.key);
         }
