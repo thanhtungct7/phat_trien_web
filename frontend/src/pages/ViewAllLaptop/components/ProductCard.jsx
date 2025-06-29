@@ -43,7 +43,7 @@ const ProductCard = ({ product }) => {
             Out of Stock
           </div>
         )}
-        <Link to={`/product-detail-page?id=${id}`} className="block aspect-w-1 aspect-h-1">
+        <Link to={`/laptop-detail-page/${id}`} className="block aspect-w-1 aspect-h-1">
           <Image
             src={image}
             alt={name}
@@ -56,7 +56,7 @@ const ProductCard = ({ product }) => {
       <div className="p-4">
         <div className="mb-2">
           <span className="text-xs font-medium text-gray-500">{brand}</span>
-          <Link to={`/product-detail-page?id=${id}`} className="block">
+          <Link to={`/laptop-detail-page/${id}`} className="block">
             <h3 className="text-lg font-medium text-gray-900 hover:text-primary-600 transition-colors line-clamp-2">
               {name}
             </h3>
@@ -118,7 +118,7 @@ const ProductCard = ({ product }) => {
         </div>
 
         {/* CTA Button */}
-        <Link to={`/product-detail-page?id=${id}`} className="block">
+        <Link to={`/laptop-detail-page/${id}`} className="block">
           <Button
             variant={stock ? "primary" : "secondary"}
             className="w-full"

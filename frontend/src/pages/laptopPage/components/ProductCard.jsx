@@ -14,11 +14,6 @@ const ProductCard = ({ product }) => {
     price,
     stock,
     yearOfManufacture,
-    chipset,
-    cpuCores,
-    gpuCores,
-    resolution,
-    screenSize,
     rating,
     reviews,
     discount,
@@ -30,7 +25,7 @@ const ProductCard = ({ product }) => {
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200 transition-all duration-300 hover:shadow-md flex flex-col h-full">
       <div className="relative">
-        <Link to={`/product-detail-page?id=${id}`}>
+        <Link to={`/laptop-detail-page/${id}`}>
           <div className="h-48 overflow-hidden">
             <img
               src={image}
@@ -51,7 +46,7 @@ const ProductCard = ({ product }) => {
         )}
       </div>
       <div className="p-4 flex flex-col flex-1">
-        <Link to={`/product-detail-page?id=${id}`}>
+        <Link to={`/laptop-detail-page/${id}`}>
           <h3 className="text-lg font-semibold text-gray-900 mb-1 hover:text-primary-600 transition-colors">
             {name}
           </h3>
@@ -65,26 +60,6 @@ const ProductCard = ({ product }) => {
           <span className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-md">
             <Icon name="Calendar" size={12} className="mr-1" />
             Năm SX: {yearOfManufacture}
-          </span>
-          <span className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-md">
-            <Icon name="Cpu" size={12} className="mr-1" />
-            Chip: {chipset}
-          </span>
-          <span className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-md">
-            <Icon name="Cpu" size={12} className="mr-1" />
-            Số nhân CPU: {cpuCores}
-          </span>
-          <span className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-md">
-            <Icon name="Gpu" size={12} className="mr-1" />
-            Số nhân GPU: {gpuCores}
-          </span>
-          <span className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-md">
-            <Icon name="Monitor" size={12} className="mr-1" />
-            Độ phân giải: {resolution}
-          </span>
-          <span className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-md">
-            <Icon name="Smartphone" size={12} className="mr-1" />
-            Kích thước màn: {screenSize}
           </span>
           <span className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-md">
             <Icon name="Box" size={12} className="mr-1" />
@@ -110,7 +85,7 @@ const ProductCard = ({ product }) => {
             )}
           </div>
         </div>
-        <Link to={`/product-detail-page?id=${id}`} className="block mt-auto">
+        <Link to={`/laptop-detail-page/${id}`} className="block mt-auto">
           <Button 
             variant="primary" 
             className="w-full"

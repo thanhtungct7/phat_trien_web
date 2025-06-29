@@ -1,17 +1,18 @@
-
 import React from "react";
 import { BrowserRouter, Routes as RouterRoutes, Route } from "react-router-dom";
-import ScrollToTop from "./components/ScrollToTop";
-import ErrorBoundary from "./components/ErrorBoundary";
 import Homepage from "./pages/homepage";
-import ProductDetailPage from "./pages/product-detail-page";
+import SmartphoneDetailPage from "./pages/smartphone-detail-page";
+import LaptopDetailPage from "./pages/laptop-detail-page";
+import CameraDetailPage from "./pages/camera-detail-page";
 import PhonePage from "./pages/phonePage";
-import ShoppingCart from "./pages/shopping-cart";
 import ComputerPage from "pages/laptopPage";
 import CameraPage from "pages/cameraPage";
 import ViewAllPhone from "pages/ViewAllPhone";
 import ViewAllLaptop from "pages/ViewAllLaptop";
 import ViewAllCamera from "pages/ViewAllCamera";
+import ScrollToTop from "./components/ScrollToTop";
+import ErrorBoundary from "./components/ErrorBoundary";
+import ShoppingCart from "./pages/shopping-cart";
 import NotFound from "./pages/NotFound";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
@@ -34,7 +35,9 @@ const Routes = () => {
           <Route path="/homepage" element={<Homepage />} />
           <Route path="/shopping-cart" element={<ShoppingCart />} />
           <Route path="/phones" element={<PhonePage />} />
-          <Route path="/product-detail-page" element={<ProductDetailPage />} />
+          <Route path="/smartphone-detail-page/:id" element={<SmartphoneDetailPage />} />
+          <Route path="/laptop-detail-page/:id" element={<LaptopDetailPage />} />
+          <Route path="/camera-detail-page/:id" element={<CameraDetailPage />} />
           <Route path="/laptops" element={<ComputerPage />} />
           <Route path="/cameras" element={<CameraPage />} />
           <Route path="/laptops/all" element={<ViewAllLaptop />} />
