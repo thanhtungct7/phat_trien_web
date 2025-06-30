@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 const ProductTable = ({ products, onEdit, onDelete }) => {
@@ -19,10 +20,9 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
             <tbody>
                 {products.length > 0 ? (
                     products.map(product => (
-                        // Sử dụng key duy nhất cho mỗi dòng
                         <tr key={product.key}>
                             <td>
-                                <img src={product.imageUrl || 'https://via.placeholder.com/60'} alt={product.name} className="product-thumbnail" />
+                                <img src={product.image || 'https://placehold.co/60x60'} alt={product.name} className="product-thumbnail" />
                             </td>
                             <td>{product.name}</td>
                             <td>{product.category}</td>
@@ -31,7 +31,6 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
                             <td>{product.stock}</td>
                             <td className="action-buttons">
                                 <button onClick={() => onEdit(product)} className="btn-secondary">Sửa</button>
-                                {/* THAY ĐỔI: Truyền toàn bộ đối tượng product */}
                                 <button onClick={() => onDelete(product)} className="btn-danger">Xóa</button>
                             </td>
                         </tr>

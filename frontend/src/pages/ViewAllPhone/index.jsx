@@ -20,10 +20,11 @@ const ViewAllPhone = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalFilteredProducts, setTotalFilteredProducts] = useState(0);
   const [isPhoneFilterOpen, setIsPhoneFilterOpen] = useState(false); 
-  const [sortBy, setSortBy] = useState("popularity");
+
+  const [sortBy, setSortBy] = useState("default");
+  
   const productsPerPage = 12;
 
-  // Lấy danh sách brands từ backend nếu muốn động, hoặc giữ tĩnh như cũ
   const availableBrands = ["Apple", "Samsung", "Google", "Xiaomi", "Oppo"];
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const ViewAllPhone = () => {
           product.price >= filters.priceRange.min &&
           product.price <= filters.priceRange.max
         );
-        // Sắp xếp
+
         switch (sortBy) {
           case "price-low-high":
             data.sort((a, b) => a.price - b.price);
@@ -55,10 +56,13 @@ const ViewAllPhone = () => {
             data.sort((a, b) => b.rating - a.rating);
             break;
           case "popularity":
-          default:
             data.sort((a, b) => b.reviews - a.reviews);
             break;
+          case "default":
+          default:
+            break;
         }
+
         setTotalFilteredProducts(data.length);
         const totalFilteredPages = Math.ceil(data.length / productsPerPage);
         setTotalPages(totalFilteredPages);
@@ -189,6 +193,8 @@ const ViewAllPhone = () => {
                     onChange={handleSortChange}
                     className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-600 focus:border-primary-600 sm:text-sm rounded-md"
                   >
+                    {/* THAY ĐỔI 2: Thêm tùy chọn "Mặc định" */}
+                    <option value="default">Mặc định</option>
                     <option value="popularity">Phổ biến</option>
                     <option value="price-low-high">Giá: Thấp đến Cao</option>
                     <option value="price-high-low">Giá: Cao đến Thấp</option>
