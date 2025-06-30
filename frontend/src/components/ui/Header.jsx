@@ -1,25 +1,25 @@
-import React, {useState, useEffect} from 'react';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Icon from '../../components/AppIcon';
 import Button from './Button';
 import Input from './Input';
-import {CiMedal} from "react-icons/ci";
-import {RiExchangeFill} from "react-icons/ri";
-import {GiMaterialsScience} from "react-icons/gi";
+import { CiMedal } from "react-icons/ci";
+import { RiExchangeFill } from "react-icons/ri";
+import { GiMaterialsScience } from "react-icons/gi";
 
 const Header = ({
-                    variant = 'default',
-                    className = '',
-                    ...props
-                }) => {
+    variant = 'default',
+    className = '',
+    ...props
+}) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [isScrolled, setIsScrolled] = useState(false);
-    // State để quản lý trạng thái mở/đóng của dropdown
+    // State để quản lý trạng thái mở/đóng của dropdown sản phẩm
     const [isPhonesDropdownOpen, setIsPhonesDropdownOpen] = useState(false);
     const [isLaptopsDropdownOpen, setIsLaptopsDropdownOpen] = useState(false);
     const [isCamerasDropdownOpen, setIsCamerasDropdownOpen] = useState(false);
-    const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
+    // Đã bỏ state isAccountDropdownOpen theo yêu cầu
 
     // State để quản lý trạng thái đăng nhập
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,6 +27,9 @@ const Header = ({
 
     const location = useLocation();
     const navigate = useNavigate();
+
+    // Dựa vào userInfo để xác định role
+    const isAdmin = userInfo?.roles?.includes('ADMIN');
 
     // Kiểm tra trạng thái đăng nhập khi component mount
     useEffect(() => {
@@ -57,33 +60,33 @@ const Header = ({
     }, []);
 
     const navigationItems = [
-        {name: 'Phone', path: '/phones', hasDropdown: true},
-        {name: 'Laptop', path: '/laptops', hasDropdown: true},
-        {name: 'Camera', path: '/cameras', hasDropdown: true},
+        { name: 'Phone', path: '/phones', hasDropdown: true },
+        { name: 'Laptop', path: '/laptops', hasDropdown: true },
+        { name: 'Camera', path: '/cameras', hasDropdown: true },
     ];
 
     const phoneBrands = [
-        {name: 'Samsung', path: '/phones/samsung'},
-        {name: 'Apple', path: '/phones/apple'},
-        {name: 'Xiaomi', path: '/phones/xiaomi'},
-        {name: 'Oppo', path: '/phones/oppo'},
-        {name: 'Google', path: '/phones/google'},
+        { name: 'Samsung', path: '/phones/samsung' },
+        { name: 'Apple', path: '/phones/apple' },
+        { name: 'Xiaomi', path: '/phones/xiaomi' },
+        { name: 'Oppo', path: '/phones/oppo' },
+        { name: 'Google', path: '/phones/google' },
     ];
 
     const laptopBrands = [
-        {name: 'Apple', path: '/laptops/apple'},
-        {name: 'Acer', path: '/laptops/acer'},
-        {name: 'Asus', path: '/laptops/asus'},
-        {name: 'Lenovo', path: '/laptops/lenovo'},
-        {name: 'HP', path: '/laptops/hp'},
+        { name: 'Apple', path: '/laptops/apple' },
+        { name: 'Acer', path: '/laptops/acer' },
+        { name: 'Asus', path: '/laptops/asus' },
+        { name: 'Lenovo', path: '/laptops/lenovo' },
+        { name: 'HP', path: '/laptops/hp' },
     ];
 
     const cameraBrands = [
-        {name: 'Ezviz', path: '/cameras/ezviz'},
-        {name: 'TpLink', path: '/cameras/tplink'},
-        {name: 'Imou', path: '/cameras/imou'},
-        {name: 'Reoqoo', path: '/cameras/reoqoo'},
-        {name: '365Selection', path: '/cameras/365selection'},
+        { name: 'Ezviz', path: '/cameras/ezviz' },
+        { name: 'TpLink', path: '/cameras/tplink' },
+        { name: 'Imou', path: '/cameras/imou' },
+        { name: 'Reoqoo', path: '/cameras/reoqoo' },
+        { name: '365Selection', path: '/cameras/365selection' },
     ];
 
     useEffect(() => {
@@ -125,9 +128,6 @@ const Header = ({
         setIsLoggedIn(false);
         setUserInfo(null);
 
-        // Đóng dropdown
-        setIsAccountDropdownOpen(false);
-
         // Chuyển hướng về trang chủ hoặc trang đăng nhập
         navigate('/homepage');
     };
@@ -141,11 +141,14 @@ const Header = ({
     };
 
     const interactiveClasses = 'transition-transform duration-200 ease-in-out hover:scale-105 active:scale-95';
+    
+    // Xác định đường link cho nút "Account" dựa trên role
+    const accountLinkPath = isLoggedIn ? (isAdmin ? '/admin' : '/account') : '/login';
 
     return (
         <header
             className={`sticky top-0 ${baseClasses} ${variantClasses[variant]} ${className}`}
-            style={{zIndex: 50}}
+            style={{ zIndex: 50 }}
             {...props}
         >
             <div className="sr-only">
@@ -158,7 +161,7 @@ const Header = ({
                     <div
                         className="flex items-center justify-center md:justify-start space-x-2 text-[#001a72] font-medium">
                         <span className="flex items-center">
-                            <RiExchangeFill className="w-8 h-8"/>
+                            <RiExchangeFill className="w-8 h-8" />
                         </span>
                         <span className="font-bold">Thu cũ</span>
                         <span className="text-[14px] opacity-70">Giá ngon</span>
@@ -169,7 +172,7 @@ const Header = ({
                     <div
                         className="flex items-center justify-center md:justify-start space-x-2 text-[#001a72] font-medium">
                         <span className="flex items-center">
-                            <CiMedal className="w-8 h-8"/>
+                            <CiMedal className="w-8 h-8" />
                         </span>
                         <span className="text-[14px] opacity-70">Sản phẩm</span>
                         <span className="font-bold">Chính hãng</span>
@@ -180,7 +183,7 @@ const Header = ({
                     <div
                         className="flex items-center justify-center md:justify-start space-x-2 text-[#001a72] font-medium">
                         <span className="flex items-center">
-                            <GiMaterialsScience className="w-8 h-8"/>
+                            <GiMaterialsScience className="w-8 h-8" />
                         </span>
                         <span className="font-bold">Tải App MemberVIP</span>
                         <span className="text-[14px] opacity-70">- Tích điểm & nhận ưu đãi</span>
@@ -195,7 +198,7 @@ const Header = ({
                     <div className="flex-shrink-0">
                         <Link to="/homepage" className={`flex items-center ${interactiveClasses}`}>
                             <span className="flex items-center">
-                                <GiMaterialsScience className="w-8 h-8 bg-white rounded-lg"/>
+                                <GiMaterialsScience className="w-8 h-8 bg-white rounded-lg" />
                             </span>
                             <span className="ml-2 text-xl font-bold text-white">Mobile City</span>
                         </Link>
@@ -205,7 +208,7 @@ const Header = ({
                         {navigationItems.map((item) => {
                             let brands = [];
                             let isDropdownOpen = false;
-                            let setDropdownOpen = () => {};
+                            let setDropdownOpen = () => { };
                             if (item.name === 'Phone') {
                                 brands = phoneBrands;
                                 isDropdownOpen = isPhonesDropdownOpen;
@@ -230,13 +233,13 @@ const Header = ({
                                     <Link
                                         to={item.path}
                                         className={`
-                                            px-1 py-2 text-sm font-medium border-b-2 text-[16px]
-                                            transition-all duration-200 ease-in-out hover:opacity-80
-                                            ${(isDropdownOpen) || location.pathname.startsWith(item.path)
-                                            ? 'border-white text-white'
-                                            : 'border-transparent text-white hover:border-gray-300'
-                                        }
-                                        `}
+                                             px-1 py-2 text-sm font-medium border-b-2 text-[16px]
+                                             transition-all duration-200 ease-in-out hover:opacity-80
+                                             ${(isDropdownOpen) || location.pathname.startsWith(item.path)
+                                                ? 'border-white text-white'
+                                                : 'border-transparent text-white hover:border-gray-300'
+                                            }
+                                            `}
                                         aria-current={location.pathname === item.path ? 'page' : undefined}
                                     >
                                         {item.name}
@@ -289,12 +292,12 @@ const Header = ({
                                 {!isLoggedIn ? (
                                     <>
                                         <Link to="/login"
-                                              className={`text-white hover:text-gray-200 text-sm ${interactiveClasses}`}>
+                                            className={`text-white hover:text-gray-200 text-sm ${interactiveClasses}`}>
                                             Đăng nhập
                                         </Link>
                                         <span className="text-white">/</span>
                                         <Link to="/register"
-                                              className={`text-white hover:text-gray-200 text-sm ${interactiveClasses}`}>
+                                            className={`text-white hover:text-gray-200 text-sm ${interactiveClasses}`}>
                                             Đăng ký
                                         </Link>
                                     </>
@@ -306,7 +309,7 @@ const Header = ({
                                         <button
                                             onClick={handleLogout}
                                             className={`text-white hover:text-gray-200 text-sm ${interactiveClasses} 
-                                                bg-red-500 hover:bg-red-600 px-3 py-1 rounded-md transition-colors`}
+                                                 bg-red-500 hover:bg-red-600 px-3 py-1 rounded-md transition-colors`}
                                         >
                                             Đăng xuất
                                         </button>
@@ -314,60 +317,23 @@ const Header = ({
                                 )}
 
                                 <Link to="/shopping-cart"
-                                      className={`relative p-2 text-gray-200 hover:text-white ${interactiveClasses}`}>
-                                    <Icon name="ShoppingCart" size={24}/>
+                                    className={`relative p-2 text-gray-200 hover:text-white ${interactiveClasses}`}>
+                                    <Icon name="ShoppingCart" size={24} />
                                     <span
                                         className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">
                                         3
                                     </span>
                                 </Link>
 
-                                <div
-                                    className="relative"
-                                    onMouseEnter={() => setIsAccountDropdownOpen(true)}
-                                    onMouseLeave={() => setIsAccountDropdownOpen(false)}
-                                >
-                                    <Link to="/account" className={interactiveClasses}>
-                                        <Button
-                                            variant="ghost"
-                                            icon="User"
-                                            aria-label="Tài khoản"
-                                            className="text-white hover:text-white"
-                                        />
-                                    </Link>
-                                    {isAccountDropdownOpen && isLoggedIn && (
-                                        <div
-                                            className="absolute right-0 top-full w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
-                                            <div className="py-1">
-                                                <Link
-                                                    to="/account"
-                                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
-                                                >
-                                                    Thông tin tài khoản
-                                                </Link>
-                                                <Link
-                                                    to="/orders"
-                                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
-                                                >
-                                                    Đơn hàng của tôi
-                                                </Link>
-                                                <Link
-                                                    to="/manage"
-                                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
-                                                >
-                                                    Quản lý sản phẩm
-                                                </Link>
-                                                <hr className="my-1" />
-                                                <button
-                                                    onClick={handleLogout}
-                                                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition"
-                                                >
-                                                    Đăng xuất
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
+                                {/* Nút account giờ chỉ điều hướng, không có dropdown */}
+                                <Link to={accountLinkPath} className={interactiveClasses}>
+                                    <Button
+                                        variant="ghost"
+                                        icon="User"
+                                        aria-label="Tài khoản"
+                                        className="text-white hover:text-white"
+                                    />
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -375,8 +341,8 @@ const Header = ({
                     {/* Mobile menu button */}
                     <div className="flex md:hidden">
                         <Link to="/shopping-cart"
-                              className={`relative p-2 mr-2 text-gray-200 hover:text-white ${interactiveClasses}`}>
-                            <Icon name="ShoppingCart" size={24}/>
+                            className={`relative p-2 mr-2 text-gray-200 hover:text-white ${interactiveClasses}`}>
+                            <Icon name="ShoppingCart" size={24} />
                             <span
                                 className="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">
                                 3
@@ -390,7 +356,7 @@ const Header = ({
                             aria-expanded={isMenuOpen}
                         >
                             <span className="sr-only">{isMenuOpen ? 'Đóng menu' : 'Mở menu'}</span>
-                            <Icon name={isMenuOpen ? "X" : "Menu"} size={24}/>
+                            <Icon name={isMenuOpen ? "X" : "Menu"} size={24} />
                         </button>
                     </div>
                 </div>
@@ -416,11 +382,11 @@ const Header = ({
                             <Link
                                 to={item.path}
                                 className={`
-                                    block px-3 py-2 rounded-md text-base font-medium transition-all duration-200 active:bg-blue-700
-                                    ${location.pathname.startsWith(item.path)
-                                    ? 'bg-blue-700 text-white'
-                                    : 'text-gray-200 hover:bg-blue-500 hover:text-white'}
-                                `}
+                                     block px-3 py-2 rounded-md text-base font-medium transition-all duration-200 active:bg-blue-700
+                                     ${location.pathname.startsWith(item.path)
+                                        ? 'bg-blue-700 text-white'
+                                        : 'text-gray-200 hover:bg-blue-500 hover:text-white'}
+                                    `}
                                 aria-current={location.pathname === item.path ? 'page' : undefined}
                             >
                                 {item.name}
@@ -450,7 +416,7 @@ const Header = ({
                                     <div className="flex-shrink-0">
                                         <div
                                             className="h-10 w-10 rounded-full bg-blue-700 flex items-center justify-center text-white">
-                                            <Icon name="User" size={20}/>
+                                            <Icon name="User" size={20} />
                                         </div>
                                     </div>
                                     <div className="ml-3">
@@ -463,30 +429,50 @@ const Header = ({
                                     </div>
                                 </div>
                                 <div className="mt-3 space-y-1 px-2">
-                                    <Link
-                                        to="/account"
-                                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors duration-200"
-                                    >
-                                        Thông tin tài khoản
-                                    </Link>
-                                    <Link
-                                        to="/orders"
-                                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors duration-200"
-                                    >
-                                        Đơn hàng của tôi
-                                    </Link>
-                                    <Link
-                                        to="/manage"
-                                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors duration-200"
-                                    >
-                                        Quản lý sản phẩm
-                                    </Link>
-                                    <button
-                                        onClick={handleLogout}
-                                        className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-300 hover:bg-red-600 hover:text-white active:bg-red-700 transition-colors duration-200"
-                                    >
-                                        Đăng xuất
-                                    </button>
+                                    {/* Các link trong mobile menu theo role */}
+                                    {isAdmin ? (
+                                        <>
+                                            <Link
+                                                to="/admin"
+                                                className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors duration-200"
+                                            >
+                                                Quản lý sản phẩm
+                                            </Link>
+                                            <button
+                                                onClick={handleLogout}
+                                                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-300 hover:bg-red-600 hover:text-white active:bg-red-700 transition-colors duration-200"
+                                            >
+                                                Đăng xuất
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Link
+                                                to="/account"
+                                                className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors duration-200"
+                                            >
+                                                Thông tin cá nhân
+                                            </Link>
+                                            <Link
+                                                to="/orders"
+                                                className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors duration-200"
+                                            >
+                                                Quản lý đơn hàng
+                                            </Link>
+                                            <Link
+                                                to="/account"
+                                                className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-blue-500 hover:text-white active:bg-blue-700 transition-colors duration-200"
+                                            >
+                                                Đổi mật khẩu
+                                            </Link>
+                                            <button
+                                                onClick={handleLogout}
+                                                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-300 hover:bg-red-600 hover:text-white active:bg-red-700 transition-colors duration-200"
+                                            >
+                                                Đăng xuất
+                                            </button>
+                                        </>
+                                    )}
                                 </div>
                             </>
                         )}

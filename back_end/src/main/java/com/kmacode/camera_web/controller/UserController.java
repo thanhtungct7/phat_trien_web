@@ -1,6 +1,7 @@
 package com.kmacode.camera_web.controller;
 
 import com.kmacode.camera_web.dto.request.UserRequestDTO;
+import com.kmacode.camera_web.dto.request.UserUpdateDTO; // THÊM MỚI
 import com.kmacode.camera_web.dto.response.ApiResponse;
 import com.kmacode.camera_web.dto.response.UserResponseDTO;
 import com.kmacode.camera_web.service.UserService;
@@ -23,11 +24,10 @@ public class UserController {
                 .result(userService.createUser(userRequestDTO))
                 .build();
     }
-
     @PutMapping("/{id}")
-    ApiResponse<UserResponseDTO> updateUser(@RequestBody UserRequestDTO userRequestDTO, @PathVariable Long id) {
+    ApiResponse<UserResponseDTO> updateUser(@RequestBody UserUpdateDTO userUpdateDTO, @PathVariable Long id) {
         return ApiResponse.<UserResponseDTO>builder()
-                .result(userService.updateUser(id, userRequestDTO))
+                .result(userService.updateUser(id, userUpdateDTO))
                 .build();
     }
 
@@ -37,6 +37,7 @@ public class UserController {
                 .result(userService.getUserById(id))
                 .build();
     }
+    
     @DeleteMapping("/{id}")
     ApiResponse<String> deleteUser(@PathVariable(name = "id")Long id) {
         userService.deleteUser(id);

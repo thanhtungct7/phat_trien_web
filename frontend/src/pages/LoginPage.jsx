@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { OAuthConfig } from "../configuration/configuaration.js";
 import { jwtDecode } from "jwt-decode";
-// Dùng như sau:
 
 const LoginPage = () => {
   const [form, setForm] = useState({
@@ -95,20 +94,21 @@ const LoginPage = () => {
 
         if (data.result.token) {
           localStorage.setItem("accessToken", data.result.token);
-          // Tạo userInfo với các trường phù hợp
+          
+          // THAY ĐỔI: Sử dụng thông tin từ API response để tạo userInfo đầy đủ hơn
           const payload = jwtDecode(data.result.token);
-          // payload.scope có thể là string hoặc array, tùy backend
           const scope = payload.scope;
-          // Nếu scope là dạng "ADMIN USER" thì tách thành mảng
           const roles = typeof scope === "string" ? scope.split(" ") : (scope || []);
 
+          // THAY ĐỔI: Tạo userInfo với các trường phù hợp
           const userInfo = {
-            username: form.username,
-            name: form.username, // Header đang tìm field 'name'
+            username: payload.sub, // 'sub' thường là username trong JWT
+            name: form.username, // Hoặc lấy từ payload nếu có
             authenticated: data.result.authenticated,
             roles: roles,
-            // Thêm các trường khác nếu API trả về
-            ...(data.result.user || {})
+            // Thêm các trường khác từ API response nếu có
+            // Ví dụ: email, phone, firstname, lastname
+            ...data.result.user, // Nếu backend trả về object user
           };
 
           console.log('Saving userInfo:', userInfo);
@@ -116,7 +116,7 @@ const LoginPage = () => {
 
           // Kiểm tra role để điều hướng
           if (roles.includes("ADMIN")) {
-            navigate("/admin");
+            navigate("/homepage");
           } else {
             navigate("/homepage");
           }
@@ -127,6 +127,7 @@ const LoginPage = () => {
           setError("Không nhận được token từ server");
         }
       } else {
+        // THAY ĐỔI: Hiển thị lỗi từ backend nếu có
         setError(data.message || "Tài khoản hoặc mật khẩu không chính xác");
       }
     } catch (error) {
