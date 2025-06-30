@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
 
-// DI CHUYỂN CÁC COMPONENT CON RA NGOÀI COMPONENT CHA
-// ===================================================
+import React, { useState, useEffect } from 'react';
 
 const PhoneFields = ({ formData, handleInputChange }) => (
     <>
@@ -37,47 +35,38 @@ const CameraFields = ({ formData, handleInputChange }) => (
     </>
 );
 
-// ===================================================
-
-const emptyForm = { 
-    // Các trường chung
+const initialFormState = {
     name: '', brand: '', type: '', description: '', image: '', price: '', stock: '', yearOfManufacture: '',
-    // Các trường của Smartphone
     screenSize: '', technology: '', cpuCores: '', chipset: '', gpu: '', mainCamera: '', cameraUltraWide: '', cameraTelephoto: '',
-    // Các trường của Laptop
     chipSet: '', gpuCores: '', resolution: '',
-    // Các trường của Camera
     wifiConnect: '', storage: ''
 };
 
 const ProductFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     const [step, setStep] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState('');
-    const [formData, setFormData] = useState(emptyForm);
+    const [formData, setFormData] = useState(initialFormState);
 
     useEffect(() => {
+        if (!isOpen) {
+            setStep(1);
+            setSelectedCategory('');
+            setFormData(initialFormState);
+            return;
+        }
+
         if (initialData) {
             setStep(2);
             setSelectedCategory(initialData.category);
-            // Ánh xạ dữ liệu từ API vào form.
             const mappedData = {
-                ...emptyForm,
+                ...initialFormState,
                 ...initialData,
-                screenSize: initialData.screen_size || '',
-                yearOfManufacture: initialData.year_of_manufacture || '',
-                cpuCores: initialData.cpu_cores || '',
-                mainCamera: initialData.main_camera || '',
-                cameraUltraWide: initialData.camera_ultra_wide || '',
-                cameraTelephoto: initialData.camera_telephoto || '',
-                chipSet: initialData.chip_set || '',
-                gpuCores: initialData.gpu_cores || '',
-                wifiConnect: initialData.wifi_connect || '',
             };
             setFormData(mappedData);
         } else {
             setStep(1);
             setSelectedCategory('');
-            setFormData(emptyForm);
+            setFormData(initialFormState);
         }
     }, [initialData, isOpen]);
 
@@ -85,86 +74,39 @@ const ProductFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
-        setFormData(prev => ({ ...emptyForm, type: category }));
+        setFormData({ ...initialFormState, type: category });
         setStep(2);
     };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-    };
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        const dataToSend = { ...formData };
-        
-        // Ánh xạ các trường camelCase của form sang snake_case của backend
-        const mapToBackend = (obj) => {
-            const newObj = {};
-            for (const key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    const newKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
-                    newObj[newKey] = obj[key];
-                }
-            }
-            return newObj;
+
+        const commonFields = ['name', 'brand', 'description', 'image', 'price', 'stock', 'yearOfManufacture'];
+        const categoryFields = {
+            SMARTPHONE: ['screenSize', 'technology', 'cpuCores', 'chipset', 'gpu', 'mainCamera', 'cameraUltraWide', 'cameraTelephoto'],
+            LAPTOP: ['screenSize', 'resolution', 'chipSet', 'cpuCores', 'gpuCores'],
+            CAMERA: ['resolution', 'wifiConnect', 'storage']
         };
 
-        const finalData = mapToBackend(dataToSend);
-        
-        // Đảm bảo các trường chung không bị đổi tên nếu đã đúng
-        finalData.name = formData.name;
-        finalData.brand = formData.brand;
-        finalData.type = selectedCategory.toUpperCase();
-        finalData.description = formData.description;
-        finalData.image = formData.image;
-        finalData.price = Number(formData.price);
-        finalData.stock = Number(formData.stock);
-        finalData.year_of_manufacture = formData.yearOfManufacture;
-        
-        // Xóa các trường không cần thiết hoặc đã được chuyển đổi
-        delete finalData.scree_n_size;
-        delete finalData.cpu_cores;
-        delete finalData.main_camera;
-        delete finalData.camera_ultra_wide;
-        delete finalData.camera_telephoto;
-        delete finalData.chip_set;
-        delete finalData.gpu_cores;
-        delete finalData.wifi_connect;
-        delete finalData.storage;
-        delete finalData.technology;
-        delete finalData.chipset;
-        delete finalData.gpu;
-        delete finalData.resolution;
-        delete finalData.category;
-        delete finalData.id;
-        delete finalData.created_at;
-        delete finalData.updated_at;
+        const fieldsToKeep = [...commonFields, ...(categoryFields[selectedCategory] || [])];
 
-        // Bổ sung lại các trường đã được chuyển đổi đúng cách
-        if (selectedCategory === 'SMARTPHONE') {
-            finalData.screen_size = formData.screenSize;
-            finalData.technology = formData.technology;
-            finalData.cpu_cores = formData.cpuCores;
-            finalData.chipset = formData.chipset;
-            finalData.gpu = formData.gpu;
-            finalData.main_camera = formData.mainCamera;
-            finalData.camera_ultra_wide = formData.cameraUltraWide;
-            finalData.camera_telephoto = formData.cameraTelephoto;
-        } else if (selectedCategory === 'LAPTOP') {
-            finalData.screen_size = formData.screenSize;
-            finalData.resolution = formData.resolution;
-            finalData.chip_set = formData.chipSet;
-            finalData.cpu_cores = formData.cpuCores;
-            finalData.gpu_cores = formData.gpuCores;
-        } else if (selectedCategory === 'CAMERA') {
-            finalData.resolution = formData.resolution;
-            finalData.wifi_connect = formData.wifiConnect;
-            finalData.storage = formData.storage;
+        const dataToSend = {};
+        for (const key of fieldsToKeep) {
+            if (formData[key] !== undefined && formData[key] !== '') {
+                dataToSend[key] = formData[key];
+            }
         }
 
-        onSubmit(finalData, selectedCategory);
+        dataToSend.type = selectedCategory.toUpperCase();
+        dataToSend.price = Number(formData.price) || 0;
+        dataToSend.stock = Number(formData.stock) || 0;
+        
+        onSubmit(dataToSend, selectedCategory);
     };
 
     return (
@@ -190,7 +132,6 @@ const ProductFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
                     {step === 2 && (
                         <form id="product-form-id" onSubmit={handleSubmit} className="product-form">
                             <p className="form-category-indicator">Danh mục: <strong>{selectedCategory}</strong></p>
-                            {/* --- Các trường chung --- */}
                             <div className="form-group"><label>Tên sản phẩm</label><input type="text" name="name" value={formData.name} onChange={handleInputChange} required /></div>
                             <div className="form-group"><label>Mô tả sản phẩm</label><textarea name="description" rows="4" value={formData.description} onChange={handleInputChange}></textarea></div>
                             <div className="form-group"><label>URL Hình ảnh</label><input type="text" name="image" value={formData.image} onChange={handleInputChange} /></div>
@@ -198,11 +139,9 @@ const ProductFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
                             <div className="form-group"><label>Số lượng tồn kho</label><input type="number" name="stock" value={formData.stock} onChange={handleInputChange} required /></div>
                             <div className="form-group"><label>Năm sản xuất</label><input type="text" name="yearOfManufacture" value={formData.yearOfManufacture} onChange={handleInputChange} /></div>
 
-                            {/* --- Truyền props xuống component con --- */}
                             {selectedCategory === 'SMARTPHONE' && <PhoneFields formData={formData} handleInputChange={handleInputChange} />}
                             {selectedCategory === 'LAPTOP' && <LaptopFields formData={formData} handleInputChange={handleInputChange} />}
                             {selectedCategory === 'CAMERA' && <CameraFields formData={formData} handleInputChange={handleInputChange} />}
-                            
                         </form>
                     )}
                 </div>
