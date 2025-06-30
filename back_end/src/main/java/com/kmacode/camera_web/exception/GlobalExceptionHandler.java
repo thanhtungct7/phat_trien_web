@@ -47,27 +47,23 @@ public class GlobalExceptionHandler {
                         .build()
         );
     }
-
+    
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse> handlingValidation(MethodArgumentNotValidException exception){
-        String enumKey = exception.getFieldError().getDefaultMessage();
-
         ErrorCode errorCode = ErrorCode.INVALID_KEY;
 
         try {
+            String enumKey = exception.getFieldError().getDefaultMessage();
             errorCode = ErrorCode.valueOf(enumKey);
         } catch (IllegalArgumentException e){
-
+            log.warn("Validation message does not match any ErrorCode enum. Using default.", e);
         }
 
         ApiResponse apiResponse = new ApiResponse();
-
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(errorCode.getMessage());
 
         return ResponseEntity.badRequest().body(apiResponse);
     }
-
-
 
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import AdminSidebar from './components/AdminSidebar';
@@ -6,100 +6,190 @@ import ProductTable from './components/ProductTable';
 import ProductFormModal from './components/ProductFormModal';
 import './AdminPage.css';
 
-// Danh sách sản phẩm mẫu ban đầu
-const initialProducts = [
-    { id: 1, name: 'Laptop ProMax 15', category: 'Laptop', brand: 'Apple', price: 34000000, stock: 50, imageUrl: 'https://via.placeholder.com/60', cpu: 'M3 Pro', ram: '16GB', storage: '512GB SSD', graphicsCard: 'Integrated', screenSize: '15 inch', screenResolution: '3024x1964', weight: '1.8kg', description: 'Siêu mạnh, siêu di động.' },
-    { id: 2, name: 'Điện thoại Galaxy S25', category: 'Điện thoại', brand: 'Samsung', price: 25000000, stock: 100, imageUrl: 'https://via.placeholder.com/60', operatingSystem: 'Android 15', screenSize: '6.8 inch', ram: '12GB', storage: '256GB', color: 'Titanium Black', description: 'Camera AI đột phá.' }
-];
-
 import { useAuth } from '../../components/AuthContext';
 
+// Khai báo endpoint API
+const API_BASE_URL = 'http://localhost:8080/api/';
+
 const AdminPage = () => {
-    const [products, setProducts] = useState(initialProducts);
+    // Đã bỏ initialProducts, sẽ load từ API
+    const [products, setProducts] = useState([]);
     const [activeView, setActiveView] = useState('products');
     const [successMessage, setSuccessMessage] = useState('');
     const [isProductModalOpen, setIsProductModalOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deletingProductId, setDeletingProductId] = useState(null);
+    // THAY ĐỔI: Thêm state để lưu category của sản phẩm cần xóa
+    const [deletingProductCategory, setDeletingProductCategory] = useState(null);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
-    const { logout } = useAuth(); // Thêm dòng này
+    const { logout } = useAuth();
 
-    // Mở modal thêm sản phẩm
+    // THAY ĐỔI: Thêm "/" vào cuối URL để khớp với backend
+    const fetchProducts = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const token = localStorage.getItem('accessToken');
+            const headers = { 'Authorization': `Bearer ${token}` };
+
+            // FETCH DỮ LIỆU TỪ CÁC ENDPOINT CÓ DẤU GẠCH CHÉO CUỐI
+            const [phoneRes, laptopRes, cameraRes] = await Promise.all([
+                fetch(`${API_BASE_URL}smartphones/`, { headers }), // FIX: Thêm /
+                fetch(`${API_BASE_URL}laptops/`, { headers }),     // FIX: Thêm /
+                fetch(`${API_BASE_URL}cameras/`, { headers })      // FIX: Thêm /
+            ]);
+
+            if (!phoneRes.ok || !laptopRes.ok || !cameraRes.ok) {
+                throw new Error('Failed to fetch data from one or more endpoints.');
+            }
+
+            const phoneData = await phoneRes.json();
+            const laptopData = await laptopRes.json();
+            const cameraData = await cameraRes.json();
+            
+            // HỢP NHẤT DỮ LIỆU VÀ GÁN CATEGORY ĐỂ HIỂN THỊ
+            const allProducts = [
+                ...phoneData.result.map(p => ({ ...p, category: 'SMARTPHONE', key: p.id + '-phone' })),
+                ...laptopData.result.map(p => ({ ...p, category: 'LAPTOP', key: p.id + '-laptop' })),
+                ...cameraData.result.map(p => ({ ...p, category: 'CAMERA', key: p.id + '-camera' })),
+            ];
+
+            setProducts(allProducts);
+        } catch (err) {
+            console.error("Error fetching products:", err);
+            setError("Không thể tải dữ liệu sản phẩm. Vui lòng kiểm tra kết nối backend.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Gọi fetchProducts khi component mount
+    useEffect(() => {
+        fetchProducts();
+    }, []);
+
     const handleOpenAddModal = () => {
         setEditingProduct(null);
         setIsProductModalOpen(true);
     };
 
-    // Mở modal chỉnh sửa sản phẩm
     const handleOpenEditModal = (product) => {
         setEditingProduct(product);
         setIsProductModalOpen(true);
     };
 
-    // Thêm hoặc cập nhật sản phẩm
-    const handleProductFormSubmit = (formData) => {
-        if (editingProduct) {
-            setProducts(products.map(p => p.id === editingProduct.id ? { ...p, ...formData } : p));
-            showSuccessMessage('Cập nhật sản phẩm thành công!');
-        } else {
-            const newProduct = { ...formData, id: Date.now() };
-            setProducts([newProduct, ...products]);
-            showSuccessMessage('Thêm sản phẩm mới thành công!');
+    // THAY ĐỔI: Thêm hoặc cập nhật sản phẩm - Gửi API
+    const handleProductFormSubmit = async (formData, category) => {
+        try {
+            const token = localStorage.getItem('accessToken');
+            let endpoint = '';
+            let method = '';
+            let productId = editingProduct ? editingProduct.id : '';
+
+            // Xác định endpoint và method dựa trên danh mục và hành động
+            if (category === 'SMARTPHONE') { endpoint = `${API_BASE_URL}smartphones`; }
+            else if (category === 'LAPTOP') { endpoint = `${API_BASE_URL}laptops`; }
+            else if (category === 'CAMERA') { endpoint = `${API_BASE_URL}cameras`; }
+            
+            if (editingProduct) {
+                method = 'PUT';
+                endpoint += `/${productId}`;
+            } else {
+                method = 'POST';
+                // FIX: Thêm dấu gạch chéo cho phương thức POST
+                endpoint += '/'; 
+            }
+
+            const response = await fetch(endpoint, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Lỗi từ server.');
+            }
+
+            // Sau khi thành công, fetch lại dữ liệu mới nhất
+            await fetchProducts();
+            showSuccessMessage(editingProduct ? 'Cập nhật sản phẩm thành công!' : 'Thêm sản phẩm mới thành công!');
+        } catch (err) {
+            console.error("Error submitting product:", err);
+            setError(err.message);
         }
         closeAllModals();
     };
 
-    // Xử lý mở modal xác nhận xóa
-    const handleOpenDeleteModal = (productId) => {
-        setDeletingProductId(productId);
+    // THAY ĐỔI: Cập nhật hàm mở modal xóa để lưu category
+    const handleOpenDeleteModal = (product) => {
+        setDeletingProductId(product.id);
+        setDeletingProductCategory(product.category); // Lưu category
         setIsDeleteModalOpen(true);
     };
 
-    // Xác nhận xóa sản phẩm
-    const handleConfirmDelete = () => {
-        setProducts(products.filter(p => p.id !== deletingProductId));
-        closeAllModals();
-        showSuccessMessage('Xóa sản phẩm thành công!');
-    };
+    // THAY ĐỔI: Xác nhận xóa sản phẩm - Gửi API
+    const handleConfirmDelete = async () => {
+        try {
+            const token = localStorage.getItem('accessToken');
+            let endpoint = '';
+            
+            // Sử dụng deletingProductCategory để xác định endpoint
+            if (deletingProductCategory === 'SMARTPHONE') { endpoint = `${API_BASE_URL}smartphones`; }
+            else if (deletingProductCategory === 'LAPTOP') { endpoint = `${API_BASE_URL}laptops`; }
+            else if (deletingProductCategory === 'CAMERA') { endpoint = `${API_BASE_URL}cameras`; }
 
-    // Đăng xuất tài khoản quản trị - FIXED
+            // FIX: Đã đúng, không cần thay đổi
+            const response = await fetch(`${endpoint}/${deletingProductId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (!response.ok) {
+                throw new Error('Lỗi khi xóa sản phẩm từ server.');
+            }
+
+            await fetchProducts();
+            showSuccessMessage('Xóa sản phẩm thành công!');
+        } catch (err) {
+            console.error("Error deleting product:", err);
+            setError(err.message);
+        }
+        closeAllModals();
+    };
+    
     const handleLogout = () => {
-        // Xóa TẤT CẢ các key liên quan đến authentication
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('accessToken'); // Thêm dòng này
-        localStorage.removeItem('userInfo');
-
+        logout();
         closeAllModals();
-
-        // Có thể cần reload để đảm bảo Header cập nhật
         navigate('/homepage');
-        window.location.reload(); // Thêm dòng này để Header re-render
     };
 
-    // Tiện ích đóng modal
     const closeAllModals = () => {
         setIsProductModalOpen(false);
         setIsDeleteModalOpen(false);
         setIsLogoutModalOpen(false);
         setEditingProduct(null);
         setDeletingProductId(null);
+        setDeletingProductCategory(null); // Reset category
     };
 
-    // Hiện thông báo thành công
     const showSuccessMessage = (message) => {
         setSuccessMessage(message);
+        setTimeout(() => setSuccessMessage(''), 3000);
     };
 
-    // Đóng thông báo thành công
     const closeSuccessModal = () => {
         setSuccessMessage('');
     };
-
-    // --- Render các modal ---
-
+    
     const renderDeleteModal = () => (
         <div className="modal-overlay" onClick={closeAllModals}>
             <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -151,9 +241,14 @@ const AdminPage = () => {
             </div>
         </div>
     );
+    
+    if (loading) {
+        return <div className="loading-indicator">Đang tải dữ liệu sản phẩm...</div>;
+    }
 
-    // --- Main render ---
-    console.log('AdminPage render - isLogoutModalOpen:', isLogoutModalOpen);
+    if (error) {
+        return <div className="error-message">Lỗi: {error}</div>;
+    }
 
     return (
         <div className="account-page">
@@ -170,7 +265,6 @@ const AdminPage = () => {
                 <div className="admin-content-header">
                     <h1>Sản phẩm</h1>
                     <button onClick={handleOpenAddModal} className="btn-primary">Thêm sản phẩm</button>
-
                 </div>
                 <ProductTable
                     products={products}

@@ -1,4 +1,4 @@
-
+// src/pages/MyAccount/components/AccountSidebar.jsx
 import React from 'react';
 import { useAuth } from '../../../components/AuthContext'; 
 
@@ -9,12 +9,12 @@ const navItems = [
     { key: 'logout', label: 'Đăng xuất', icon: '🚪' },
 ];
 
-const AccountSidebar = ({ activeView, setActiveView }) => {
+const AccountSidebar = ({ activeView, setActiveView, openLogoutModal }) => {
     const { user, logout } = useAuth(); 
 
     const handleNavItemClick = (item) => {
         if (item.key === 'logout') {
-            logout();
+            openLogoutModal();
         } else {
             setActiveView(item.key);
         }
@@ -25,7 +25,6 @@ const AccountSidebar = ({ activeView, setActiveView }) => {
             <div className="user-profile">
                 <img src={'https://via.placeholder.com/80'} alt="User Avatar" className="user-avatar" />
                 <h3 className="user-name">{user ? user.name : 'Người dùng'}</h3>
-                <p className="user-tier">Hạng: Vàng</p> 
             </div>
             <nav className="account-nav">
                 <ul>

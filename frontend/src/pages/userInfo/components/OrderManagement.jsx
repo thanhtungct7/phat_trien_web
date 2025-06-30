@@ -1,45 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import OrderCard from './OrderCard';
 import OrderDetailModal from './OrderDetailModal';
 
-const mockOrders = [
-    {
-        id: '#ED12345',
-        date: '22/06/2025',
-        status: 'Đang giao hàng',
-        total: 15000000,
-        products: [
-            { id: 'P01', name: 'Laptop ProMax 15', quantity: 1, price: 14000000 },
-            { id: 'P02', name: 'Chuột không dây X1', quantity: 1, price: 500000 },
-            { id: 'P03', name: 'Bàn di chuột Gaming', quantity: 2, price: 250000 },
-        ]
-    },
-    {
-        id: '#ED12321',
-        date: '15/05/2025',
-        status: 'Đã hoàn thành',
-        total: 2500000,
-        products: [
-            { id: 'P04', name: 'Bàn phím cơ K2', quantity: 1, price: 2500000 }
-        ]
-    },
-    {
-        id: '#ED11999',
-        date: '01/04/2025',
-        status: 'Đã hủy',
-        total: 890000,
-        products: [
-            { id: 'P05', name: 'Tai nghe Bluetooth Z5', quantity: 1, price: 890000 }
-        ]
-    },
-];
+// Endpoint API để lấy đơn hàng
+const API_ORDERS_URL = 'http://localhost:8080/api/orders';
 
-
-const OrderManagement = ({ onAddToCart }) => { 
+const OrderManagement = ({ userId }) => { 
     const [activeTab, setActiveTab] = useState('all');
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const [orders, setOrders] = useState([]); // State để lưu data từ API
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const filteredOrders = mockOrders.filter(order => {
+    // Fetch dữ liệu đơn hàng khi component mount
+    useEffect(() => {
+        const fetchOrders = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const token = localStorage.getItem('accessToken');
+                // THAY ĐỔI: Thêm userId vào URL để fetch đơn hàng của user cụ thể
+                // Giả sử backend có endpoint /api/orders/user/{userId} hoặc /api/orders?userId=...
+                const response = await fetch(`${API_ORDERS_URL}/user/${userId}`, { 
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Không thể tải danh sách đơn hàng.');
+                }
+                const data = await response.json();
+                setOrders(data.result);
+            } catch (err) {
+                console.error('Error fetching orders:', err);
+                setError('Có lỗi khi tải đơn hàng. Vui lòng thử lại.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (userId) {
+            fetchOrders();
+        }
+    }, [userId]);
+
+    const filteredOrders = orders.filter(order => {
         if (activeTab === 'all') return true;
         if (activeTab === 'delivering') return order.status === 'Đang giao hàng';
         if (activeTab === 'completed') return order.status === 'Đã hoàn thành';
@@ -54,6 +58,14 @@ const OrderManagement = ({ onAddToCart }) => {
     const handleCloseModal = () => {
         setSelectedOrder(null);
     };
+
+    if (loading) {
+        return <div className="loading-indicator">Đang tải đơn hàng...</div>;
+    }
+
+    if (error) {
+        return <div className="error-message">Lỗi: {error}</div>;
+    }
 
     return (
         <div className="order-management">
@@ -71,7 +83,7 @@ const OrderManagement = ({ onAddToCart }) => {
                             key={order.id}
                             order={order}
                             onViewDetails={() => handleViewDetails(order)}
-                            onReorder={() => onAddToCart(order.products, order.id)}
+                            onReorder={() => console.log('Reorder logic here')}
                         />
                     ))
                 ) : (

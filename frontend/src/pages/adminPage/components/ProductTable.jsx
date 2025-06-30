@@ -19,7 +19,8 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
             <tbody>
                 {products.length > 0 ? (
                     products.map(product => (
-                        <tr key={product.id}>
+                        // Sử dụng key duy nhất cho mỗi dòng
+                        <tr key={product.key}>
                             <td>
                                 <img src={product.imageUrl || 'https://via.placeholder.com/60'} alt={product.name} className="product-thumbnail" />
                             </td>
@@ -30,7 +31,8 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
                             <td>{product.stock}</td>
                             <td className="action-buttons">
                                 <button onClick={() => onEdit(product)} className="btn-secondary">Sửa</button>
-                                <button onClick={() => onDelete(product.id)} className="btn-danger">Xóa</button>
+                                {/* THAY ĐỔI: Truyền toàn bộ đối tượng product */}
+                                <button onClick={() => onDelete(product)} className="btn-danger">Xóa</button>
                             </td>
                         </tr>
                     ))
