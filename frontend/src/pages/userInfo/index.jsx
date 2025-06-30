@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AccountSidebar from './components/AccountSidebar';
 import AccountDetails from './components/AccountDetails';
-import OrderManagement from './components/OrderManagement';
 import ChangePassword from './components/ChangePassword';
 import './MyAccountPage.css';
 import { useAuth } from '../../components/AuthContext';
@@ -23,34 +22,28 @@ const MyAccountPage = () => {
 
     // Hàm xử lý đăng xuất (gọi từ sidebar)
     const handleLogout = () => {
-        logout(); // Gọi hàm logout từ AuthContext
+        logout();
         setIsLogoutModalOpen(false);
         navigate('/homepage');
     };
 
     // Hàm render nội dung chính dựa trên activeView
     const renderContent = () => {
-        // THAY ĐỔI: Chỉ render nội dung nếu user đã tồn tại
         if (!user) {
             return <div className="loading-indicator">Đang tải thông tin người dùng...</div>;
         }
 
+        // switch case cho 'orders' đã được xóa bỏ
         switch (activeView) {
-            case 'orders':
-                // Truyền user.userId vào component để fetch order
-                return <OrderManagement userId={user.userId} />;
             case 'password':
-                // Truyền user.username vào component
                 return <ChangePassword username={user.username} />;
             case 'details':
             default:
-                // Truyền toàn bộ user info vào component
                 return <AccountDetails user={user} />;
         }
     };
 
     if (!isAuthenticated) {
-        // Có thể hiển thị loading spinner hoặc null trong lúc redirect
         return null; 
     }
 

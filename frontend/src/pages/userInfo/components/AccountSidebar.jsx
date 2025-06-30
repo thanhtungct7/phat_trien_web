@@ -1,10 +1,8 @@
-// src/pages/MyAccount/components/AccountSidebar.jsx
 import React from 'react';
 import { useAuth } from '../../../components/AuthContext'; 
 
 const navItems = [
     { key: 'details', label: 'Thông tin cá nhân', icon: '👤' },
-    { key: 'orders', label: 'Quản lý đơn hàng', icon: '📦' },
     { key: 'password', label: 'Đổi mật khẩu', icon: '🔑' },
     { key: 'logout', label: 'Đăng xuất', icon: '🚪' },
 ];
