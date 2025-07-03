@@ -62,6 +62,7 @@ export default function Authenticate() {
     useEffect(() => {
         if (isLoggedin) {
             navigate("/");
+            window.location.reload(); 
         }
     }, [isLoggedin, navigate]);
 
